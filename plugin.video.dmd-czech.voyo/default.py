@@ -3,7 +3,7 @@ import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://voyo.nova.cz'
-__dmdbase__ = 'http://iamm.netuje.cz/emulator/voyo/image/'
+__dmdbase__ = 'http://iamm.uvadi.cz/xbmc/voyo/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.voyo')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
