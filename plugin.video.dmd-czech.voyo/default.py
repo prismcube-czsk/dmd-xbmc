@@ -5,13 +5,17 @@ import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://voyo.nova.cz'
 __dmdbase__ = 'http://iamm.netuje.cz/emulator/voyo/image/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-#icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-#nexticon = xbmc.translatePath( os.path.join( home, 'nexticon.png' ) )
-#fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
-fanart  = 'fanart.jpg'
-nexticon  = 'fanart.jpg'
+addon = xbmcaddon.Addon('plugin.video.dmd-czech.voyo')
+profile = xbmc.translatePath(addon.getAddonInfo('profile'))
+__settings__ = xbmcaddon.Addon(id='plugin.video.dmd-czech.voyo')
+home = __settings__.getAddonInfo('path')
+REV = os.path.join( profile, 'list_revision')
+icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
+nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
+fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
 page_pole_no = []
+
 
 def CATEGORIES():
     #addDir('112','http://voyo.nova.cz/112/',1,'http://iamm.netuje.cz/emulator/voyo/image/112.jpg')
