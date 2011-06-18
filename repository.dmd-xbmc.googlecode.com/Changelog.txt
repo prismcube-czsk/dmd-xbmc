@@ -1,0 +1,7 @@
+2011-06-18:
+ * přidán archiv Prima TV
+ * přidán repositář pro automatické aktualizace 
+
+2011-06-17: repository.dmd-xbmc.booglecode.com 0.1
+
+ * First alpha version 
