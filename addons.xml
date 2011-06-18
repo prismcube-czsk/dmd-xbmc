@@ -67,7 +67,7 @@
   </extension>
 </addon>
 <addon id="repository.dmd-xbmc.googlecode.com"
-       version="0.1"
+       version="0.2"
        name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)"
        provider-name="Jiri Vyhnalek">
   <requires>
