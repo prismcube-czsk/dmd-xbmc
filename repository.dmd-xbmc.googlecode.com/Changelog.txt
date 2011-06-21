@@ -1,3 +1,6 @@
+2011-06-21:
+  * přidán plugin Show Jana Krause
+
 2011-06-19:
   * přidán archiv JOJ TV
 
