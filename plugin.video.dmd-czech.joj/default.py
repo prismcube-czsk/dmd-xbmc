@@ -82,10 +82,10 @@ def LIST_2(url):
     doc = read_page(url)
     items = doc.find('div', 'b-body c')
     for item in items.findAll('li'):
-        name = item.a['title']
+        name = item.a['title'].encode('utf-8')
         url = str(item.a['href']) 
         thumb = str(item.img['src'])   
-        addDir(name,url,7,thumb)
+        addDir(name,'http://www.sefka.sk/'+url,7,thumb)
 
 def LIST_3(url):
     #self.core.setSorting('NONE')
@@ -105,27 +105,48 @@ def VIDEOLINK(url,name):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    basepath = re.compile('basePath: "(.+?)"').findall(httpdata)
-    videoid = re.compile('videoId: "(.+?)"').findall(httpdata)
-    pageid = re.compile('pageId: "(.+?)"').findall(httpdata)
-    playlisturl = basepath[0]+'services/Video.php?clip='+videoid[0]+'pageId='+pageid[0]
-    #print playlisturl
-    req = urllib2.Request(playlisturl)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    doc = response.read()
-    response.close()
-    title = re.compile('title="(.+?)"').findall(doc)
-    thumb = re.compile('large_image="(.+?)"').findall(doc)
-    joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
-    for kvalita,serverno,cesta in joj_file:
-        name = str.swapcase(kvalita)+ ' - ' + title[0]
-        server = 'n0'+serverno+'.joj.sk'
-        tcurl = 'rtmp://'+server
-        swfurl = 'http://www.joj.sk/fileadmin/templates/swf/JojPlayer.swf?no_cache=176146'
-        port = '1935'
-        rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
-        addLink(name,rtmp_url,thumb[0],name)
+    try:
+        basepath = re.compile('basePath: "(.+?)"').findall(httpdata)
+        videoid = re.compile('videoId: "(.+?)"').findall(httpdata)
+        pageid = re.compile('pageId: "(.+?)"').findall(httpdata)
+        playlisturl = basepath[0]+'services/Video.php?clip='+videoid[0]+'pageId='+pageid[0]
+        #print playlisturl
+        req = urllib2.Request(playlisturl)
+        req.add_header('User-Agent', _UserAgent_)
+        response = urllib2.urlopen(req)
+        doc = response.read()
+        response.close()
+        title = re.compile('title="(.+?)"').findall(doc)
+        thumb = re.compile('large_image="(.+?)"').findall(doc)
+        joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
+        for kvalita,serverno,cesta in joj_file:
+            name = str.swapcase(kvalita)+ ' - ' + title[0]
+            server = 'n0'+serverno+'.joj.sk'
+            tcurl = 'rtmp://'+server
+            swfurl = 'http://www.joj.sk/fileadmin/templates/swf/JojPlayer.swf?no_cache=176146'
+            port = '1935'
+            rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
+            addLink(name,rtmp_url,thumb[0],name)
+    except:
+        videoid = re.compile('videoId=(.+?)&amp').findall(httpdata)
+        playlisturl = 'http://www.sefka.sk/services/Video.php?clip='+videoid[0]
+        req = urllib2.Request(playlisturl)
+        req.add_header('User-Agent', _UserAgent_)
+        response = urllib2.urlopen(req)
+        doc = response.read()
+        response.close()
+        title = re.compile('title="(.+?)"').findall(doc)
+        joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
+        for kvalita,serverno,cesta in joj_file:
+            name = str.swapcase(kvalita)+ ' - ' + title[0]
+            server = 'n0'+serverno+'.joj.sk'
+            tcurl = 'rtmp://'+server
+            swfurl = 'http://www.sefka.sk/fileadmin/templates/swf/csmt_player.swf?no_cache=171307'
+            port = '1935'
+            rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
+            addLink(name,rtmp_url,icon,name)
+
+
 
 def get_params():
         param=[]

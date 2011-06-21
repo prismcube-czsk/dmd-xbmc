@@ -1,2 +1,5 @@
-2009-06-19: JOJ.sk (alpha) - first release
+2011-06-21:
+ * Oprava přehrávání pořadu Šééfka
+2011-06-19:
+ * JOJ.sk (alpha) - first release
 
