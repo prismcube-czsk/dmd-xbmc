@@ -1,3 +1,6 @@
+2011-06-26:
+  * přidán plugin Stream TV  
+
 2011-06-21:
   * přidán plugin Show Jana Krause
 
