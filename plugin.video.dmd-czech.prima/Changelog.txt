@@ -1,2 +1,5 @@
-2009-06-18: Prima.cz (alpha) - first release
+2011-07-04:
+ * zmìna fanart(u)
+2009-06-18: 
+ * Prima.cz (alpha) - first release
 

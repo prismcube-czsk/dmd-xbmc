@@ -1,3 +1,5 @@
+2011-07-04:
+ * změna fanart(u)
 2011-06-21:
  * Oprava přehrávání pořadu Šééfka
 2011-06-19:

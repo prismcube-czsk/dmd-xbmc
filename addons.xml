@@ -2,7 +2,7 @@
 <addons>
 <addon id="plugin.video.dmd-czech.ivysilani"
        name="iVysílání TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -25,7 +25,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.joj"
        name="JOJ TV Archiv"
-       version="0.2"
+       version="0.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -48,7 +48,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.markiza"
        name="Markiza TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -71,7 +71,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.prima"
        name="Prima TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -95,7 +95,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.sjk"
        name="Show Jana Krause TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -119,7 +119,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.dmd-czech.stream"
        name="Stream TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -142,7 +142,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.voyo"
        name="Voyo TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -182,7 +182,7 @@
   </extension>
 </addon>
 <addon id="repository.dmd-xbmc.googlecode.com"
-       version="0.2"
+       version="0.7"
        name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)"
        provider-name="Jiri Vyhnalek">
   <requires>

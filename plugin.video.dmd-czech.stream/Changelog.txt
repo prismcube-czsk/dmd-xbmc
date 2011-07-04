@@ -1,3 +1,5 @@
+2011-07-04:
+ * úprava ikony
 2011-06-26:
  * Stream (alpha) - first release
 
