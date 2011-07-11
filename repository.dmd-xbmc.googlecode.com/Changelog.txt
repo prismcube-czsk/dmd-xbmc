@@ -1,3 +1,6 @@
+2011-07-11:
+  * přidán plugin Huste TV
+
 2011-07-04:
   * přidán plugin Markíza TV
 
