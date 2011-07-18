@@ -1,0 +1,2 @@
+2011-07-18:
+ * Jaknato? (Centrum.cz) (alpha) - first release
