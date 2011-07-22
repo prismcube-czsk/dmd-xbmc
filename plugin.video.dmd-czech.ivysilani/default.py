@@ -3,9 +3,12 @@ import urllib2,urllib,re,os,time,datetime,json
 from parseutils import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
+import time
+import datetime
+
 
 __baseurl__ = 'http://www.ceskatelevize.cz/ivysilani'
-__dmdbase__ = 'http://iamm.netuje.cz/xbmc/stream/'
+#__dmdbase__ = 'http://iamm.netuje.cz/xbmc/stream/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 swfurl='http://img8.ceskatelevize.cz/libraries/player/flashPlayer.swf?version=1.43'
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.ivysilani')
@@ -19,10 +22,19 @@ fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
 page_pole_no = []
 
+DATE_FORMAT = '%d.%m.%Y'
+DAY_NAME = (u'Po', u'Út', u'St', u'Čt', u'Pá', u'So', u'Ne')
+
+RE_DATE   = re.compile('(\d{1,2}\.\s*\d{1,2}\.\s*\d{4})')
+
+
+
 def OBSAH():
+    addDir('Nejnovější pořady',__baseurl__+'/?nejnovejsi=vsechny-porady',12,icon)
+    addDir('Nejsledovanější videa týdne',__baseurl__+'/?nejsledovanejsi=tyden',11,icon)
+    addDir('Podle datumu',__baseurl__+'/podle-data-vysilani/',5,icon)
     addDir('Podle abecedy',__baseurl__+'/podle-abecedy/',2,icon)
     addDir('Podle kategorie',__baseurl__,1,icon)
-    #addDir('Podle datumu',__baseurl__+'/podle-data-vysilani/',5,icon)
     addDir('Živé iVysílání',__baseurl__+'/ajax/liveBox.php',4,icon)
 
 def KATEGORIE():
@@ -76,8 +88,87 @@ def CAT_LIST(url):
         #print name,__baseurl__+link
         addDir(name,'http://www.ceskatelevize.cz'+link,6,icon)
 
-def DATUM(url):
-    addDir(name,link,6,icon)
+
+# =============================================
+
+# vypis CT1,CT2,CT24,CT4
+def DAY_LIST(url):
+    doc = read_page(url)
+    items = doc.findAll('div','programmeColumn')    
+    for item in items:
+        item = item.find('div','logo')    
+        item = item.find('img')
+	icons= item['src']
+        name = item['alt'].encode('utf-8').strip()
+        addDir(name,url,9,icons)
+
+# vypis programu na zvolenem kanalu
+def DAY_PROGRAM_LIST( url, chnum ):
+    doc = read_page(url)
+    items = doc.findAll('div','logo clearfix')    
+    #items = doc.find('div','logo clearfix')    
+    for item in items:
+    #for item in items.findAll('img'):
+    	item = item.find('img')
+    	name = item['alt'].encode('utf-8').strip()
+    	if name==chnum:
+		items2 = item.findParent()
+		items2 = items2.findParent()
+		for item2 in items2.findAll('a'):
+        		name = item2.getText(" ").encode('utf-8')
+        		link = str(item2['href'])
+			icons= item['src']
+			if link!="#add":
+       				addDir(name,'http://www.ceskatelevize.cz'+link,10,icon)
+
+
+def date2label(date):
+     dayname = DAY_NAME[date.weekday()]
+     return "%s %s.%s.%s" % (dayname, date.day, date.month, date.year)
+
+
+def DATE_LIST(url):
+     pole_url=url.split("/")
+     date = pole_url[len(pole_url)-1]
+     if date:
+         date = datetime.date( *time.strptime(date, DATE_FORMAT)[:3] )
+     else:
+         date = datetime.date.today()
+     # Add link to previous month virtual folder 
+     pdate = date - datetime.timedelta(days=30)
+     addDir('Předchozí měsíc (%s)' % date2label(pdate).encode('utf-8'),__baseurl__ + '/' + pdate.strftime(DATE_FORMAT),5,icon)
+     for i in range(0,30):
+           pdate = date - datetime.timedelta(i)
+     	   addDir(date2label(pdate).encode('utf-8'),__baseurl__ + '/' + pdate.strftime(DATE_FORMAT),8,icon)
+
+
+# vypis nejsledovanejsi za tyden
+def MOSTVISITED(url):
+    doc = read_page(url)
+    #items = doc.find('ul', 'clearfix content','mostWatchedBox')    
+    items = doc.find(id="mostWatchedBox")    
+    for item in items.findAll('a'):
+       	    name = item.getText(" ").encode('utf-8')
+            link = str(item['href'])
+            item = item.find('img')
+            icons= item['src']
+            #print "LINK: "+link
+            addDir(name,'http://www.ceskatelevize.cz'+link,10,icons)
+
+# vypis nejnovejsich poradu
+def NEWEST(url):
+    doc = read_page(url)
+    items = doc.find(id="newestBox")    
+    for item in items.findAll('a'):
+       	    name = item.getText(" ").encode('utf-8')
+            link = str(item['href'])
+            item = item.find('img')
+            icons= item['src']
+            #print "LINK: "+link
+            addDir(name,'http://www.ceskatelevize.cz'+link,10,icons)
+
+
+# =============================================
 
 
 def VIDEO_LIST(url):
@@ -170,7 +261,10 @@ def VIDEOLINK(url,name):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('callSOAP\((.+?)\)').findall(httpdata)
+    #match = re.compile('callSOAP\((.+?)\)').findall(httpdata)
+    match = re.compile('callSOAP\((.*)\)').findall(httpdata)
+    print "VIDEO-LINK URL: "+url
+    print match[0]
     info = re.compile('<meta name="description" content="(.+?)"').findall(httpdata)
     if len(info)<1:
             info = re.compile('<title>(.+?)&mdash').findall(httpdata)
@@ -252,6 +346,7 @@ def http_build_query(params, topkey = ''):
 def get_params():
         param=[]
         paramstring=sys.argv[2]
+	#print "PARAMSTRING: "+urllib.unquote_plus(paramstring)
         if len(paramstring)>=2:
                 params=sys.argv[2]
                 cleanedparams=params.replace('?','')
@@ -305,6 +400,7 @@ try:
 except:
         pass
 
+
 print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
@@ -331,7 +427,7 @@ elif mode==4:
 
 elif mode==5:
         print ""+url
-        DATUM(url)
+        DATE_LIST(url)
 
 elif mode==6:
         print ""+url
@@ -341,11 +437,24 @@ elif mode==7:
         print ""+url
         BONUSY(url)
 
+elif mode==8:
+        print ""+url
+        DAY_LIST(url)
 
+elif mode==9:
+        print ""+url
+        DAY_PROGRAM_LIST(url,name)
 
 elif mode==10:
         print ""+url
         VIDEOLINK(url,name)
 
+elif mode==11:
+        print ""+url
+        MOSTVISITED(url)
+
+elif mode==12:
+        print ""+url
+        NEWEST(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

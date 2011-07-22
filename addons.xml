@@ -2,11 +2,11 @@
 <addons>
 <addon id="plugin.video.dmd-czech.ivysilani"
        name="iVysílání TV Archiv"
-       version="0.2"
+       version="0.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -25,11 +25,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.btv"
        name="Brno TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -48,11 +48,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.jaknato"
        name="Jak na to?"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -71,11 +71,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.huste"
        name="Huste TV Archiv"
-       version="0.1"
+       version="0.2"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -94,11 +94,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.joj"
        name="JOJ TV Archiv"
-       version="0.3"
+       version="0.4"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -117,11 +117,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.markiza"
        name="Markiza TV Archiv"
-       version="0.2"
+       version="0.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -140,11 +140,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.prima"
        name="Prima TV Archiv"
-       version="0.2"
+       version="0.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 
     library="default.py">
@@ -164,11 +164,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.sjk"
        name="Show Jana Krause TV Archiv"
-       version="0.2"
+       version="0.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -188,11 +188,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.dmd-czech.stream"
        name="Stream TV Archiv"
-       version="0.2"
+       version="0.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -211,11 +211,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.voyo"
        name="Voyo TV Archiv"
-       version="0.2"
+       version="0.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.2"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 
     library="default.py">
@@ -236,7 +236,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="0.2">
+        version="0.3">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
@@ -251,11 +251,11 @@
   </extension>
 </addon>
 <addon id="repository.dmd-xbmc.googlecode.com"
-       version="0.7"
+       version="1.0"
        name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)"
        provider-name="Jiri Vyhnalek">
   <requires>
-    <import addon="xbmc.addon" version="0.2"/>
+    <import addon="xbmc.addon" version="0.1"/>
   </requires>
   <extension point="xbmc.addon.repository"
               name="dmd-xbmc.googlecode.com addons repository">

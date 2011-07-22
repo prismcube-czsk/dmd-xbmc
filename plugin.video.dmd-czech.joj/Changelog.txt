@@ -1,3 +1,5 @@
+2011-07-22:
+ * přechod na upravenou knihovnu BeautifulSOAP - údajně má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  
 2011-07-04:
  * změna fanart(u)
 2011-06-21:

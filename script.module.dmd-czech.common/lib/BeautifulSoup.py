@@ -1454,14 +1454,26 @@ class BeautifulStoneSoup(Tag, SGMLParser):
              j = k+3
              self._toStringSubclass(data, CData)
         else:
-            try:
-                j = SGMLParser.parse_declaration(self, i)
-            except SGMLParseError:
-                toHandle = self.rawdata[i:]
-                self.handle_data(toHandle)
-                j = i + len(toHandle)
-        return j
-
+          # This block has been modified:
+          # http://groups.google.com/group/beautifulsoup/browse_thread/thread/69093cb0d3a3cf63
+          # Could not parse the DOCTYPE declaration
+          # Try to just skip the actual declaration
+          match = re.search(r'<!DOCTYPE([^>]*?)>', self.rawdata,
+                    re.MULTILINE)
+          if match:
+            toHandle = self.rawdata[i:match.end()]
+          else:
+            toHandle = self.rawdata[i:]
+          self.handle_data(toHandle)
+          j = i + len(toHandle)
+          # Original code:
+          #try:
+          #    j = SGMLParser.parse_declaration(self, i)
+          #except SGMLParseError:
+          #    toHandle = self.rawdata[i:]
+          #    self.handle_data(toHandle)
+          #    j = i + len(toHandle)
+          return j
 class BeautifulSoup(BeautifulStoneSoup):
 
     """This parser knows the following facts about HTML:

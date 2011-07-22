@@ -1,3 +1,6 @@
+2011-07-22:
+ * nové funkce od IVO - Zobrazení podle datumu, Nejnovější pořady, Nejsledovanější pořady týdne, úprava parseru
+ * přechod na upravenou knihovnu BeautifulSOAP - údajně má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  
 2011-07-04:
  * změna fanart(u)
 2011-06-26:

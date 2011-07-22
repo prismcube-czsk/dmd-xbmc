@@ -75,7 +75,10 @@ def VIDEOLINK(url,name):
     thumb = re.compile('<link rel="image_src" href="(.+?)" />').findall(httpdata)
     popis = re.compile('<meta name="description" content="(.+?)" />').findall(httpdata)
     config = 'http://tn.nova.cz/bin/player/serve.php?media_id='+mediaid[0]+'&site_id='+siteid[0]
-
+    try:
+        desc = popis[0]
+    except:
+        desc = name
     req = urllib2.Request(config)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
@@ -85,8 +88,8 @@ def VIDEOLINK(url,name):
     server = re.compile('server="(.+?)"').findall(httpdata)
     urlhq = 'rtmp://flash'+server[0]+'.nova.nacevi.cz:80/vod?slist=mp4:'+videosrc[0]
     url = urlhq.encode('utf-8')
-    #print name,urlhq,thumb
-    addLink(name,url,thumb[0],popis[0])
+    print name,url,thumb[0],desc
+    addLink(name,url,thumb[0],desc)
 
 def get_params():
         param=[]
