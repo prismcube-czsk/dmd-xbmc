@@ -1,4 +1,5 @@
-﻿import urllib,urllib2,re,os
+# -*- coding: utf-8 -*-
+import urllib,urllib2,re,os
 import xbmcplugin,xbmcgui,xbmcaddon
 from BeautifulSoup import BeautifulStoneSoup, BeautifulSoup, BeautifulSOAP
 
@@ -13,7 +14,7 @@ fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 file = __settings__.getSetting('xml_file')
 if __settings__.getSetting('community_list') == "true":
         if __settings__.getSetting('save_location') == "":
-                xbmc.executebuiltin("XBMC.Notification('DMD Streams','Vyber misto s playlisty.',30000,"+icon+")")
+                xbmc.executebuiltin("XBMC.Notification('DMD Streams','Vyber místo s playlisty.',30000,"+icon+")")
                 __settings__.openSettings()
 
 def getSoup():
@@ -37,7 +38,7 @@ def getSoup():
                 f.write(link)
                 f.close()
             except:
-                print "Nemohu ukladat do zvoleneho umisteni, vyber jine." 
+                print "Nemohu ukládat do zvoleného umístění, vyber jiné." 
         req = urllib2.Request('http://iamm.xf.cz/ims/xbmc/streams/')
         response = urllib2.urlopen(req)
         link=response.read()
@@ -62,7 +63,7 @@ def checkForUpdate():
             R.close()
         except:
             getSoup()
-            print "neexistuje soubor s revizi."
+            print "neexistuje soubor s revizí."
         try:
             revision_check = re.compile('<html><head><title>(.+?)/trunk</title></head>').findall(rev)
             if revision_check[0] != revision[0]:
