@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
 <addon id="plugin.video.dmd-czech.ivysilani"
        name="iVysílání TV Archiv"
@@ -231,6 +231,20 @@
     <description lang="cs">
         Plugin pro přehrávání videí z archivu Voyo.cz
     </description>
+  </extension>
+</addon>
+<addon id="plugin.video.dmd.streams" name="DMD Streams" version="0.0.1" provider-name="DMD">
+  <requires>
+    <import addon="xbmc.python" version="1.0" />
+    <import addon="script.module.beautifulsoup" version="3.0.8" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>DMD streams.</summary>
+    <description>Upravený plugin LiveStreams 0.0.7 pro přehrávání dmd-xbmc playlistu streamů pro České a Slovenské uživatele xbmc. Po první instalaci otevřete nastavení doplňku a zkontrolujte cesty, jsou přednastaveny pro OpenELEC.tv, pokud máte nainstalovanou jinou distribuci, opravte je.</description>
+    <platform>all</platform>
   </extension>
 </addon>
 <addon  id="script.module.dmd-czech.common" 
