@@ -265,7 +265,7 @@
   </extension>
 </addon>
 <addon id="repository.dmd-xbmc.googlecode.com"
-       version="1.0"
+       version="1.1"
        name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)"
        provider-name="Jiri Vyhnalek">
   <requires>
