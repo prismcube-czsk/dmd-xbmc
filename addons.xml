@@ -264,6 +264,29 @@
     <platform>all</platform>
   </extension>
 </addon>
+<addon id="plugin.video.dmd-czech.filmyczcom"
+       name="Filmy CZ"
+       version="0.3"
+       provider-name="Ivo">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>FilmyCZ.com</summary>
+    <summary lang="cs">FilmyCZ.com</summary>
+    <description>
+        Plugin to play videos form FilmyCZ.com
+    </description>
+    <description lang="cs">
+        Plugin pro přehrávání videí z FilmyCZ.com
+    </description>
+  </extension>
+</addon>
 <addon id="repository.dmd-xbmc.googlecode.com"
        version="1.1"
        name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)"
