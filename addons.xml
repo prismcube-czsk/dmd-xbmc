@@ -69,6 +69,29 @@
     </description>
   </extension>
 </addon>
+<addon id="plugin.video.dmd-czech.fashion"
+       name="FashionStars TV"
+       version="0.1"
+       provider-name="Jiri Vyhnalek">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.dmd-czech.common" version="0.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>FashionStars TV video-archive plugin</summary>
+    <summary lang="cs">FashionStars TV - archiv</summary>
+    <description>
+        Plugin to play TV video archive http://www.fashionstarstv.cz
+    </description>
+    <description lang="cs">
+        Plugin pro přehrávání videí z archivu http://www.fashionstarstv.cz
+    </description>
+  </extension>
+</addon>
 <addon id="plugin.video.dmd-czech.huste"
        name="Huste TV Archiv"
        version="0.2"

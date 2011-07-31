@@ -1,5 +1,7 @@
 2011-07-31:
  * přidán plugin Muvi.cz
+ * přidán plugin FashionStarsTV.cz
+  
 2011-07-27:
  * přidán plugin Filmy CZ 
 
