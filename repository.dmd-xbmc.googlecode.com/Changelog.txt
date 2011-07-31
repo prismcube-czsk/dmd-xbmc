@@ -1,4 +1,9 @@
-﻿2011-07-26:
+2011-07-31:
+ * přidán plugin Muvi.cz
+2011-07-27:
+ * přidán plugin Filmy CZ 
+
+2011-07-26:
  * přidán plugin DMD streams (upravený LiveStreams s vlastním playlistem)
  
 2011-07-22:

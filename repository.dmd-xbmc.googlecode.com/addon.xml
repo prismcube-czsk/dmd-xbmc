@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <addon id="repository.dmd-xbmc.googlecode.com"
-       version="1.1"
+       version="1.2"
        name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)"
        provider-name="Jiri Vyhnalek">
   <requires>
@@ -19,7 +19,7 @@
       
       This repository contains plugins for czech and slovak XBMC users.
       
-      For example video plugins for playing videos from Voyo.cz, JOJ.sk, Huste.sk, Stream.cz, STV.sk, and many more...
+      For example video plugins for playing videos from Voyo.cz, JOJ.sk, Huste.sk, Stream.cz, and many more...
 
       For more informations see webpage http://dmd-xbmc.googlecode.com
     </description>
@@ -28,9 +28,9 @@
 
       Tento repositář obsahuje pluginy pro české a slovenské uživatele XBMC.
 
-      Např. video pluginy pro přehrávání videí z Voyo.cz, JOJ.sk, Huste.sk, Stream.cz, Slovenské televize (STV.sk), ...
+      Najdete zde doplňky pro přehrávání videí z mnoha českých serverů jako např. Voyo.cz, JOJ.sk, Huste.sk, Stream.cz, MArkiza.sk, Muvi.cz, ...
 
-      Další informace naleznete na http://dmd-xbmc.googlecode.com
+      Další informace o projektu naleznete na http://dmd-xbmc.googlecode.com
     </description>
     <platform>all</platform>
   </extension>
