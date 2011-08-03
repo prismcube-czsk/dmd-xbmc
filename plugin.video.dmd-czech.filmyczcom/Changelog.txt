@@ -1,2 +1,4 @@
+2011-08-03:
+ * opraveno stránkování, pøidáno vyhledávání, pøesunutí kódu videoserverù do common knihoven
 2011-07-27:
  * FilmyCZ.com

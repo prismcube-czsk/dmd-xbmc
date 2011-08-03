@@ -295,7 +295,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="0.3">
+        version="0.4">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
@@ -311,11 +311,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.filmyczcom"
        name="Filmy CZ"
-       version="0.3"
-       provider-name="Ivo">
+       version="0.4"
+       provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.3"/>
+    <import addon="script.module.dmd-czech.common" version="0.4"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -332,8 +332,34 @@
     </description>
   </extension>
 </addon>
+
+<addon id="plugin.video.dmd-czech.piratskefilmycz"
+       name="Filmy CPS Archiv"
+       version="0.1"
+       provider-name="Ivo Brhel">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.dmd-czech.common" version="0.4"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>Filmy CPS video-archive plugin</summary>
+    <summary lang="cs">Filmy CPS - archiv</summary>
+    <description>
+        Plugin to play video archive Filmy CPS
+    </description>
+    <description lang="cs">
+        Plugin pro přehrávání videí z archivu Filmy CPS
+    </description>
+  </extension>
+</addon>
+
+
 <addon id="repository.dmd-xbmc.googlecode.com"
-       version="1.1"
+       version="1.2"
        name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)"
        provider-name="Jiri Vyhnalek">
   <requires>
