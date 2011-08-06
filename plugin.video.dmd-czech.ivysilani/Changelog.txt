@@ -1,3 +1,5 @@
+2011-08-06:
+ * přidání časového údaje do seznamu pořadů podle datumu
 2011-07-22:
  * nové funkce od IVO - Zobrazení podle datumu, Nejnovější pořady, Nejsledovanější pořady týdne, úprava parseru
  * přechod na upravenou knihovnu BeautifulSOAP - údajně má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  

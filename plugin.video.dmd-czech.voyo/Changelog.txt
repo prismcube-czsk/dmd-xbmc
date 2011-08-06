@@ -1,3 +1,5 @@
+2011-08-06:
+ * odstranìní novì pøidaných seriálù z listu (nelze pøehrát z dùvodu DRM) 
 2011-07-22:
  * upravena funkce získávání popisu poøadu, který nìkde chybìl, thanx to IVO za upozornìní ;-)
  * pøechod na upravenou knihovnu BeautifulSOAP - údajnì má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  

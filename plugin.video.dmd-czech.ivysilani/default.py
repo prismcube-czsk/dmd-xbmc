@@ -3,8 +3,6 @@ import urllib2,urllib,re,os,time,datetime,json
 from parseutils import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
-import time
-import datetime
 
 
 __baseurl__ = 'http://www.ceskatelevize.cz/ivysilani'
@@ -106,20 +104,23 @@ def DAY_LIST(url):
 def DAY_PROGRAM_LIST( url, chnum ):
     doc = read_page(url)
     items = doc.findAll('div','logo clearfix')    
-    #items = doc.find('div','logo clearfix')    
     for item in items:
-    #for item in items.findAll('img'):
     	item = item.find('img')
     	name = item['alt'].encode('utf-8').strip()
     	if name==chnum:
 		items2 = item.findParent()
 		items2 = items2.findParent()
 		for item2 in items2.findAll('a'):
+			item3 = item2.findParent()
+			item3 = item3.findParent()
+			item3 = item3.findParent()
+			cas = item3.find('div','time')
+			cas = cas.getText(" ").encode('utf-8')
         		name = item2.getText(" ").encode('utf-8')
         		link = str(item2['href'])
 			icons= item['src']
 			if link!="#add":
-       				addDir(name,'http://www.ceskatelevize.cz'+link,10,icon)
+       				addDir(cas+' '+name,'http://www.ceskatelevize.cz'+link,10,icon)
 
 
 def date2label(date):

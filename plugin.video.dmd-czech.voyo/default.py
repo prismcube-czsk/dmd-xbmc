@@ -18,17 +18,16 @@ page_pole_no = []
 
 
 def CATEGORIES():
-    #addDir('112','http://voyo.nova.cz/112/',1,'http://iamm.netuje.cz/emulator/voyo/image/112.jpg')
-    #addDir( 'Babicovy dobroty','http://voyo.nova.cz/babicovy-dobroty/',1,'http://iamm.netuje.cz/emulator/voyo/image/babicovy-dobroty.jpg')
-    #self.core.setSorting('NONE')
+    zakazane = ['zenaty-se-zavazky', 'tudorovci', 'kobra-11', 'patty-hewes', 'policejni-odznak']
     req = urllib2.Request(__baseurl__)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
     match = re.compile('<a class="list_item" href="/(.+?)/">(.+?)</a>').findall(httpdata)
-
     for url,name in match:
+        if url in zakazane:
+            continue        
         addDir(name,__baseurl__+'/'+url+'/',1,__dmdbase__+url+'.jpg')
         
 def INDEX(url):
