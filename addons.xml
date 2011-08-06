@@ -46,29 +46,7 @@
     </description>
   </extension>
 </addon>
-<addon id="plugin.video.dmd-czech.jaknato"
-       name="Jak na to?"
-       version="0.2"
-       provider-name="Jiri Vyhnalek">
-  <requires>
-    <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.3"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-    <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <platform>all</platform>
-    <summary>Jak na to? video-archive plugin</summary>
-    <summary lang="cs">Jak na to?</summary>
-    <description>
-        Plugin to play video archive http://jaknato.centrum.cz
-    </description>
-    <description lang="cs">
-        Plugin pro přehrávání videí z archivu http://jaknato.centrum.cz
-    </description>
-  </extension>
-</addon>
+
 <addon id="plugin.video.dmd-czech.fashion"
        name="FashionStars TV"
        version="0.1"
