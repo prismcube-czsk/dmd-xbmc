@@ -185,7 +185,9 @@ def HUDBA_PORADY(url):
             name_a = name_a.getText(" ").encode('utf-8')
             name_i = name_full.find('p','perex') 
             name_i = name_i.getText(" ").encode('utf-8')
-            link = __baseurl__+str(item.a['href'])
+            link = str(item.a['href'])
+            if not re.match('music.stream.cz', link, re.U):
+                link = 'http://music.stream.cz'+link
             thumb = str(item.img['src'])
             #print name_a +' / '+ name_i, thumb, link
             addDir(name_a +' / '+ name_i,link,20,thumb)
