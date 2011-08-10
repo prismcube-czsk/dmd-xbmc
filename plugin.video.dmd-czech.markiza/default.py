@@ -118,11 +118,16 @@ def VIDEOLINK(url,name):
     for item in items.findAll('item'):
         title = item.find('title')
         title = title.getText(" ").encode('utf-8')
-        url = re.compile('player url="(.+?)"').findall(str(item))
-        thumb = re.compile('thumbnail url="(.+?)"').findall(str(item))
+        #url = re.compile('player url="(.+?)"').findall(str(item))
+        #thumb = re.compile('thumbnail url="(.+?)"').findall(str(item))
+        url = item.find('media:player')
+        url = url['url']
+        thumb = item.find('media:thumbnail')
+        thumb = thumb['url']
         title = title + ' ' + title_main
         #print title+title_main, url[0],thumb[0]
-        addLink(title,url[0],thumb[0],name)
+        addLink(title,url,thumb,name)
+        #addLink(title,url[0],thumb[0],name)
 
 
 
