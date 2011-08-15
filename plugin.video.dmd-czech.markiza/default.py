@@ -111,23 +111,21 @@ def SUPERSTAR(url):
         print 'STRANKOVANI NENALEZENO'
                
 def VIDEOLINK(url,name):
-    doc = read_page(url)
-    title_main = doc.find('title')
-    title_main = title_main.getText(" ").encode('utf-8')
-    items = doc.find('channel')
-    for item in items.findAll('item'):
-        title = item.find('title')
-        title = title.getText(" ").encode('utf-8')
-        #url = re.compile('player url="(.+?)"').findall(str(item))
-        #thumb = re.compile('thumbnail url="(.+?)"').findall(str(item))
-        url = item.find('media:player')
-        url = url['url']
-        thumb = item.find('media:thumbnail')
-        thumb = thumb['url']
-        title = title + ' ' + title_main
-        #print title+title_main, url[0],thumb[0]
-        addLink(title,url,thumb,name)
-        #addLink(title,url[0],thumb[0],name)
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    response.close()
+    match = re.compile('<media:player url="(.+?)"/>').findall(httpdata)
+    thumb = re.compile('<media:thumbnail url="(.+?)"/>').findall(httpdata)
+    title = re.compile('<title>(.+?)</title>').findall(httpdata)
+    no = 0
+    notit = 1
+    for link in match:
+        print '#'+str(notit) +' '+ title[0], link, thumb[no]
+        addLink('#'+str(notit) +' '+ title[0],link,thumb[no],name)
+        no +=1
+        notit +=1
 
 
 

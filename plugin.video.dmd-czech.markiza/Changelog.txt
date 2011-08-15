@@ -1,3 +1,6 @@
+2011-08-15:
+ * úprava parsování videa - nyní se BeutifulSOUP k získání linků na videa nepoužívá vůbec.... 
+
 2011-08-10:
  * úprava parsování videa - nyní pomocí BeutifulSOUP  
 
