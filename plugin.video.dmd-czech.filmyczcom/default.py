@@ -52,7 +52,7 @@ def KATEGORIE():
 
 
 #==========================================================================
-searchurl = 'http://filmycz.com/component/search/'
+searchurl = __baseurl__+'/component/search/'
 def SEARCH():
 	keyb = xbmc.Keyboard('', 'Search Filmy CZ')
         keyb.doModal()
@@ -79,12 +79,18 @@ def INDEX(url):
     doc = read_page(url)  
     items = doc.findAll('div','pos-media')
     for item in items:
+            try:
+            	item2 = item.findNextSibling()
+	        popis = item2.getText(" ").encode('utf-8')
+	    except:
+	        popis=''
       	    item = item.find('a')
             name = item['title'].encode('utf-8')
             link = item['href']
 	    item = item.find('img')
             icon = item['src']
-            addDir(name,__baseurl__+link,3,icon)
+            
+            addDir(name,__baseurl__+link,3,icon,popis)
 	    #VIDEOLINK(__baseurl__+link,name)
     try:
         pager = doc.find('div','pagination-bg')
@@ -146,21 +152,27 @@ def VIDEOLINK(url,name):
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
     link = response.read()
-    match=re.compile('.*mce_(src|href)=\"(.+?)\".*').findall(link)
+    match=re.compile('<p>(.+?)</p>\s*.*<p style=.*><.*mce_(src|href)=\"(.+?)\".*').findall(link)
+    if len(match) < 1:
+	match=re.compile('.*mce_(src|href)=\"(.+?)\".*').findall(link)
     print match
     for item in match:
-    	item = item[1].replace('&amp;','&')
-	if item.find('youtube.com') != -1:
+    	url = item[len(item)-1].replace('&amp;','&')
+	try:
+		n=item[2]
+		name=item[0]
+	except:
+		print 
+	if url.find('youtube.com') != -1:
 		continue
-	elif item.find('videobb.com') != -1:
-		VIDEOBB_LINK(item,name)
-	elif item.find('novamov.com') != -1:
-		NOVAMOV_LINK(item,name)
-	elif item.find('vk.com') != -1 or item.find('vkontakte.ru') != -1:
-		VKCOM_LINK(item,name)
+	elif url.find('videobb.com') != -1:
+		VIDEOBB_LINK(url,name)
+	elif url.find('novamov.com') != -1:
+		NOVAMOV_LINK(url,name)
+	elif url.find('vk.com') != -1 or url.find('vkontakte.ru') != -1:
+		VKCOM_LINK(url,name)
 	else:
-		print "VIDEOLINK URL: "+item
-
+		print "VIDEOLINK URL: "+url
 #==========================================================================
 	
 
@@ -192,11 +204,12 @@ def addLink(name,url,iconimage,popis):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
-def addDir(name,url,mode,iconimage):
+def addDir(name,url,mode,iconimage,popis=''):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        #liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": popis} )
         liz.setProperty( "Fanart_Image", fanart )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok

@@ -1,2 +1,5 @@
+2011-08-16:
+ * pridan server videozer.com
+ * pridan popisek k filmu
 2011-08-03:
  * piratskefilmy.cz

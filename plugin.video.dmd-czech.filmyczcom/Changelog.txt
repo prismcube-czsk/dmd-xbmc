@@ -1,3 +1,6 @@
+2011-08-16:
+ * oprava nazvu filmu u serialu
+ * pridan popisek k filmu
 2011-08-03:
  * opraveno stránkování, pøidáno vyhledávání, pøesunutí kódu videoserverù do common knihoven
 2011-07-27:

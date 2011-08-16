@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #------------------------------------------------------------
 #
-# Modify: 2011-07-31, by Ivo Brhel
+# Modify: 2011-08-15, by Ivo Brhel
 #
 #------------------------------------------------------------
 
@@ -39,9 +39,10 @@ def getURL(url):
     	link=response.read()
     	response.close()
     	#	
-    	match=re.compile('url=(.+?)&title=.*').findall(link)
+    	#match=re.compile('url=(.+?)&title=.*').findall(link)
+    	match=re.compile('url=http://(.+?)&title=.+?').findall(link)
 	#print "{NOVAMOV MATCH2:"
 	#print match
-	urlhq=match[0]
+	urlhq='http://'+match[0]
 
 	return urlhq

@@ -1,12 +1,12 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 #------------------------------------------------------------
 # pelisalacarta - XBMC Plugin
 # Conector para Megavideo
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
-# A partir del código de Voinage y Coolblaze
+# A partir del cï¿½digo de Voinage y Coolblaze
 #------------------------------------------------------------
-# Modify: 2011-07-31, by Ivo Brhel
+# Modify: 2011-08-12, by Ivo Brhel
 #------------------------------------------------------------
 
 import re, sys, os
@@ -195,33 +195,63 @@ def decrypt(str1, key1, key2):
 def getcode(mega):
 	if mega.startswith('http://www.megavideo.com/?v='):
 		mega = mega[-8:]
+	if mega.startswith('http://wwwstatic.megavideo.com'):
+		mega = re.compile('.*v=(.+?)$').findall(mega)
+		mega = mega[0]
 	if mega.startswith('http://www.megavideo.com/v/'):
 		mega = re.compile('.*/v/(.+?)$').findall(mega)
 		mega = mega[0][0:8]
 	return mega
 
 def getURL(mega):
-	mega = getcode(mega)
+	#mega = getcode(mega)
 	movielink = getlowurl(mega)
 	return movielink
 #####END of part 2
 
 def getlowurl(code):
-	code=getcode(code)
+	#code=getcode(code)
+	try:
+	    quality = config.get_setting("quality_flv")
+	except:
+	    quality = "1"
+
 	modoPremium = "false"
 	req = urllib2.Request("http://www.megavideo.com/xml/videolink.php?v="+code)
 	#req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')
 	req.add_header('User-Agent', _UserAgent_)
 	req.add_header('Referer', 'http://www.megavideo.com/')
 	page = urllib2.urlopen(req);response=page.read();page.close()
-	errort = re.compile(' errortext="(.+?)"').findall(response)
-	movielink = ""
-	if len(errort) <= 0:
-		s = re.compile(' s="(.+?)"').findall(response)
-		k1 = re.compile(' k1="(.+?)"').findall(response)
-		k2 = re.compile(' k2="(.+?)"').findall(response)
-		un = re.compile(' un="(.+?)"').findall(response)
-		movielink = "http://www" + s[0] + ".megavideo.com/files/" + decrypt(un[0], k1[0], k2[0]) + "/?.flv"
+		
+	#errort = re.compile(' errortext="(.+?)"').findall(response)
+	#movielink = ""
+	#if len(errort) <= 0:
+	#	s = re.compile(' s="(.+?)"').findall(response)
+	#	k1 = re.compile(' k1="(.+?)"').findall(response)
+	#	k2 = re.compile(' k2="(.+?)"').findall(response)
+	#	un = re.compile(' un="(.+?)"').findall(response)
+	#	movielink = "http://www" + s[0] + ".megavideo.com/files/" + decrypt(un[0], k1[0], k2[0]) + "/?.flv"
 	
-	return movielink
+	#return movielink
 
+        errort = re.compile(' errortext="(.+?)"').findall(response)
+        movielink = ""
+        if len(errort) <= 0:
+            
+            if quality == "1":
+                hd = re.compile(' hd="(.+?)"').findall(response)
+                if len(hd)>0 and hd[0]=="1":
+                    s = re.compile(' hd_s="(.+?)"').findall(response)
+                    k1 = re.compile(' hd_k1="(.+?)"').findall(response)
+                    k2 = re.compile(' hd_k2="(.+?)"').findall(response)
+                    un = re.compile(' hd_un="(.+?)"').findall(response)
+                    movielink = "http://www" + s[0] + ".megavideo.com/files/" + decrypt(un[0], k1[0], k2[0]) + "/?.flv"
+                    return movielink        
+            
+            s = re.compile(' s="(.+?)"').findall(response)
+            k1 = re.compile(' k1="(.+?)"').findall(response)
+            k2 = re.compile(' k2="(.+?)"').findall(response)
+            un = re.compile(' un="(.+?)"').findall(response)
+            movielink = "http://www" + s[0] + ".megavideo.com/files/" + decrypt(un[0], k1[0], k2[0]) + "/?.flv"
+
+	return movielink

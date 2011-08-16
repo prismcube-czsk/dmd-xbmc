@@ -2,7 +2,7 @@
 import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
-import megavideo,videobb,novamov,vk,videoweed
+import megavideo,videobb,novamov,vk,videoweed,videozer
 
 __baseurl__ = 'http://www.piratskefilmy.cz'
 #_UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -161,7 +161,7 @@ def SERVERY():
 #==========================================================================
 
 #==========================================================================
-searchurl = 'http://www.piratskefilmy.cz/?s='
+searchurl = __baseurl__+'/?s='
 def SEARCH():
 	keyb = xbmc.Keyboard('', 'Search Filmy CSP')
         keyb.doModal()
@@ -184,7 +184,15 @@ def INDEX(url):
             link = item2['href']
 	    item = item.find('img')
             icon = item['src']
-            addDir(name,link,6,icon)
+            if icon.find('http://') == -1:
+            	icon= __baseurl__+item['src'][1:]
+            try:
+                item2 = item.findParent()
+                popis = item2.getText(" ").encode('utf-8')
+            except:
+                popis=''
+
+            addDir(name,link,6,icon,popis)
 
     try:
 	pager = doc.find('li','page_info')
@@ -253,6 +261,7 @@ def VKCOM_LINK(url,name):
 #==========================================================================
 def MEGAVIDEO_LINK(url,name):
 	try:
+		url=megavideo.getcode(url)
 		videourl=megavideo.getURL(url)
     		addLink(name+" - megavideo.com",videourl,'','')
 	except:
@@ -272,6 +281,18 @@ def VIDEOWEED_LINK(url,name):
        		print "VIDEOWEED.COM URL: "+url
 #==========================================================================
 
+
+
+#==========================================================================
+def VIDEOZER_LINK(url,name):
+        try:
+                #url=KINOTIP_URL(url)
+                #
+                videourl=videozer.getURL(url)
+                addLink(name+" - videozer.com",videourl,'','')
+        except:
+                print "VIDEOZER.COM URL: "+url
+#==========================================================================
 
 
 
@@ -300,6 +321,8 @@ def VIDEOLINK(url,name):
 		MEGAVIDEO_LINK(item,name)
 	elif item.find('videoweed.php?id=') != -1:
 		VIDEOWEED_LINK(item,name)
+        elif item.find('videozer.com') != -1:
+                VIDEOZER_LINK(item,name)
 	elif item.find('vk.com') != -1 or item.find('vkontakte.ru') != -1:
 		VKCOM_LINK(item,name)
 	else:
@@ -335,11 +358,12 @@ def addLink(name,url,iconimage,popis):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
-def addDir(name,url,mode,iconimage):
+def addDir(name,url,mode,iconimage,popis=''):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        #liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": popis} )
         liz.setProperty( "Fanart_Image", fanart )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
