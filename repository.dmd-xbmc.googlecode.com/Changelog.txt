@@ -1,3 +1,6 @@
+2011-08-24:
+ * přidán STV Archiv
+ * změna v dekodéru videa iVysílání 
 2011-08-03:
  * přidán plugin Filmy CPS :-)
  * změny v common knihovnách 

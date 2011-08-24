@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-import urllib2,urllib,re,os,time,datetime,json
+import urllib2,urllib,re,os,time,datetime
 from parseutils import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
+#import json
+import simplejson as json
+
 
 
 __baseurl__ = 'http://www.ceskatelevize.cz/ivysilani'

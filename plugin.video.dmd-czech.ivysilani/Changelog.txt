@@ -1,3 +1,5 @@
+2011-08-24:
+ * změna "dekodéru playlistu" z JSON na SIMPLEJSON, dle IVOše by mělo zlepšit kompatibilitu...
 2011-08-06:
  * přidání časového údaje do seznamu pořadů podle datumu
 2011-07-22:
