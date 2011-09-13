@@ -118,7 +118,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.joj"
        name="JOJ TV Archiv"
-       version="0.5"
+       version="0.6"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -316,7 +316,7 @@
        provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.5"/>
+    <import addon="script.module.dmd-czech.common" version="0.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -340,7 +340,7 @@
        provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.5"/>
+    <import addon="script.module.dmd-czech.common" version="0.7"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

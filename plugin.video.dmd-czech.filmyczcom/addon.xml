@@ -5,7 +5,7 @@
        provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.5"/>
+    <import addon="script.module.dmd-czech.common" version="0.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

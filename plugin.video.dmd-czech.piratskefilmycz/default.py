@@ -260,12 +260,14 @@ def VKCOM_LINK(url,name):
 
 #==========================================================================
 def MEGAVIDEO_LINK(url,name):
-	try:
-		url=megavideo.getcode(url)
-		videourl=megavideo.getURL(url)
-    		addLink(name+" - megavideo.com",videourl,'','')
-	except:
-       		print "MEGAVIDEO.COM URL: "+url
+ 	try:
+ 		url=megavideo.getcode(url)
+ 		videourl=megavideo.getURL(url)
+ 		#addLink(name+" - megavideo.com",videourl,'','')
+ 		for video_url in videourl:
+      addLink(name+" - "+video_url[0] ,video_url[1],'','')
+ 	except:
+        		print "MEGAVIDEO.COM URL: "+url
 #==========================================================================
 
 
