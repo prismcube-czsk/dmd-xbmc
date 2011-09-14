@@ -265,9 +265,9 @@ def MEGAVIDEO_LINK(url,name):
  		videourl=megavideo.getURL(url)
  		#addLink(name+" - megavideo.com",videourl,'','')
  		for video_url in videourl:
-      addLink(name+" - "+video_url[0] ,video_url[1],'','')
+                      addLink(name+" - "+video_url[0] ,video_url[1],'','')
  	except:
-        		print "MEGAVIDEO.COM URL: "+url
+        	print "MEGAVIDEO.COM URL: "+url
 #==========================================================================
 
 
