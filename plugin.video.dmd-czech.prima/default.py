@@ -2,7 +2,7 @@
 import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
-__baseurl__ = 'http://prima.stream.cz'
+__baseurl__ = 'http://www.iprima.cz/videoarchiv'
 __cdn_url__  = 'http://cdn-dispatcher.stream.cz/?id='
 __dmdbase__ = 'http://iamm.uvadi.cz/xbmc/prima/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -14,84 +14,122 @@ REV = os.path.join( profile, 'list_revision')
 icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
-page_pole_url = []
-page_pole_no = []
+file = __settings__.getSetting('xml_file')
+
+def replace_words(text, word_dic):
+    rc = re.compile('|'.join(map(re.escape, word_dic)))
+    def translate(match):
+        return word_dic[match.group(0)]
+    return rc.sub(translate, text)
+
+word_dic = {
+'\u00e1': 'á',
+'\u00e9': 'é',
+'\u00ed': 'í',
+'\u00fd': 'ý',
+'\u00f3': 'ó',
+'\u00fa': 'ú',
+'\u016f': 'ů',
+'\u011b': 'ě',
+'\u0161': 'š',
+'\u0165': 'ť',
+'\u010d': 'č',
+'\u0159': 'ř',
+'\u017e': 'ž',
+'\u010f': 'ď',
+'\u0148': 'ň',
+'\u00C0': 'Á',
+'\u00c9': 'É',
+'\u00cd': 'Í',
+'\u00d3': 'Ó',
+'\u00da': 'Ú',
+'\u016e': 'Ů',
+'\u0115': 'Ě',
+'\u0160': 'Š',
+'\u010c': 'Č',
+'\u0158': 'Ř',
+'\u0164': 'Ť',
+'\u017d': 'Ž',
+'\u010e': 'Ď',
+'\u0147': 'Ň'
+}
 
 
 def CATEGORIES():
-    #addDir('112','http://voyo.nova.cz/112/',1,'http://iamm.netuje.cz/emulator/voyo/image/112.jpg')
-    #addDir( 'Babicovy dobroty','http://voyo.nova.cz/babicovy-dobroty/',1,'http://iamm.netuje.cz/emulator/voyo/image/babicovy-dobroty.jpg')
-    #self.core.setSorting('NONE')
     req = urllib2.Request(__baseurl__)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('<li><a href="http://prima.stream.cz/(.+?)/">(.+?)</a></li>').findall(httpdata)
+    match = re.compile('<div class="field-content"><a href="/videoarchiv/(.+?)" class="modalframe-exclude">(.+?)</a></div>').findall(httpdata)
 
     for url,name in match:
-        addDir(name,__baseurl__+'/'+url+'/',1,__dmdbase__+url+'.jpg')
+        addDir(name,'http://www.iprima.cz/videoarchiv_ajax/'+url,1,icon,0)
         
-def INDEX(url):
-    doc = read_page(url)
-    items = doc.find('div', id='videa_kanalu_list')
-    for item in items.findAll('div', 'kanal_1video'):
-            thumb = item.find('a', 'kanal_1video_pic')
-            thumb = thumb['style']
-            thumb = thumb[(thumb.find('url(') + len('url(') + 1):] 
-            thumb = thumb[:(thumb.find(')') - 1)]
-            name_a = item.find('a', 'kanal_1video_title')
-            name = name_a.getText(" ").encode('utf-8')
-            url = str(item.a['href'])
-            plot = item.find('div', 'kanal_1video_text')
-            plot = plot.getText(" ").encode('utf-8')
-            #print name, thumb, url, datum, plot
-            addDir(name,url,2,thumb)
-    try:
-        items = doc.find('div', 'paging')
-        for item in items.findAll('a'):
-            page = item.text.encode('utf-8') 
-            if re.match('další', page, re.U):
-                next_url = item['href']
-                #print 'Další strana',item['href']
-                addDir('Další strana',__baseurl__+next_url,1,nexticon)
-        
-    except:
-        print 'strankovani nenalezeno'
+def INDEX(url,page):
+    # parametry pro skript
+    if int(page) != 0:
+        strquery = 'method=json&action=relevant&page='+str(page)
+    else:
+        strquery = 'method=json&action=relevant'
+    print strquery    
+    # pozadavek na skript
+    request = urllib2.Request(url, strquery)
+    con = urllib2.urlopen(request)
+    # nacteni stranky
+    data = con.read()
+    con.close()
+    # naplneni promenne obsahem stranky
+    match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":".+?","comment_count":".+?","image":".+?/(.+?)"').findall(data)
+    for videoid,name,datum,thumb in match:
+            name = replace_words(name, word_dic)
+            thumb = replace_words(thumb, word_dic)
+            #print str(name),'http://www.iprima.cz/videoarchiv_ajax/'+videoid,2,'http://www.iprima.cz/sites/'+thumb
+            addDir(str(name),'http://www.iprima.cz/videoarchiv_ajax/'+videoid,2,'http://www.iprima.cz/sites/'+thumb,'')
+
+    strankovani = re.compile('"total":(.+?),"from":.+?,"to":.+?,"page":(.+?),').findall(data)
+    for page_total,act_page in strankovani:
+        print page_total,act_page
+        if int(page_total) > 10:
+            act_page = act_page.replace('"','')
+            next_page = int(act_page)  + 1
+            max_page =  round(int(page_total)/10,0 )
+            if next_page < max_page+1:
+                #print '>> Další strana >>',url,1,next_page
+                addDir('>> Další strana ('+str(next_page+1)+' z '+str(max_page+1)+')',url,1,nexticon,next_page)
         
 def VIDEOLINK(url,name):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    try:
-        hd_video = re.compile('cdnHD=([0-9]+)').findall(httpdata)
-    except:
-        print 'HD stream nenalezen'
-    try:
-        hq_video = re.compile('cdnHQ=([0-9]+)').findall(httpdata)
-    except:
-        print 'HD stream nenalezen'
-    try:
-        lq_video = re.compile('cdnLQ=([0-9]+)').findall(httpdata)
-    except:
-        print 'LQ stream nenalezen'
-    thumb = re.compile('<link rel="image_src" href="(.+?)" />').findall(httpdata)
-    popis = re.compile('<meta name="title" content="(.+?) - Video na Stream.cz" />').findall(httpdata)
-    #print name,urlhq,thumb
-    if len(hd_video)>0:
-        hdurl = __cdn_url__ + hd_video[0]
-        #print 'HD '+'name',hdurl,popis[0]
-        addLink('HD '+name,hdurl,'',popis[0])
-    if len(hq_video)>0:
-        hqurl = __cdn_url__ + hq_video[0]
-        #print 'HQ '+'name',hqurl,'',popis[0]
-        addLink('HQ '+name,hqurl,'',popis[0])
-    if len(lq_video)>0:
-        lqurl = __cdn_url__ + lq_video[0]
-        #print'LQ '+'name',lqurl,'',popis[0]
-        addLink('LQ '+name,lqurl,'',popis[0])        
+    # parametry pro skript
+    strquery = 'method=json&action=video'
+    # pozadavek na skript
+    request = urllib2.Request(url, strquery)
+    con = urllib2.urlopen(request)
+    # nacteni stranky
+    data = con.read()
+    con.close()
+    # naplneni promenne obsahem stranky
+    stream_video = re.compile('cdnID=([0-9]+)').findall(data)
+    if len(stream_video) > 0:
+        print 'LQ '+__cdn_url__+name,stream_video[0],icon,''
+        addLink('LQ '+name,__cdn_url__+stream_video[0],icon,'')        
+    else:
+        livebox = re.compile("'512','414', '(.+?)', '(.+?)', '(.+?)'").findall(data)
+        #hq_stream = livebox[0]
+        #lq_stream = livebox[1]
+        #thumb = livebox[2]
+        for hq_stream,lq_stream,thumb in livebox:
+            nahled = 'http://embed.livebox.cz/iprima/'+thumb
+            hq_url = 'rtmp://iprima.livebox.cz/iprima/'+hq_stream                
+            lq_url = 'rtmp://iprima.livebox.cz/iprima/'+lq_stream                
+            print nahled, hq_url, lq_url
+            if __settings__.getSetting('kvalita_sel') == "true":
+                print 'HQ '+name,hq_url,nahled,name
+                addLink('HQ '+name,hq_url,nahled,name)
+            if __settings__.getSetting('kvalita_sel') == "false":
+                print 'LQ '+name,lq_url,nahled,name
+                addLink('LQ '+name,lq_url,nahled,name)
+
+
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -120,8 +158,8 @@ def addLink(name,url,iconimage,popis):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+def addDir(name,url,mode,iconimage,page):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&page="+str(page)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
@@ -134,7 +172,7 @@ url=None
 name=None
 thumb=None
 mode=None
-
+page=None
 try:
         url=urllib.unquote_plus(params["url"])
 except:
@@ -147,10 +185,15 @@ try:
         mode=int(params["mode"])
 except:
         pass
+try:
+        page=int(params["page"])
+except:
+        pass
 
 print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
+print "Page: "+str(page)
 
 if mode==None or url==None or len(url)<1:
         print ""
@@ -158,7 +201,8 @@ if mode==None or url==None or len(url)<1:
        
 elif mode==1:
         print ""+url
-        INDEX(url)
+        print ""+str(page)
+        INDEX(url,page)
         
 elif mode==2:
         print ""+url

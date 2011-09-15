@@ -1,3 +1,5 @@
+2011-09-15:
+ * archiv komplet pøedìlán pro pøehrávání poøadù, které prima novì dává pouze do archivu na svých stránkách  
 2011-07-22:
  * pøechod na upravenou knihovnu BeautifulSOAP - údajnì má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  
 2011-07-04:
