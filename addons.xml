@@ -312,7 +312,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.filmyczcom"
        name="Filmy CZ"
-       version="0.6"
+       version="0.7"
        provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

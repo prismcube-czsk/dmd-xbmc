@@ -1,3 +1,6 @@
+2011-09-29:
+ * pøidána položka "Seriály"
+
 2011-09-13:
  * oprava pluginu vk.com - nefungoval spravne ve Windows prostredi, problem s cookies a home adresarem
 2011-08-16:

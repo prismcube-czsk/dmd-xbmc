@@ -3,6 +3,7 @@ import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 import vk,novamov,videobb
+#import videonet
 
 __baseurl__ = 'http://filmycz.com'
 #_UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -17,11 +18,11 @@ nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 
 
-
 #==========================================================================
 def OBSAH():
     addDir('Hledat ...',__baseurl__,4,icon)
     addDir('Podle kategorie',__baseurl__,1,icon)
+    addDir('Serialy',__baseurl__+'/serialy/1-online',5,icon)
     addDir('Filmy Online',__baseurl__+'/',2,icon)
 #==========================================================================
 
@@ -89,9 +90,7 @@ def INDEX(url):
             link = item['href']
 	    item = item.find('img')
             icon = item['src']
-            
             addDir(name,__baseurl__+link,3,icon,popis)
-	    #VIDEOLINK(__baseurl__+link,name)
     try:
         pager = doc.find('div','pagination-bg')
         act_page_a = pager.find('span')
@@ -114,6 +113,35 @@ def INDEX(url):
     except:
         print 'stop'
 #==========================================================================
+
+
+#==========================================================================
+def SERIALY(url):
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', _UserAgent_)
+	response = urllib2.urlopen(req)
+	link = response.read()
+	response.close()
+	match  = re.compile("mce_href=\"(.+?)\">(.+?)</a>").findall(link)
+	for item in match:
+		addDir(item[1],__baseurl__+item[0],6,'','')
+#==========================================================================
+
+
+#==========================================================================
+def SERIALY_DET(url):
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', _UserAgent_)
+	response = urllib2.urlopen(req)
+	link = response.read()
+	response.close()
+	match  = re.compile("mce_href=\"(.+?)\">[\s]*?(.+?)</a>").findall(link)
+	for item in match:
+		name=item[1].replace('&nbsp;',' ')
+		name=name.replace('<b></b>','')
+		addDir(name,__baseurl__+item[0],3,'','')
+#==========================================================================
+
 
 
 #==========================================================================
@@ -145,6 +173,15 @@ def VKCOM_LINK(url,name):
        		print "VK.COM URL: "+url
 #==========================================================================
 
+#==========================================================================
+def VIDEONET_LINK(url,name):
+	try:
+		videourl=videonet.getURL(url)
+    		addLink(name+" - 24video.net",videourl,'','')
+	except:
+       		print "24VIDEO.NET URL: "+url
+#==========================================================================
+
 
 #==========================================================================
 def VIDEOLINK(url,name):
@@ -152,19 +189,22 @@ def VIDEOLINK(url,name):
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
     link = response.read()
+    response.close()
     match=re.compile('<p>(.+?)</p>\s*.*<p style=.*><.*mce_(src|href)=\"(.+?)\".*').findall(link)
-    if len(match) < 1:
-	match=re.compile('.*mce_(src|href)=\"(.+?)\".*').findall(link)
-    print match
+    if (len(match) < 1) or (match[0][0].find('<br /></p><p><br />') != -1) :
+    	match=re.compile('.*mce_(src|href)=\"(.+?)\".*').findall(link)
     for item in match:
     	url = item[len(item)-1].replace('&amp;','&')
 	try:
 		n=item[2]
 		name=item[0]
 	except:
-		print 
+		pass 
 	if url.find('youtube.com') != -1:
 		continue
+	#elif url.find('24video.net') != -1:
+	#	match=re.search('flashvars=\"id=(?P<id>.+?)&amp;idHtml=(?P<html>.+?)&amp;.*rootUrl=(?P<url>.+?)&amp;', link, re.IGNORECASE | re.DOTALL)
+	#	VIDEONET_LINK(('%s%s%s?mode=play'% (match.group('url') , match.group('html'),match.group('id'))),name)
 	elif url.find('videobb.com') != -1:
 		VIDEOBB_LINK(url,name)
 	elif url.find('novamov.com') != -1:
@@ -256,6 +296,14 @@ elif mode==3:
 elif mode==4:
         print ""+url
         SEARCH()
+
+elif mode==5:
+        print ""+url
+        SERIALY(url)
+
+elif mode==6:
+        print ""+url
+        SERIALY_DET(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
