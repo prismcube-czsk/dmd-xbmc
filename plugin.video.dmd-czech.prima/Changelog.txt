@@ -1,3 +1,5 @@
+2011-10-03:
+ * pøidány náhledy poøadù  
 2011-09-15:
  * archiv komplet pøedìlán pro pøehrávání poøadù, které prima novì dává pouze do archivu na svých stránkách  
 2011-07-22:
