@@ -24,7 +24,7 @@ def OBSAH():
     addDir('Televize','http://www.stream.cz/televize',1,icon)
     addDir('Uživatelská videa','http://www.stream.cz/kategorie/2-uzivatelska-videa',2,icon)
     addDir('Hudba','http://hudba.stream.cz',3,icon)
-    addDir('Filmový Stream','http://filmovy.stream.cz',4,icon)
+    #addDir('Filmový Stream','http://filmovy.stream.cz',4,icon)
 
 def HUDBA_OBSAH():
     addDir('TOP20','http://music.stream.cz/klipy/top20',7,icon)
@@ -45,7 +45,10 @@ def INDEX_TV(url):
     response.close()
     match = re.compile('<li><a  href="(.+?)">(.+?)</a>').findall(httpdata)
     for link,name in match:
-        if not re.match('www.stream.cz', link, re.U):
+        if re.match('TV Prima', name, re.U):
+            continue
+        else:
+            if not re.match('www.stream.cz', link, re.U):
                 link = 'http://www.stream.cz'+link
                 #print name,link
                 addDir(name,link,5,icon)
@@ -77,7 +80,12 @@ def LIST_TV(url):
             thumb = thumb[(thumb.find('url(') + len('url(') + 1):] 
             thumb = thumb[:(thumb.find(')') - 1)]
             #print name, thumb, url
-            addDir(name,url,6,thumb)
+            if re.match('Hudební videoarchiv', name, re.U):
+                addDir('Hudební videoarchiv','http://hudba.stream.cz',3,icon)
+            elif re.match('Filmové sestřihy', name, re.U):
+                continue
+            else:
+                addDir(name,url,6,thumb)
     try:
         pager = doc.find('div', 'paging')
         act_page_a = pager.find('strong',)
