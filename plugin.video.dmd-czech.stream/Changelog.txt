@@ -1,3 +1,7 @@
+2011-10-16:
+ * odstranìn issue 1
+ * odebrán filmový stream, který byl zrušen
+ * odebrána Prima TV z dùvodu pøechodu na vlastní archiv, aktuální archiv Prima v samostatném doplòku    
 2011-08-10:
  * oprava  kategorie Hudba - Hudební poøady  
 2011-07-22:
