@@ -1,3 +1,5 @@
+2011-10-17:
+ * pøidáno vyhledávání
 2011-10-16:
  * odstranìn issue 1
  * odebrán filmový stream, který byl zrušen

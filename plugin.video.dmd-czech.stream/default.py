@@ -17,6 +17,7 @@ nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
 page_pole_no = []
+searchurl = 'http://www.stream.cz/?a=search&search_text='
 
 
 
@@ -24,6 +25,7 @@ def OBSAH():
     addDir('Televize','http://www.stream.cz/televize',1,icon)
     addDir('Uživatelská videa','http://www.stream.cz/kategorie/2-uzivatelska-videa',2,icon)
     addDir('Hudba','http://hudba.stream.cz',3,icon)
+    addDir('Hledat...',__baseurl__,13,icon)
     #addDir('Filmový Stream','http://filmovy.stream.cz',4,icon)
 
 def HUDBA_OBSAH():
@@ -146,6 +148,102 @@ def LIST_UZIVATEL(url):
     except:
         print 'STRANKOVANI NENALEZENO!'
 
+
+def SEARCH():
+	keyb = xbmc.Keyboard('', 'Vyhledat na Stream.cz')
+        keyb.doModal()
+        if (keyb.isConfirmed()):
+        	search = keyb.getText()
+	        encode=urllib.quote(search)
+		link = searchurl+encode
+                doc = read_page(link)
+                #items = doc.find('div', 'orderTabInner orderTabInnerG')
+                #for item in items.findAll('a'):
+                #    name = '>> '+item.getText(" ").encode('utf-8')+' <<'
+                #    url = __baseurl__+str(item['href'])
+                #    if re.match('>> Vše <<', name, re.U):
+                #        continue
+                #   #print name, url
+                #    addDir(name,url,6,icon)		
+                items = doc.find('div', 'vertical540Box')
+                for item in items.findAll('div', 'videoList'):
+                    name_a = item.find('h5')
+                    name_a = name_a.find('a') 
+                    name = name_a.getText(" ").encode('utf-8')
+                    url = __baseurl__+str(item.a['href'])
+                    thumb = item.find('a', 'videoListImg')
+                    thumb = thumb['style']
+                    thumb = thumb[(thumb.find('url(') + len('url(') + 1):] 
+                    thumb = thumb[:(thumb.find(')') - 1)]
+                    #print name, thumb, url
+                    addDir(name,url,20,thumb)
+                try:
+                    pager = doc.find('div', 'paging')
+                    act_page_a = pager.find('strong',)
+                    act_page = act_page_a.getText(" ").encode('utf-8')
+                    next_page = int(act_page) + 1        
+                    next_url_no = int(act_page)
+                    for item in pager.findAll('a'):
+                        page_url = item['href'].encode('utf-8')
+                        page_no = item.getText(" ").encode('utf-8')
+                        page_pole_url.append(page_url)
+                        page_pole_no.append(page_no)
+                        max_page_count = len(page_pole_no)-1
+                        url_page = int(max_page_count)-1
+                        if  re.match('další', page_pole_no[max_page_count], re.U):
+                            next_url = item['href']
+                            #next_url = page_pole_url[next_url_no]
+                            max_page = page_pole_no[url_page]
+                            next_label = '>> Přejít na stranu '+str(next_page)+' z '+max_page
+                            #print next_label,__baseurl__+next_url
+                            addDir(next_label,__baseurl__+next_url,14,nexticon)
+                except:
+                    print 'STRANKOVANI NENALEZENO!'
+
+def SEARCH2(url):
+                doc = read_page(url)
+                #items = doc.find('div', 'orderTabInner orderTabInnerG')
+                #for item in items.findAll('a'):
+                #    name = '>> '+item.getText(" ").encode('utf-8')+' <<'
+                #    url = __baseurl__+str(item['href'])
+                #    if re.match('>> Vše <<', name, re.U):
+                #        continue
+                #   #print name, url
+                #    addDir(name,url,6,icon)		
+                items = doc.find('div', 'vertical540Box')
+                for item in items.findAll('div', 'videoList'):
+                    name_a = item.find('h5')
+                    name_a = name_a.find('a') 
+                    name = name_a.getText(" ").encode('utf-8')
+                    url = __baseurl__+str(item.a['href'])
+                    thumb = item.find('a', 'videoListImg')
+                    thumb = thumb['style']
+                    thumb = thumb[(thumb.find('url(') + len('url(') + 1):] 
+                    thumb = thumb[:(thumb.find(')') - 1)]
+                    #print name, thumb, url
+                    addDir(name,url,20,thumb)
+                try:
+                    pager = doc.find('div', 'paging')
+                    act_page_a = pager.find('strong',)
+                    act_page = act_page_a.getText(" ").encode('utf-8')
+                    next_page = int(act_page) + 1        
+                    next_url_no = int(act_page)
+                    for item in pager.findAll('a'):
+                        page_url = item['href'].encode('utf-8')
+                        page_no = item.getText(" ").encode('utf-8')
+                        page_pole_url.append(page_url)
+                        page_pole_no.append(page_no)
+                        max_page_count = len(page_pole_no)-1
+                        url_page = int(max_page_count)-1
+                        if  re.match('další', page_pole_no[max_page_count], re.U):
+                            next_url = item['href']
+                            #next_url = page_pole_url[next_url_no]
+                            max_page = page_pole_no[url_page]
+                            next_label = '>> Přejít na stranu '+str(next_page)+' z '+max_page
+                            #print next_label,__baseurl__+next_url
+                            addDir(next_label,__baseurl__+next_url,14,nexticon)
+                except:
+                    print 'STRANKOVANI NENALEZENO!'
     
 def HUDBA_TOP20(url):
     doc = read_page(url)
@@ -435,6 +533,13 @@ elif mode==11:
 elif mode==12:
         print ""+url
         FILM_LIST2(url)
+
+elif mode==13:
+        print ""+url
+        SEARCH()
+elif mode==14:
+        print ""+url
+        SEARCH2(url)  
        
 elif mode==20:
         print ""+url
