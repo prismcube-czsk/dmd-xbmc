@@ -64,7 +64,8 @@ def CATEGORIES():
     match = re.compile('<div class="field-content"><a href="/videoarchiv/(.+?)" class="modalframe-exclude">(.+?)</a></div>').findall(httpdata)
 
     for url,name in match:
-        addDir(name,'http://www.iprima.cz/videoarchiv_ajax/'+url,1,icon,0)
+        thumb = re.compile('([0-9]+)').findall(url)
+        addDir(name,'http://www.iprima.cz/videoarchiv_ajax/'+url,1,__dmdbase__+thumb[0]+'.jpg',0)
         
 def INDEX(url,page):
     # parametry pro skript

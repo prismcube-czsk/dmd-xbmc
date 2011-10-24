@@ -1,0 +1,4 @@
+<settings>
+   <setting id="kvalita_sel" type="bool" label="Použít vyšší kvalitu HQ" default="true"/>
+   <setting id="secret_token" type="text" label="Zadejte tajné heslo" default="" />
+</settings>

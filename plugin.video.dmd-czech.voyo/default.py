@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import urllib2,urllib,re,os
+import urllib2,urllib,re,os,string,time,base64,md5,datetime
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://voyo.nova.cz'
@@ -15,8 +15,13 @@ nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
 page_pole_no = []
-
-
+secret_token =__settings__.getSetting('secret_token')
+#rtmp_token =__settings__.getSetting('rtmp_token')
+nova_service_url = 'http://master-ng.nacevi.cz/cdn.server/PlayerLink.ashx'
+nova_app_id = 'nova-vod'
+if secret_token == '':
+    xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Zadejte tajné heslo!',30000,"+icon+")")
+    __settings__.openSettings() 
 def CATEGORIES():
     zakazane = ['zenaty-se-zavazky', 'tudorovci', 'kobra-11', 'patty-hewes', 'policejni-odznak']
     req = urllib2.Request(__baseurl__)
@@ -70,10 +75,16 @@ def VIDEOLINK(url,name):
     httpdata = response.read()
     response.close()
     mediaid = re.compile('media_id = "(.+?)"').findall(httpdata)
-    siteid = re.compile('site_id = (.+?);').findall(httpdata)
     thumb = re.compile('<link rel="image_src" href="(.+?)" />').findall(httpdata)
     popis = re.compile('<meta name="description" content="(.+?)" />').findall(httpdata)
-    config = 'http://tn.nova.cz/bin/player/serve.php?media_id='+mediaid[0]+'&site_id='+siteid[0]
+    datum = datetime.datetime.now()
+    timestamp = datum.strftime('%Y%m%d%H%M%S')
+    videoid = urllib.quote(nova_app_id + '|' + mediaid[0])
+    md5hash = nova_app_id + '|' + mediaid[0] + '|' + timestamp + '|' + secret_token
+    md5hash = md5.new(md5hash)
+    signature = urllib.quote(base64.b64encode(md5hash.digest()))
+    config = nova_service_url + '?t=' + timestamp + '&d=1&tm=nova&h=0&c=' +videoid+ '&s='+signature    
+    print config
     try:
         desc = popis[0]
     except:
@@ -83,12 +94,33 @@ def VIDEOLINK(url,name):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    videosrc = re.compile('src="(.+?)"').findall(httpdata)
-    server = re.compile('server="(.+?)"').findall(httpdata)
-    urlhq = 'rtmp://flash'+server[0]+'.nova.nacevi.cz:80/vod?slist=mp4:'+videosrc[0]
-    url = urlhq.encode('utf-8')
-    print name,url,thumb[0],desc
-    addLink(name,url,thumb[0],desc)
+    error_secret_token = re.compile('<errorCode>(.+?)</errorCode>').findall(httpdata)
+    try:
+        chyba = int(error_secret_token[0])
+    except:
+        chyba = 0
+    if chyba == 2:    
+        print 'Nesprávné tajné heslo'
+        xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Nesprávné tajné heslo!',30000,"+icon+")")
+        __settings__.openSettings()        
+    elif chyba == 1:    
+        print 'Špatné časové razítko'
+        xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Nesprávné časové razítko!',30000,"+icon+")")      
+    elif chyba == 0:
+        baseurl = re.compile('<baseUrl>(.+?)</baseUrl>').findall(httpdata)
+        streamurl = re.compile('<url>(.+?)</url>').findall(httpdata)
+        urllq = streamurl[0].encode('utf-8')
+        urlhq = streamurl[1].encode('utf-8')
+        swfurl = 'http://voyo.nova.cz/static/shared/app/flowplayer/13-flowplayer.commercial-3.1.5-19-003.swf'
+        #rtmp_url_lq = baseurl[0]+' playpath='+urllq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
+        rtmp_url_lq = baseurl[0]+' playpath='+urllq
+        #rtmp_url_hq = baseurl[0]+' playpath='+urlhq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
+        rtmp_url_hq = baseurl[0]+' playpath='+urlhq
+        if __settings__.getSetting('kvalita_sel') == "true":
+            addLink(name,rtmp_url_hq,thumb[0],desc)
+        if __settings__.getSetting('kvalita_sel') == "false":
+            addLink(name,rtmp_url_lq,thumb[0],desc)
+
 
 def get_params():
         param=[]

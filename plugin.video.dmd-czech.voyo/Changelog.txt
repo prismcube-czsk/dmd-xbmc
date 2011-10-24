@@ -1,3 +1,6 @@
+2011-10-24:
+ * pøizpùsobení doplòku provedeným zmìnám
+ * pro pøehrávání je nyní nutné "tajné heslo" které z právních dùvodù nemohu uveøejnit na stránkách projektu 
 2011-08-06:
  * odstranìní novì pøidaných seriálù z listu (nelze pøehrát z dùvodu DRM) 
 2011-07-22:

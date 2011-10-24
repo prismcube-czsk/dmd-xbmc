@@ -1,3 +1,5 @@
+2011-10-24:
+ * oprava náhledù poøadù 
 2011-10-03:
  * pøidány náhledy poøadù  
 2011-09-15:
