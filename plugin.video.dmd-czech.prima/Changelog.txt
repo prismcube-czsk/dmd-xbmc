@@ -1,3 +1,5 @@
+2011-10-29:
+ * provizorní oprava archivu, prozatím nefunkèní stránkování
 2011-10-24:
  * oprava náhledù poøadù 
 2011-10-03:

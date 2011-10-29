@@ -70,9 +70,9 @@ def CATEGORIES():
 def INDEX(url,page):
     # parametry pro skript
     if int(page) != 0:
-        strquery = 'method=json&action=relevant&page='+str(page)
+        strquery = '?method=json&action=relevant&page='+str(page)
     else:
-        strquery = 'method=json&action=relevant'
+        strquery = '?method=json&action=relevant'
     print strquery    
     # pozadavek na skript
     request = urllib2.Request(url, strquery)
@@ -81,12 +81,13 @@ def INDEX(url,page):
     data = con.read()
     con.close()
     # naplneni promenne obsahem stranky
-    match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":".+?","comment_count":".+?","image":".+?/(.+?)"').findall(data)
+
+    match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":.+?,"comment_count":".+?","image":".+?/(.+?)"').findall(data)
     for videoid,name,datum,thumb in match:
             name = replace_words(name, word_dic)
             thumb = replace_words(thumb, word_dic)
             #print str(name),'http://www.iprima.cz/videoarchiv_ajax/'+videoid,2,'http://www.iprima.cz/sites/'+thumb
-            addDir(str(name),'http://www.iprima.cz/videoarchiv_ajax/'+videoid,2,'http://www.iprima.cz/sites/'+thumb,'')
+            addDir(str(name),'http://www.iprima.cz/videoarchiv/'+videoid+'/',2,'http://www.iprima.cz/sites/'+thumb,'')
 
     strankovani = re.compile('"total":(.+?),"from":.+?,"to":.+?,"page":(.+?),').findall(data)
     for page_total,act_page in strankovani:
@@ -101,7 +102,7 @@ def INDEX(url,page):
         
 def VIDEOLINK(url,name):
     # parametry pro skript
-    strquery = 'method=json&action=video'
+    strquery = '?method=json&action=video'
     # pozadavek na skript
     request = urllib2.Request(url, strquery)
     con = urllib2.urlopen(request)
@@ -109,6 +110,7 @@ def VIDEOLINK(url,name):
     data = con.read()
     con.close()
     # naplneni promenne obsahem stranky
+    print url
     stream_video = re.compile('cdnID=([0-9]+)').findall(data)
     if len(stream_video) > 0:
         print 'LQ '+__cdn_url__+name,stream_video[0],icon,''
