@@ -74,22 +74,15 @@ def INDEX(url,page):
     else:
         strquery = '?method=json&action=relevant'
     print strquery    
-    # pozadavek na skript
-    request = urllib2.Request(url, strquery)
-    con = urllib2.urlopen(request)
-    # nacteni stranky
-    data = con.read()
-    con.close()
-    # naplneni promenne obsahem stranky
-
-    match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":.+?,"comment_count":".+?","image":".+?/(.+?)"').findall(data)
+    doc = read_page(url+strquery)
+    match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":.+?,"comment_count":".+?","image":".+?/(.+?)"').findall(str(doc))
     for videoid,name,datum,thumb in match:
             name = replace_words(name, word_dic)
             thumb = replace_words(thumb, word_dic)
             #print str(name),'http://www.iprima.cz/videoarchiv_ajax/'+videoid,2,'http://www.iprima.cz/sites/'+thumb
             addDir(str(name),'http://www.iprima.cz/videoarchiv/'+videoid+'/',2,'http://www.iprima.cz/sites/'+thumb,'')
 
-    strankovani = re.compile('"total":(.+?),"from":.+?,"to":.+?,"page":(.+?),').findall(data)
+    strankovani = re.compile('"total":(.+?),"from":.+?,"to":.+?,"page":(.+?),').findall(str(doc))
     for page_total,act_page in strankovani:
         print page_total,act_page
         if int(page_total) > 10:
@@ -97,8 +90,10 @@ def INDEX(url,page):
             next_page = int(act_page)  + 1
             max_page =  round(int(page_total)/10,0 )
             if next_page < max_page+1:
+                max_page = str(max_page+1)
+                max_page = re.sub('.0','',max_page)
                 #print '>> Další strana >>',url,1,next_page
-                addDir('>> Další strana ('+str(next_page+1)+' z '+str(max_page+1)+')',url,1,nexticon,next_page)
+                addDir('>> Další strana ('+str(next_page+1)+' z '+max_page+')',url,1,nexticon,next_page)
         
 def VIDEOLINK(url,name):
     # parametry pro skript
