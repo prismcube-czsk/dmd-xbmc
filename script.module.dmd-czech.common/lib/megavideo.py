@@ -7,7 +7,7 @@
 # Python Video Decryption and resolving routines.
 # Courtesy of Voinage, Coolblaze.
 #------------------------------------------------------------
-# Modify: 2011-09-12, by Ivo Brhel
+# Modify: 2011-10-09, by Ivo Brhel
 #------------------------------------------------------------
 
 import os
@@ -41,13 +41,14 @@ def geturl(url):
 
 # Returns an array of possible video url's from the page_url, supporting premium user account and password protected video
 def getURL( page_url , premium = False , user="" , password="", video_password="" ):
-    print("[megavideo.py] get_video_url( page_url='%s' , user='%s' , password='%s', video_password=%s)" % (page_url , user , "**************************"[0:len(password)] , video_password) )
+    print("[megavideo.py] getURL( page_url='%s' , user='%s' , password='%s', video_password=%s)" % (page_url , user , "**************************"[0:len(password)] , video_password) )
 
     video_urls = []
 
     # If user has premium account, retrieve the cookie_id from the cookie store and passes to the request as parameter "u"
     if premium:
-        megavideo_cookie_id = get_megavideo_cookie_id(user, password)
+        #megavideo_cookie_id = get_megavideo_cookie_id(user, password)
+        megavideo_cookie_id = login(user, password)
         if megavideo_cookie_id == "":
             print("[megavideo.py] No hay cookie de Megavideo válida (error en login o password?)")
             premium = False
@@ -69,6 +70,11 @@ def getURL( page_url , premium = False , user="" , password="", video_password="
     # http://www.megavideo.com/?v=ABCDEFGH -> ABCDEFGH
     #megavideo_video_id = extract_video_id(page_url)
     megavideo_video_id = page_url
+    
+    if megavideo_video_id=="":
+	print("[megavideo.py] Megavideo URL not valid, or video not available")
+	return video_urls
+
 
     # Base URL for obtaining Megavideo URL
     url = "http://www.megavideo.com/xml/videolink.php?v="+megavideo_video_id
@@ -97,6 +103,10 @@ def getURL( page_url , premium = False , user="" , password="", video_password="
         video_urls.append( ["SD "+account_type , video_url ])
     # Video is not available
     except:
+        import sys
+        for line in sys.exc_info():
+            print( "%s" % line )
+        print("[megavideo.py] Megavideo URL not valid, or video not available")      
         return []
 
     # Search for an HD link if it exists
@@ -149,6 +159,12 @@ def extract_video_id( page_url ):
         patron = 'http://www.megavideo.com.*\?v\=([A-Z0-9a-z]{8})'
         matches = re.compile(patron,re.DOTALL).findall(page_url)
         video_id = matches[0]
+    elif page_url.startswith('http://www.megavideo.com/?d='):
+        patron = 'http://www.megavideo.com.*\?d\=([A-Z0-9a-z]{8})'
+        matches = re.compile(patron,re.DOTALL).findall(page_url)
+        video_id = matches[0]
+        import megaupload
+        video_id = megaupload.convertcode(video_id)
     else:
         video_id = page_url
 
@@ -156,35 +172,48 @@ def extract_video_id( page_url ):
     return video_id
 
 # Get the Megavideo user ID (cookie) from the user and password credentials
-def get_megavideo_cookie_id(user, password):
-    print("[megavideo.py] get_megavideo_cookie_id(user="+user+", password="+"**************************"[0:len(password)]+")")
+def login(user, password):
+    print("[megavideo.py] login(user="+user+", password="+"**************************"[0:len(password)]+")")
 
     url = "http://www.megavideo.com/?c=login"
     post = "login=1&redir=1&username="+user+"&password="+urllib.quote(password)
     headers = [ ['User-Agent','Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'],['Referer','http://www.megavideo.com/?s=signup'] ]
     #data = scrapertools.cache_page(url=url, post=post)
     
+    return get_megavideo_cookie_id()
+    
+def get_megavideo_cookie_id():
+    
     cookie_data = config.get_cookie_data()
     print("cookie_data="+cookie_data)
-    patron = 'user="([^"]+)"'
-    matches = re.compile(patron,re.DOTALL).findall(cookie_data)
-    if len(matches)==0:
-        patron = 'user=([^\;]+);'
-        matches = re.compile(patron,re.DOTALL).findall(cookie_data)
-
-    if len(matches)==0:
-        print("[megavideo.py] No se ha encontrado la cookie de Megavideo")
-        print("---------------------------------------------------------------")
-        print("RESPONSE")
-        print(data)
-        print("---------------------------------------------------------------")
-        print("COOKIES")
-        print(cookie_data)
-        print("---------------------------------------------------------------")
-        return ""
-    else:
-        return matches[0]
-
+    
+    lines = cookie_data.split("\n")
+    for line in lines:
+        print("line="+line)
+    
+        if "megavideo.com" in line:
+            print("[megavideo.py] patron1")
+            patron = 'user="([^"]+)"'
+            matches = re.compile(patron,re.DOTALL).findall(line)
+        
+            if len(matches)>0:
+                cookie = matches[0]
+                break
+            else:
+                print("[megavideo.py] patron2")
+                patron = 'user=([^\;]+);'
+                matches = re.compile(patron,re.DOTALL).findall(line)
+                if len(matches)>0:
+                    cookie = matches[0]
+                    break
+                else:
+                    print("[megavideo.py] No se ha encontrado la cookie de Megavideo")
+                    cookie=""
+    
+    print("cookie="+cookie)
+        
+    return cookie
+    
 # Megavideo decryption routines
 def ajoin(arr):
     strtest = ''
@@ -205,53 +234,18 @@ def decrypt(str1, key1, key2):
     while (__reg3 < len(str1)):
         __reg0 = str1[__reg3]
         holder = __reg0
-        if (holder == "0"):
-            __reg1.append("0000")
-        else:
-            if (__reg0 == "1"):
-                __reg1.append("0001")
+        
+        # Optimización de aabilio@gmail.com :)
+        for i in range(16):
+
+            if i == 0:
+                tmp = holder
             else:
-                if (__reg0 == "2"): 
-                    __reg1.append("0010")
-                else: 
-                    if (__reg0 == "3"):
-                        __reg1.append("0011")
-                    else: 
-                        if (__reg0 == "4"):
-                            __reg1.append("0100")
-                        else: 
-                            if (__reg0 == "5"):
-                                __reg1.append("0101")
-                            else: 
-                                if (__reg0 == "6"):
-                                    __reg1.append("0110")
-                                else: 
-                                    if (__reg0 == "7"):
-                                        __reg1.append("0111")
-                                    else: 
-                                        if (__reg0 == "8"):
-                                            __reg1.append("1000")
-                                        else: 
-                                            if (__reg0 == "9"):
-                                                __reg1.append("1001")
-                                            else: 
-                                                if (__reg0 == "a"):
-                                                    __reg1.append("1010")
-                                                else: 
-                                                    if (__reg0 == "b"):
-                                                        __reg1.append("1011")
-                                                    else: 
-                                                        if (__reg0 == "c"):
-                                                            __reg1.append("1100")
-                                                        else: 
-                                                            if (__reg0 == "d"):
-                                                                __reg1.append("1101")
-                                                            else: 
-                                                                if (__reg0 == "e"):
-                                                                    __reg1.append("1110")
-                                                                else: 
-                                                                    if (__reg0 == "f"):
-                                                                        __reg1.append("1111")
+                tmp = __reg0
+
+            if tmp == hex(i).split("x")[1]:
+                __reg1.append("".join([str((i >> y) & 1) for y in range(3, -1, -1)]))
+                break
 
         __reg3 = __reg3 + 1
 
@@ -297,55 +291,18 @@ def decrypt(str1, key1, key2):
     while (__reg3 < len(__reg7)):
         __reg0 = __reg7[__reg3]
         holder2 = __reg0
-    
-        if (holder2 == "0000"):
-            __reg2.append("0")
-        else: 
-            if (__reg0 == "0001"):
-                __reg2.append("1")
-            else: 
-                if (__reg0 == "0010"):
-                    __reg2.append("2")
-                else: 
-                    if (__reg0 == "0011"):
-                        __reg2.append("3")
-                    else: 
-                        if (__reg0 == "0100"):
-                            __reg2.append("4")
-                        else: 
-                            if (__reg0 == "0101"): 
-                                __reg2.append("5")
-                            else: 
-                                if (__reg0 == "0110"): 
-                                    __reg2.append("6")
-                                else: 
-                                    if (__reg0 == "0111"): 
-                                        __reg2.append("7")
-                                    else: 
-                                        if (__reg0 == "1000"): 
-                                            __reg2.append("8")
-                                        else: 
-                                            if (__reg0 == "1001"): 
-                                                __reg2.append("9")
-                                            else: 
-                                                if (__reg0 == "1010"): 
-                                                    __reg2.append("a")
-                                                else: 
-                                                    if (__reg0 == "1011"): 
-                                                        __reg2.append("b")
-                                                    else: 
-                                                        if (__reg0 == "1100"): 
-                                                            __reg2.append("c")
-                                                        else: 
-                                                            if (__reg0 == "1101"): 
-                                                                __reg2.append("d")
-                                                            else: 
-                                                                if (__reg0 == "1110"): 
-                                                                    __reg2.append("e")
-                                                                else: 
-                                                                    if (__reg0 == "1111"): 
-                                                                        __reg2.append("f")
-                                                                    
+
+        # Optimización de aabilio@gmail.com :)
+        for i in range(16):
+            if i == 0:
+                tmp = holder2
+            else:
+                tmp = __reg0
+
+            if tmp == "".join([str((i >> y) & 1) for y in range(3, -1, -1)]):
+                __reg2.append(hex(i).split("x")[1])
+                break
+
         __reg3 = __reg3 + 1
 
     endstr = ajoin(__reg2)
