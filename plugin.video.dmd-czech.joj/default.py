@@ -45,6 +45,7 @@ def OBSAH_ZAB():
     addDir('ČS má Talent','http://www.csmatalent.cz/video-cz.html',6,__dmdbase__+'talent.jpg')
     addDir('Hladá sa milionár','http://www.joj.sk/hlada-sa-milionar/hlada-sa-milionar-archiv.html',4,__dmdbase__+'hlada-sa-milionar.jpg')
     addDir('Chutíš mi','http://www.chutismi.sk/chutis-mi-archiv.html',4,__dmdbase__+'chutismi.jpg')
+    addDir('Farmár hľadá ženu 2','http://www.farmarhladazenu.sk/epizody.html',8,'http://t2.gstatic.com/images?q=tbn:ANd9GcRRJbqnrXcT-Ius3Qo29sc-KPVKuNkVjRq5zx51P3FSdpzLL0VD')
     addDir('Kapor na torte','http://www.joj.sk/kapor-na-torte-den-prvy/kapor-na-torte-den-prvy-archiv.html',4,__dmdbase__+'kapor-na-torte.jpg')
     addDir('Kutyil s.r.o','http://www.joj.sk/kutyil/kutyil-epizody.html',4,__dmdbase__+'kutyil-logo.jpg')
     addDir('Lampa','http://plus.joj.sk/lampa/lampa-tv-archiv.html',4,__dmdbase__+'lampa.jpg')
@@ -122,6 +123,23 @@ def LIST_4(url):
         if len(dalsi) != 0:
             next_url = str(dalsi.a['href']) 
             addDir('>> Další strana >>','http://www.mamaozenma.sk/'+next_url,7,nexticon)
+    except:
+        print 'strankovani nenalezeno'
+
+def LIST_5(url):
+    doc = read_page(url)
+    items = doc.find('ul', 'l c')
+    for item in items.findAll('li','i'):
+        name = item.a['title'].encode('utf-8')
+        url = str(item.a['href']) 
+        thumb = str(item.img['src'])   
+        addDir(name,'http://www.farmarhladazenu.sk/'+url,10,thumb)
+    try:
+        items = doc.find('ul', 'b-box b-pager-x c')
+        dalsi = items.find('li', 'next')
+        if len(dalsi) != 0:
+            next_url = str(dalsi.a['href']) 
+            addDir('>> Další strana >>','http://www.farmarhladazenu.sk/'+next_url,8,nexticon)
     except:
         print 'strankovani nenalezeno'
                 
@@ -297,6 +315,10 @@ elif mode==6:
 elif mode==7:
         print ""+url
         LIST_4(url) 
+
+elif mode==8:
+        print ""+url
+        LIST_5(url)
         
 elif mode==10:
         print ""+url
