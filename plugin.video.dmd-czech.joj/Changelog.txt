@@ -1,14 +1,15 @@
-2011-09-13:
- * oprava včerejší špatné aktualizace
- * přidány pořady Mama ožeň ma, Ako som prežil, Hoď svišťom 
+2011-11-02:
+ * debug
+2011-11-01:
+ * pridan pořad Farmar hlada zenu 2
 2011-09-12:
- * přidán pořad ČS má talent
+ * pridan pořad CS ma talent
 2011-07-22:
- * přechod na upravenou knihovnu BeautifulSOAP - údajně má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  
+ * prechod na upravenou knihovnu BeautifulSOAP - udajne ma zpracovavat dotazy o 100% rychleji, thanx to IVO ;-)  
 2011-07-04:
- * změna fanart(u)
+ * zmena fanart(u)
 2011-06-21:
- * Oprava přehrávání pořadu Šééfka
+ * Oprava prehravani poradu Sefka
 2011-06-19:
  * JOJ.sk (alpha) - first release
 

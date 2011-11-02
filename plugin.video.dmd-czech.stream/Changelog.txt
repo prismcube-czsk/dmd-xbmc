@@ -1,15 +1,17 @@
+2011-11-02:
+ * pridana moznost zobrazeni vlastnich nahranych videi
 2011-10-17:
- * pøidáno vyhledávání
+ * pridano vyhledavani
 2011-10-16:
- * odstranìn issue 1
- * odebrán filmový stream, který byl zrušen
- * odebrána Prima TV z dùvodu pøechodu na vlastní archiv, aktuální archiv Prima v samostatném doplòku    
+ * odstranen issue 1
+ * odebran filmovy stream, ktery byl zrusen
+ * odebrana Prima TV z duvodu prechodu na vlastni archiv, aktualni archiv Prima v samostatnem doplnku    
 2011-08-10:
- * oprava  kategorie Hudba - Hudební poøady  
+ * oprava  kategorie Hudba - Hudebni porady  
 2011-07-22:
- * pøechod na upravenou knihovnu BeautifulSOAP - údajnì má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  
+ * prechod na upravenou knihovnu BeautifulSOAP - udajne ma zpracovavat dotazy o 100% rychleji, thanx to IVO ;-)  
 2011-07-04:
- * úprava ikony
+ * uprava ikony
 2011-06-26:
  * Stream (alpha) - first release
 

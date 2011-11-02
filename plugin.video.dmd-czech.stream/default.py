@@ -18,14 +18,14 @@ fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
 page_pole_no = []
 searchurl = 'http://www.stream.cz/?a=search&search_text='
-
-
+user_name =__settings__.getSetting('user_name')
 
 def OBSAH():
     addDir('Televize','http://www.stream.cz/televize',1,icon)
     addDir('Uživatelská videa','http://www.stream.cz/kategorie/2-uzivatelska-videa',2,icon)
     addDir('Hudba','http://hudba.stream.cz',3,icon)
     addDir('Hledat...',__baseurl__,13,icon)
+    addDir('Moje videa',__baseurl__,15,icon)
     #addDir('Filmový Stream','http://filmovy.stream.cz',4,icon)
 
 def HUDBA_OBSAH():
@@ -68,6 +68,57 @@ def INDEX_UZIVATEL(url):
         #print name,link
         addDir(name,link,6,icon)
 
+def MY_VIDEO(url):
+    if url == __baseurl__:
+        if user_name == '':
+            xbmc.executebuiltin("XBMC.Notification('Doplněk DMD JOJ','Zadejte uživ.jméno nebo email!',30000,"+icon+")")
+            __settings__.openSettings()
+        if re.search('@', user_name, re.U):
+            match = re.compile('(.+?)@(.+)').findall(user_name)
+            for name,email in match:
+                url = __baseurl__+ '/profil/' + email + '/'+ name
+        else:
+            url = __baseurl__+ '/profil/' + user_name
+        print url            
+        doc = read_page(url)
+        items = doc.find('div', 'boxVideo txtRight')
+        url = __baseurl__+str(items.a['href'])
+        print url
+    doc = read_page(url)
+    items = doc.find('div', 'vertical670Box')
+    for item in items.findAll('div', 'videoList'):
+            name_a = item.find('h5')
+            name_a = name_a.find('a') 
+            name = name_a.getText(" ").encode('utf-8')
+            link = __baseurl__+str(item.a['href'])
+            thumb = item.find('a', 'videoListImg')
+            thumb = thumb['style']
+            thumb = thumb[(thumb.find('url(') + len('url(') + 1):] 
+            thumb = thumb[:(thumb.find(')') - 1)]
+            #print name, thumb, url
+            addDir(name,link,20,thumb)
+    try:
+        pager = doc.find('div', 'paging')
+        act_page_a = pager.find('strong',)
+        act_page = act_page_a.getText(" ").encode('utf-8')
+        next_page = int(act_page) + 1        
+        next_url_no = int(act_page) - 1
+        for item in pager.findAll('a'):
+            page_url = item['href'].encode('utf-8')
+            page_no = item.getText(" ").encode('utf-8')
+            page_pole_url.append(page_url)
+            page_pole_no.append(page_no)
+        max_page_count = len(page_pole_no)-1
+        url_page = int(max_page_count)-1
+        if  re.match('další', page_pole_no[max_page_count], re.U):
+            next_url = item['href']
+            #next_url = page_pole_url[next_url_no]
+            max_page = page_pole_no[url_page]
+            next_label = 'Přejít na stranu '+str(next_page)+' z '+max_page
+            #print next_label,__baseurl__+next_url
+            addDir(next_label,__baseurl__+next_url,15,nexticon)
+    except:
+        print 'STRANKOVANI NENALEZENO!'
 
 def LIST_TV(url):
     doc = read_page(url)
@@ -540,7 +591,11 @@ elif mode==13:
 elif mode==14:
         print ""+url
         SEARCH2(url)  
-       
+
+elif mode==15:
+        print ""+url
+        MY_VIDEO(url)       
+
 elif mode==20:
         print ""+url
         VIDEOLINK(url,name)

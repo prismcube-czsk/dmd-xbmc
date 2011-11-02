@@ -133,7 +133,7 @@ def LIST_5(url):
         name = item.a['title'].encode('utf-8')
         url = str(item.a['href']) 
         thumb = str(item.img['src'])   
-        addDir(name,'http://www.farmarhladazenu.sk/'+url,10,thumb)
+        addDir(name,'http://www.farmarhladazenu.sk/'+url,10,'http://www.farmarhladazenu.sk/'+thumb)
     try:
         items = doc.find('ul', 'b-box b-pager-x c')
         dalsi = items.find('li', 'next')
