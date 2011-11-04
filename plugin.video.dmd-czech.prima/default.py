@@ -79,6 +79,7 @@ def INDEX(url,page):
     for videoid,name,datum,thumb in match:
             name = replace_words(name, word_dic)
             thumb = replace_words(thumb, word_dic)
+            thumb = re.sub('98x55','280x158',thumb)
             #print str(name),'http://www.iprima.cz/videoarchiv_ajax/'+videoid,2,'http://www.iprima.cz/sites/'+thumb
             addDir(str(name),'http://www.iprima.cz/videoarchiv/'+videoid+'/',2,'http://www.iprima.cz/sites/'+thumb,'')
 
