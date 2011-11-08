@@ -112,7 +112,7 @@ def VIDEOLINK(url,name):
         print 'LQ '+__cdn_url__+name,stream_video[0],icon,''
         addLink('LQ '+name,__cdn_url__+stream_video[0],icon,'')        
     else:
-        livebox = re.compile("'512','414', '(.+?)', '(.+?)', '(.+?)'").findall(data)
+        livebox = re.compile("width, height, '(.+?)', '(.+?)', '(.+?)'").findall(data)
         #hq_stream = livebox[0]
         #lq_stream = livebox[1]
         #thumb = livebox[2]
