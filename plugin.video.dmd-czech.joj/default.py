@@ -87,7 +87,10 @@ def LIST_2(url):
     doc = read_page(url)
     items = doc.find('div', 'b-body c')
     for item in items.findAll('li'):
-        name = item.a['title'].encode('utf-8')
+        try:
+            name = item.a['title'].encode('utf-8')
+        except:
+            name = 'Bezejmenný titul'
         url = str(item.a['href']) 
         thumb = str(item.img['src'])   
         addDir(name,'http://www.sefka.sk/'+url,10,thumb)
@@ -96,7 +99,10 @@ def LIST_3(url):
     doc = read_page(url)
     items = doc.find('ul', 'l c')
     for item in items.findAll('li'):
-        name = item.a['title'].encode('utf-8')
+        try:
+            name = item.a['title'].encode('utf-8')
+        except:
+            name = 'Bezejmenný titul'
         url = str(item.a['href']) 
         thumb = str(item.img['src'])   
         addDir(name,'http://www.csmatalent.cz/'+url,11,thumb)
@@ -113,7 +119,10 @@ def LIST_4(url):
     doc = read_page(url)
     items = doc.find('ul', 'l c')
     for item in items.findAll('li'):
-        name = item.a['title'].encode('utf-8')
+        try:
+            name = item.a['title'].encode('utf-8')
+        except:
+            name = 'Bezejmenný titul'
         url = str(item.a['href']) 
         thumb = str(item.img['src'])   
         addDir(name,'http://www.mamaozenma.sk/'+url,10,thumb)
@@ -130,7 +139,10 @@ def LIST_5(url):
     doc = read_page(url)
     items = doc.find('ul', 'l c')
     for item in items.findAll('li','i'):
-        name = item.a['title'].encode('utf-8')
+        try:
+            name = item.a['title'].encode('utf-8')
+        except:
+            name = 'Bezejmenný titul'
         url = str(item.a['href']) 
         thumb = str(item.img['src'])   
         addDir(name,'http://www.farmarhladazenu.sk/'+url,10,'http://www.farmarhladazenu.sk/'+thumb)
@@ -210,17 +222,16 @@ def TALENT(url,name):
     response = urllib2.urlopen(req)
     doc = response.read()
     response.close()
-    title = re.compile('title="(.+?)"').findall(doc)
     thumb = re.compile('thumb="(.+?)"').findall(doc)
     joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
     for kvalita,serverno,cesta in joj_file:
-        name = str.swapcase(kvalita)+ ' - ' + title[0]
+        titul = str.swapcase(kvalita)+ ' - ' + name
         server = 'n0'+serverno+'.joj.sk'
         tcurl = 'rtmp://'+server
         swfurl = 'http://b.static.csmatalent.sk/fileadmin/templates/swf/CsmtPlayer.swf?no_cache=168842'
         port = '1935'
         rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
-        addLink(name,rtmp_url,thumb[0],name)
+        addLink(titul,rtmp_url,thumb[0],titul)
 
 
 
