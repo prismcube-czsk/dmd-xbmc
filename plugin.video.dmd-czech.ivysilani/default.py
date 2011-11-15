@@ -54,21 +54,26 @@ def KATEGORIE():
     addDir('Všechny',__baseurl__+'/zanr-vse/',3,icon)   
 
 def LIVE_OBSAH(url):
+    program=[r'ČT1 - ', r'ČT2 - ', r'ČT24 - ', r'ČT4 - ']
+    i = 0
     doc = read_page(url)
     items = doc.find('div', 'clearfix')
     for item in items.findAll('div', 'channel'):
+            prehrano = item.find('div','progressBar')
+            prehrano = prehrano['style']
+            prehrano = prehrano[(prehrano.find('width:') + len('width:') + 1):]
             #name_a = item.find('p')
             try:
                 name_a = item.find('a') 
-                name = name_a.getText(" ").encode('utf-8')
+                name = program[i]+name_a.getText(" ").encode('utf-8')+'- Přehráno: '+prehrano.encode('utf-8')
                 url = 'http://www.ceskatelevize.cz'+str(item.a['href'])
                 thumb = str(item.img['src'])
             except:
-                name = 'Právě teď běží pořad, který nemůžeme vysílat po internetu.'
+                name = program[i]+'Právě teď běží pořad, který nemůžeme vysílat po internetu.'
                 thumb = 'http://img7.ceskatelevize.cz/ivysilani/gfx/empty/noLive.png'
             #print name, thumb, url
             addDir(name,url,10,thumb)
-
+            i=i+1
 def ABC(url):
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
@@ -286,12 +291,12 @@ def VIDEOLINK(url,name):
     doc = read_page(data)
     items = doc.find('body')
     for item in items.findAll('switchitem'):
-        match = re.compile('<switchitem id="(.+?)" base="(.+?)" begin=".+?" duration=".+?" clipbegin=".+?">').findall(str(item))
+        match = re.compile('<switchitem id="(.+?)" base="(.+?)"').findall(str(item))
         for id,base in match:
             base = re.sub('&amp;','&',base)
             if re.search('AD', id, re.U): 
                 continue
-            video = re.compile('<video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled=".+?">').findall(str(item))
+            video = re.compile('<video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled=".+?"').findall(str(item))
             for cesta,kvalita in video:
                 #rtmp_url = base+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true live=true'
                 rtmp_url = base+'/'+cesta
