@@ -1,13 +1,15 @@
+2011-11-15:
+ * oprava vyberu kvality prehravaneho poradu
 2011-10-24:
- * pøizpùsobení doplòku provedeným zmìnám
- * pro pøehrávání je nyní nutné "tajné heslo" které z právních dùvodù nemohu uveøejnit na stránkách projektu 
+ * prizpusobeni doplnku provedenym zmenam
+ * pro prehravani je nyni nutne "tajne heslo" ktere z pravnich duvodu nemohu uverejnit na strankach projektu 
 2011-08-06:
- * odstranìní novì pøidaných seriálù z listu (nelze pøehrát z dùvodu DRM) 
+ * odstraneni nove pridanych serialu z listu (nelze prehrat z duvodu DRM) 
 2011-07-22:
- * upravena funkce získávání popisu poøadu, který nìkde chybìl, thanx to IVO za upozornìní ;-)
- * pøechod na upravenou knihovnu BeautifulSOAP - údajnì má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  
+ * upravena funkce ziskavani popisu poradu, ktery nekde chybel, thanx to IVO za upozorneni ;-)
+ * prechod na upravenou knihovnu BeautifulSOAP - udajne ma zpracovavat dotazy o 100% rychleji, thanx to IVO ;-)  
 2011-07-04:
- * zmìna fanart(u)
+ * zmena fanart(u)
 2009-06-18: 
  * Voyo.cz (alpha) - first release
 

@@ -108,9 +108,14 @@ def VIDEOLINK(url,name):
         xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Nesprávné časové razítko!',30000,"+icon+")")      
     elif chyba == 0:
         baseurl = re.compile('<baseUrl>(.+?)</baseUrl>').findall(httpdata)
-        streamurl = re.compile('<url>(.+?)</url>').findall(httpdata)
-        urllq = streamurl[0].encode('utf-8')
-        urlhq = streamurl[1].encode('utf-8')
+        streamurl = re.compile('<media>\s<quality>(.+?)</quality>.\s<url>(.+?)</url>\s</media>').findall(httpdata)        
+        for kvalita,odkaz in streamurl:
+            #print kvalita,odkaz
+            if re.match('hq', kvalita, re.U):
+                urlhq = odkaz.encode('utf-8')
+            elif re.match('lq', kvalita, re.U):
+                urllq = odkaz.encode('utf-8')
+        print urlhq,urllq
         swfurl = 'http://voyo.nova.cz/static/shared/app/flowplayer/13-flowplayer.commercial-3.1.5-19-003.swf'
         #rtmp_url_lq = baseurl[0]+' playpath='+urllq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
         rtmp_url_lq = baseurl[0]+' playpath='+urllq
