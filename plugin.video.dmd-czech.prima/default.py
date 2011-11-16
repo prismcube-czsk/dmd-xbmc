@@ -75,7 +75,8 @@ def INDEX(url,page):
         strquery = '?method=json&action=relevant'
     print strquery    
     doc = read_page(url+strquery)
-    match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":.+?,"comment_count":".+?","image":".+?/(.+?)"').findall(str(doc))
+    #match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":.+?,"comment_count":".+?","image":".+?/(.+?)"').findall(str(doc))
+    match = re.compile('"nid":"(.+?)","title":"(.+?)","date":"(.+?)","view_count":.+?,"image":".+?/(.+?)"').findall(str(doc))
     for videoid,name,datum,thumb in match:
             name = replace_words(name, word_dic)
             thumb = replace_words(thumb, word_dic)
