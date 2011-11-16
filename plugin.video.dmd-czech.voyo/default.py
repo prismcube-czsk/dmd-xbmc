@@ -37,6 +37,14 @@ def CATEGORIES():
         
 def INDEX(url):
     doc = read_page(url)
+    match = re.compile("list_video_form_type_id'\)\.value='(.+?)'; \$\('list_video_form'\)\.submit\(\); return false;\">(.+?)</a>").findall(str(doc))
+    parentid = re.compile('<input type="hidden" name="parent_id" value="(.+?)" />').findall(str(doc))
+    for typeid,nazev in match:
+        nazev = '= '+nazev.capitalize()+' ='
+        link = '/search?parent_id='+parentid[0]+'&s=0&d=0&wm=0&pg=0&type_id='+typeid
+        if not re.search('search', url, re.U):
+            #print nazev,link
+            addDir(nazev,__baseurl__+link,1,icon)
     items = doc.find('div', id='searched_videos')
     for item in items.findAll('li', 'catchup_related_video status_'):
             name_a = item.find('strong', 'info_title')
