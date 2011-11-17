@@ -1,3 +1,5 @@
+2011-11-17:
+ * testovaci sestava
 2011-11-16:
  * pridan filtr poradu
 2011-11-15:

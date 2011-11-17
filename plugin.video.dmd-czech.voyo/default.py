@@ -16,7 +16,7 @@ fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
 page_pole_no = []
 secret_token =__settings__.getSetting('secret_token')
-#rtmp_token =__settings__.getSetting('rtmp_token')
+rtmp_token = 'h0M*t:pa$kA'
 nova_service_url = 'http://master-ng.nacevi.cz/cdn.server/PlayerLink.ashx'
 nova_app_id = 'nova-vod'
 if secret_token == '':
@@ -125,10 +125,12 @@ def VIDEOLINK(url,name):
                 urllq = odkaz.encode('utf-8')
         print urlhq,urllq
         swfurl = 'http://voyo.nova.cz/static/shared/app/flowplayer/13-flowplayer.commercial-3.1.5-19-003.swf'
-        #rtmp_url_lq = baseurl[0]+' playpath='+urllq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
-        rtmp_url_lq = baseurl[0]+' playpath='+urllq
-        #rtmp_url_hq = baseurl[0]+' playpath='+urlhq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
-        rtmp_url_hq = baseurl[0]+' playpath='+urlhq
+        if __settings__.getSetting('test_nastaveni') == "true":          
+            rtmp_url_lq = baseurl[0]+' playpath='+urllq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
+            rtmp_url_hq = baseurl[0]+' playpath='+urlhq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
+        else:
+            rtmp_url_lq = baseurl[0]+' playpath='+urllq
+            rtmp_url_hq = baseurl[0]+' playpath='+urlhq
         if __settings__.getSetting('kvalita_sel') == "true":
             addLink(name,rtmp_url_hq,thumb[0],desc)
         if __settings__.getSetting('kvalita_sel') == "false":
