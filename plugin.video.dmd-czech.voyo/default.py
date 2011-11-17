@@ -23,7 +23,7 @@ if secret_token == '':
     xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Zadejte tajné heslo!',30000,"+icon+")")
     __settings__.openSettings() 
 def CATEGORIES():
-    zakazane = ['zenaty-se-zavazky', 'tudorovci', 'kobra-11', 'patty-hewes', 'policejni-odznak']
+    zakazane = ['zenaty-se-zavazky', 'tudorovci', 'kobra-11', 'patty-hewes', 'policejni-odznak', 'v-dobrem-i-ve-zlem','pernikovy-tata']
     req = urllib2.Request(__baseurl__)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
