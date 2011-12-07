@@ -321,7 +321,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="0.8">
+        version="0.9">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
@@ -337,11 +337,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.filmyczcom"
        name="Filmy CZ"
-       version="0.7"
+       version="0.8"
        provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.7"/>
+    <import addon="script.module.dmd-czech.common" version="0.9"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -361,12 +361,12 @@
 
 <addon id="plugin.video.dmd-czech.piratskefilmycz"
        name="Filmy CPS Archiv"
-       version="0.4"
+       version="0.5"
        provider-name="Ivo Brhel">
   <requires>
     <import addon="script.module.pysqlite" version="2.5.6"/>
     <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.dmd-czech.common" version="0.7"/>
+    <import addon="script.module.dmd-czech.common" version="0.9"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
