@@ -1,3 +1,5 @@
+2011-12-15:
+ * prechod na novy engine webu voyo.cz
 2011-11-17:
  * testovaci sestava
  * odstraneni poradu chranenych DRM

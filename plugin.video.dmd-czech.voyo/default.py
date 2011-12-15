@@ -22,59 +22,71 @@ nova_app_id = 'nova-vod'
 if secret_token == '':
     xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Zadejte tajné heslo!',30000,"+icon+")")
     __settings__.openSettings() 
-def CATEGORIES():
-    zakazane = ['zenaty-se-zavazky', 'tudorovci', 'kobra-11', 'patty-hewes', 'policejni-odznak', 'v-dobrem-i-ve-zlem','pernikovy-tata']
-    req = urllib2.Request(__baseurl__)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    match = re.compile('<a class="list_item" href="/(.+?)/">(.+?)</a>').findall(httpdata)
-    for url,name in match:
-        if url in zakazane:
-            continue        
-        addDir(name,__baseurl__+'/'+url+'/',1,__dmdbase__+url+'.jpg')
+def OBSAH():
+    addDir('Seriály','http://voyo.nova.cz/serialy/',1,icon)
+    addDir('Pořady','http://voyo.nova.cz/porady/',1,icon)
+    addDir('Zprávy','http://voyo.nova.cz/zpravy/',1,icon)
+
+    
+def CATEGORIES(url):
+    zakazane = ['/serialy/3926-zenaty-se-zavazky', '/serialy/26482-5-dnu-do-pulnoci', '/serialy/26481-odvazny-crusoe', '/serialy/3924-patty-hewes','/serialy/3931-v-dobrem-i-ve-zlem']
+    pole_poradu = 0
+    doc = read_page(url)
+    for porady in doc.findAll('div', 'productsList'):
+            pole_poradu = pole_poradu + 1        
+            if pole_poradu == 1:
+                continue
+            for item in porady.findAll('div', 'section_item'):
+                item = item.find('div', 'poster')
+                url = item.a['href'].encode('utf-8')
+                title = item.a['title'].encode('utf-8')
+                thumb = item.a.img['src'].encode('utf-8')
+                #print title,url,thumb
+                if url in zakazane:
+                    continue
+                addDir(title,__baseurl__+url,2,thumb)
+    try:
+        items = doc.find('div', 'pagination')
+        for item in items.findAll('span', 'normal'):
+            url = __baseurl__+str(item.a['href'])
+            doc = read_page(url)
+            pole_poradu = 0
+            for porady in doc.findAll('div', 'productsList'):
+                pole_poradu = pole_poradu + 1        
+                if pole_poradu == 1:
+                    continue
+                for item in porady.findAll('div', 'section_item'):
+                    item = item.find('div', 'poster')
+                    url = item.a['href'].encode('utf-8')
+                    title = item.a['title'].encode('utf-8')
+                    thumb = item.a.img['src'].encode('utf-8')
+                    #print title,url,thumb
+                    if url in zakazane:
+                        continue
+                    addDir(title,__baseurl__+url,2,thumb)
+    except:
+        print 'Stránkování nenalezeno'
         
 def INDEX(url):
     doc = read_page(url)
-    match = re.compile("list_video_form_type_id'\)\.value='(.+?)'; \$\('list_video_form'\)\.submit\(\); return false;\">(.+?)</a>").findall(str(doc))
-    parentid = re.compile('<input type="hidden" name="parent_id" value="(.+?)" />').findall(str(doc))
-    for typeid,nazev in match:
-        nazev = '= '+nazev.capitalize()+' ='
-        link = '/search?parent_id='+parentid[0]+'&s=0&d=0&wm=0&pg=0&type_id='+typeid
-        if not re.search('search', url, re.U):
-            #print nazev,link
-            addDir(nazev,__baseurl__+link,1,icon)
-    items = doc.find('div', id='searched_videos')
-    for item in items.findAll('li', 'catchup_related_video status_'):
-            name_a = item.find('strong', 'info_title')
-            name = name_a.getText(" ").encode('utf-8')
-            url = __baseurl__+str(item.a['href'])
-            datum_a = item.find('span', 'date')
-            datum = datum_a.getText(" ")
-            thumb = str(item.a.img['src'])            
-            #print name, thumb, url, datum, plot
-            addDir(name,url,2,thumb)
+    items = doc.find('div', 'productsList')
+    for item in items.findAll('div', 'section_item'):
+            item = item.find('div', 'poster')
+            url = item.a['href'].encode('utf-8')
+            title = item.a['title'].encode('utf-8')
+            thumb = item.a.img['src'].encode('utf-8')
+            #print title,url,thumb
+            addDir(title,__baseurl__+url,3,thumb)
     try:
-        pager = doc.find('div', id='pager')
-        act_page_a = pager.find('span', 'selected ')
-        act_page = act_page_a.getText(" ").encode('utf-8')
-        next_page = int(act_page) + 1
-        url_page = int(act_page)-1
-        #print act_page, url_page
-        for item in pager.findAll('a'):
-            page_url = item['href'].encode('utf-8')
-            page_no = item.getText(" ").encode('utf-8')
-            #print page_url,page_no
-            page_pole_url.append(page_url)
-            page_pole_no.append(page_no)
-        max_page_count = len(page_pole_no)-1
-        next_url = page_pole_url[url_page]
-        max_page = page_pole_no[max_page_count]
-        next_label = 'Přejít na stranu '+str(next_page)+' z '+max_page
-        addDir(next_label,__baseurl__+next_url,1,nexticon)
+        items = doc.find('div', 'pagination')
+        for item in items.findAll('a'):
+            page = item.text.encode('utf-8') 
+            if re.match('další', page, re.U):
+                next_url = item['href']
+                #print next_url
+                addDir('>> Další strana >>',__baseurl__+next_url,2,nexticon)                
     except:
-        print 'stop'
+        print 'strankovani nenalezeno'
         
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
@@ -82,7 +94,7 @@ def VIDEOLINK(url,name):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    mediaid = re.compile('media_id = "(.+?)"').findall(httpdata)
+    mediaid = re.compile('mainVideo = new mediaData\(.+?, .+?, (.+?),').findall(httpdata)
     thumb = re.compile('<link rel="image_src" href="(.+?)" />').findall(httpdata)
     popis = re.compile('<meta name="description" content="(.+?)" />').findall(httpdata)
     datum = datetime.datetime.now()
@@ -132,9 +144,9 @@ def VIDEOLINK(url,name):
             rtmp_url_lq = baseurl[0]+' playpath='+urllq
             rtmp_url_hq = baseurl[0]+' playpath='+urlhq
         if __settings__.getSetting('kvalita_sel') == "true":
-            addLink(name,rtmp_url_hq,thumb[0],desc)
+            addLink(name,rtmp_url_hq,icon,desc)
         if __settings__.getSetting('kvalita_sel') == "false":
-            addLink(name,rtmp_url_lq,thumb[0],desc)
+            addLink(name,rtmp_url_lq,icon,desc)
 
 
 def get_params():
@@ -199,13 +211,17 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
-        CATEGORIES()
-       
+        OBSAH()
+
 elif mode==1:
+        print ""+url
+        CATEGORIES(url)
+       
+elif mode==2:
         print ""+url
         INDEX(url)
         
-elif mode==2:
+elif mode==3:
         print ""+url
         VIDEOLINK(url,name)
 
