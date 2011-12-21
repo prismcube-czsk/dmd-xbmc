@@ -131,7 +131,9 @@ def VIDEOLINK(url,name):
         streamurl = re.compile('<media>\s<quality>(.+?)</quality>.\s<url>(.+?)</url>\s</media>').findall(httpdata)        
         for kvalita,odkaz in streamurl:
             #print kvalita,odkaz
-            if re.match('hq', kvalita, re.U):
+            if re.match('hd', kvalita, re.U):
+                urlhd = odkaz.encode('utf-8')
+            elif re.match('hq', kvalita, re.U):
                 urlhq = odkaz.encode('utf-8')
             elif re.match('lq', kvalita, re.U):
                 urllq = odkaz.encode('utf-8')
@@ -140,13 +142,26 @@ def VIDEOLINK(url,name):
         if __settings__.getSetting('test_nastaveni') == "true":          
             rtmp_url_lq = baseurl[0]+' playpath='+urllq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
             rtmp_url_hq = baseurl[0]+' playpath='+urlhq+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
+            try:
+                rtmp_url_hd = baseurl[0]+' playpath='+urlhd+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true token='+rtmp_token 
+            except:
+                rtmp_url_hd = 0
         else:
             rtmp_url_lq = baseurl[0]+' playpath='+urllq
             rtmp_url_hq = baseurl[0]+' playpath='+urlhq
-        if __settings__.getSetting('kvalita_sel') == "true":
+            try:
+                rtmp_url_hd = baseurl[0]+' playpath='+urlhd            
+            except:
+                rtmp_url_hd = 0
+        if __settings__.getSetting('kvalita_sel') == "HQ":
             addLink(name,rtmp_url_hq,icon,desc)
-        if __settings__.getSetting('kvalita_sel') == "false":
+        elif __settings__.getSetting('kvalita_sel') == "LQ":
             addLink(name,rtmp_url_lq,icon,desc)
+        elif __settings__.getSetting('kvalita_sel') == "HD":
+            if rtmp_url_hd == 0:
+                addLink(name,rtmp_url_hq,icon,desc)                
+            else:
+                addLink(name,rtmp_url_hd,icon,desc)
 
 
 def get_params():
