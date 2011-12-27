@@ -1,3 +1,5 @@
+2011-12-26:
+ * pridana moznost "Vynuceny stream server" do nastaveni doplnku, snad by mohla vyresit problem se nefunkcnosti HQ na slovensku u nekterych ISP
 2011-11-13:
  * oprava zobrazeni "bezejmennych" videi
 2011-11-02:

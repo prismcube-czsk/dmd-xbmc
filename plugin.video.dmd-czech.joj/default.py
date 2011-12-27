@@ -180,7 +180,10 @@ def VIDEOLINK(url,name):
         joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
         for kvalita,serverno,cesta in joj_file:
             name = str.swapcase(kvalita)+ ' - ' + title[0]
-            server = 'n0'+serverno+'.joj.sk'
+            if __settings__.getSetting('stream_server') == "true":
+                server = 'n04.joj.sk'
+            else:
+                server = 'n0'+serverno+'.joj.sk'
             tcurl = 'rtmp://'+server
             swfurl = 'http://www.joj.sk/fileadmin/templates/swf/JojPlayer.swf?no_cache=176146'
             port = '1935'
@@ -202,7 +205,10 @@ def VIDEOLINK(url,name):
         joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
         for kvalita,serverno,cesta in joj_file:
             name = str.swapcase(kvalita)+ ' - ' + title[0]
-            server = 'n0'+serverno+'.joj.sk'
+            if __settings__.getSetting('stream_server') == "true":
+                server = 'n04.joj.sk'
+            else:
+                server = 'n0'+serverno+'.joj.sk'
             tcurl = 'rtmp://'+server
             swfurl = basepath+'fileadmin/templates/swf/csmt_player.swf?no_cache=171307'
             port = '1935'
@@ -226,7 +232,10 @@ def TALENT(url,name):
     joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
     for kvalita,serverno,cesta in joj_file:
         titul = str.swapcase(kvalita)+ ' - ' + name
-        server = 'n0'+serverno+'.joj.sk'
+        if __settings__.getSetting('stream_server') == "true":
+            server = 'n04.joj.sk'
+        else:
+                server = 'n0'+serverno+'.joj.sk'
         tcurl = 'rtmp://'+server
         swfurl = 'http://b.static.csmatalent.sk/fileadmin/templates/swf/CsmtPlayer.swf?no_cache=168842'
         port = '1935'
