@@ -1,11 +1,14 @@
+2012-01-02:
+ * prechod na server voyo.sk, nemohu zarucit spravnou funkcnost na starsich mutacich XBMC, kde muze byt nefunkcni... Otestovano na XBMC 11 pod Win Vista a v XBMC 10.1 z 10.10.2011 pod OpenElec. (Thanx to IVOS and mp-onlinevideos2 project) 
+
 2011-08-15:
- * úprava parsování videa - nyní se BeutifulSOUP k získání linků na videa nepoužívá vůbec.... 
+ * uprava parsovani videa - nyni se BeutifulSOUP k ziskani linku na videa nepouziva vubec.... 
 
 2011-08-10:
- * úprava parsování videa - nyní pomocí BeutifulSOUP  
+ * uprava parsovani videa - nyni pomoci BeutifulSOUP  
 
 2011-07-22:
- * přechod na upravenou knihovnu BeautifulSOAP - údajně má zpracovávat dotazy o 100% rychleji, thanx to IVO ;-)  
+ * prechod na upravenou knihovnu BeautifulSOAP - udajne má zpracovavat dotazy o 100% rychleji, thanx to IVO ;-)  
 2011-07-04:
  * Markiza.sk (alpha) - first release
 
