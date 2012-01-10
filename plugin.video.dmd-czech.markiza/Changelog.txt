@@ -1,3 +1,6 @@
+2012-01-10:
+ * odstraneni zrusene FUN TV, upravy parseru 
+
 2012-01-02:
  * prechod na server voyo.sk, nemohu zarucit spravnou funkcnost na starsich mutacich XBMC, kde muze byt nefunkcni... Otestovano na XBMC 11 pod Win Vista a v XBMC 10.1 z 10.10.2011 pod OpenElec. (Thanx to IVOS and mp-onlinevideos2 project) 
 

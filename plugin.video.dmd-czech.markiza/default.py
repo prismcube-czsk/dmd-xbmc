@@ -2,7 +2,8 @@
 import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
-import aes
+import aes,random,decimal
+
 __baseurl__ = 'http://video.markiza.sk'
 __baseurl2__= 'http://voyo.markiza.sk'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -22,7 +23,7 @@ def OBSAH():
     addDir('Seriály',__baseurl2__+'/zoznam/serialy/',2,icon)
     addDir('Relácie',__baseurl2__+'/stranka/relacie/',1,icon)
     addDir('Spravodajstvo',__baseurl2__+'/stranka/spravodajstvo/',1,icon)    
-    addDir('FUN TV',__baseurl__+'/fun-tv',3,icon)    
+    #addDir('FUN TV',__baseurl__+'/fun-tv',3,icon)    
 
     
 def CAT_ALL(url):
@@ -144,7 +145,11 @@ def VIDEOLINK_VOYO(url,name):
     for prod,unit,media in param1:
         site = re.compile('siteId: ([0-9]+)').findall(httpdata)
         section = re.compile('sectionId: ([0-9]+)').findall(httpdata)
-        product_page = 'http://voyo.markiza.sk/bin/eshop/ws/plusPlayer.php?x=playerFlash&prod='+prod+'&unit='+unit+'&media='+media+'&site='+site[0]+'&section='+section[0]+'&subsite=produkt&embed=0&mute=0&realSite='+site[0]+'&width=704&height=441&hdEnabled=1&hash=&finish=finishedPlayer&dev=null'
+        nahodne_no = str(gen_random_decimal(0,99999999999999))
+        subsite = re.compile('subsite: \'(.+?)\',').findall(httpdata)
+        width = re.compile('width: ([0-9]+)').findall(httpdata)
+        height = re.compile('height: ([0-9]+)').findall(httpdata)
+        product_page = 'http://voyo.markiza.sk/bin/eshop/ws/plusPlayer.php?x=playerFlash&prod='+prod+'&unit='+unit+'&media='+media+'&site='+site[0]+'&section='+section[0]+'&subsite='+subsite[0]+'&embed=0&mute=0&size=&realSite='+site[0]+'&width='+width[0]+'&height='+height[0]+'&hdEnabled=1&hash=&finish=finishedPlayer&dev=null&r='+nahodne_no
     data=geturl(product_page)
     if re.search('VAROVANIE', str(data), re.U):
         xbmc.executebuiltin("XBMC.Notification('Doplněk Markíza.sk','Tento pořad nelze sledovat mimo území SR!',30000,"+icon+")")
@@ -183,6 +188,8 @@ def geturl(url):
         response.close()
         return link
 
+def gen_random_decimal(i,d):
+        return decimal.Decimal('%d.%d' % (random.randint(0,i),random.randint(0,d)))
 
 def get_params():
         param=[]
