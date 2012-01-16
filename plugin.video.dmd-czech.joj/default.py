@@ -16,7 +16,8 @@ fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 def OBSAH():
     addDir('Publicistika','http://www.joj.sk',1,icon)
     addDir('Seriály','http://www.joj.sk',2,icon)
-    addDir('Zábava','http://www.joj.sk',3,icon)    
+    addDir('Zábava','http://www.joj.sk',3,icon)
+    addDir('Videoportal.sk','http://www.videoportal.sk/kategorie.html',9,icon)        
 def OBSAH_PUB():
     addDir('Črepiny *','http://crepiny.joj.sk/crepiny-s-hviezdickou-archiv.html',4,__dmdbase__+'crepiny-s-hviezdickou.jpg')
     addDir('Exclusiv','http://www.joj.sk/exclusiv/exclusiv-archiv.html',4,__dmdbase__+'exclusiv.jpg')
@@ -154,7 +155,36 @@ def LIST_5(url):
             addDir('>> Další strana >>','http://www.farmarhladazenu.sk/'+next_url,8,nexticon)
     except:
         print 'strankovani nenalezeno'
-                
+
+def VIDEOPORTAL(url):
+    doc = read_page(url)
+    items = doc.find('div', 'c-full c')
+    for item in items.findAll('div','b-wrap b-video b-video-grid b-video-category'):
+        name = item.find('a')
+        name = name.getText(" ").encode('utf-8')
+        url = str(item.a['href']) 
+        #print name,url
+        addDir(name,'http://www.videoportal.sk/'+url,12,icon)
+
+def VP_LIST(url):
+    doc = read_page(url)
+    items = doc.find('ul', 'l c')
+    for item in items.findAll('li'):
+        try:
+            name = item.a['title'].encode('utf-8')
+        except:
+            name = 'Bezejmenný titul'
+        url = str(item.a['href']) 
+        thumb = str(item.img['src'])
+        #print name,url, thumb
+        addDir(name,'http://www.videoportal.sk/'+url,13,thumb)
+    try:
+        items = doc.find('ul', 'm-move right c')
+        match = re.compile('<li><a class="next" href="(.+?)"').findall(str(items))
+        addDir('>> Další strana >>','http://www.videoportal.sk/'+match[0],12,nexticon)
+    except:
+        print 'strankovani nenalezeno'
+        
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
@@ -242,6 +272,33 @@ def TALENT(url,name):
         rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
         addLink(titul,rtmp_url,thumb[0],titul)
 
+def VP_PLAY(url,name):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    response.close()
+    videoid = re.compile('videoId=(.+?)&').findall(httpdata)
+    playlisturl = 'http://www.videoportal.sk/services/Video.php?clip='+videoid[0]+'&article=undefined'
+    req = urllib2.Request(playlisturl)
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    doc = response.read()
+    response.close()
+    thumb = re.compile('image="(.+?)"').findall(doc)
+
+    joj_file = re.compile('<file type=".+?" quality="(.+?)" id="(.+?)" label=".+?" path="(.+?)"/>').findall(doc)
+    for kvalita,serverno,cesta in joj_file:
+        titul = str.swapcase(kvalita)+ ' - ' + name
+        if __settings__.getSetting('stream_server') == "true":
+            server = 'n04.joj.sk'
+        else:
+                server = 'n0'+serverno+'.joj.sk'
+        tcurl = 'rtmp://'+server
+        swfurl = 'http://player.joj.sk/VideoportalPlayer.swf?no_cache=173329'
+        port = '1935'
+        rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
+        addLink(titul,rtmp_url,thumb[0],titul)
 
 
 def get_params():
@@ -339,6 +396,11 @@ elif mode==7:
 elif mode==8:
         print ""+url
         LIST_5(url)
+
+elif mode==9:
+        print ""+url
+        VIDEOPORTAL(url)
+
         
 elif mode==10:
         print ""+url
@@ -346,4 +408,12 @@ elif mode==10:
 elif mode==11:
         print ""+url
         TALENT(url,name)
+elif mode==12:
+        print ""+url
+        VP_LIST(url)
+elif mode==13:
+        print ""+url
+        VP_PLAY(url,name)
+
+        
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
