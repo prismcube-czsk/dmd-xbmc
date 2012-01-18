@@ -1,3 +1,5 @@
+2012-01-18:
+ * uprava debug rezimu
 2011-12-21:
  * pridana moznost vyberu preferovane kvality prehravani v nastaveni doplnku
 2011-12-15:

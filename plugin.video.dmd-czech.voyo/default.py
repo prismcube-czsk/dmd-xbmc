@@ -26,7 +26,6 @@ def OBSAH():
     addDir('Seriály','http://voyo.nova.cz/serialy/',1,icon)
     addDir('Pořady','http://voyo.nova.cz/porady/',1,icon)
     addDir('Zprávy','http://voyo.nova.cz/zpravy/',1,icon)
-
     
 def CATEGORIES(url):
     zakazane = ['/serialy/3926-zenaty-se-zavazky', '/serialy/26482-5-dnu-do-pulnoci', '/serialy/26481-odvazny-crusoe', '/serialy/3924-patty-hewes','/serialy/3931-v-dobrem-i-ve-zlem']
@@ -66,6 +65,7 @@ def CATEGORIES(url):
                     addDir(title,__baseurl__+url,2,thumb)
     except:
         print 'Stránkování nenalezeno'
+
         
 def INDEX(url):
     doc = read_page(url)
@@ -75,7 +75,8 @@ def INDEX(url):
             url = item.a['href'].encode('utf-8')
             title = item.a['title'].encode('utf-8')
             thumb = item.a.img['src'].encode('utf-8')
-            #print title,url,thumb
+            if __settings__.getSetting('test_nastaveni') == "true":
+                print title,url,thumb
             addDir(title,__baseurl__+url,3,thumb)
     try:
         items = doc.find('div', 'pagination')
@@ -114,6 +115,8 @@ def VIDEOLINK(url,name):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
+    if __settings__.getSetting('test_nastaveni') == "true":
+        print httpdata
     error_secret_token = re.compile('<errorCode>(.+?)</errorCode>').findall(httpdata)
     try:
         chyba = int(error_secret_token[0])
@@ -162,6 +165,8 @@ def VIDEOLINK(url,name):
                 addLink(name,rtmp_url_hq,icon,desc)                
             else:
                 addLink(name,rtmp_url_hd,icon,desc)
+        else:
+            addLink(name,rtmp_url_hq,icon,desc)                
 
 
 def get_params():
@@ -235,6 +240,9 @@ elif mode==1:
 elif mode==2:
         print ""+url
         INDEX(url)
+elif mode==4:
+        print ""+url
+        FILMY(url)
         
 elif mode==3:
         print ""+url
