@@ -20,9 +20,10 @@ nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 
 def OBSAH():
-    addDir('Seriály',__baseurl2__+'/zoznam/serialy/',2,icon)
-    addDir('Relácie',__baseurl2__+'/stranka/relacie/',1,icon)
-    addDir('Spravodajstvo',__baseurl2__+'/stranka/spravodajstvo/',1,icon)    
+    addDir('Seriály',__baseurl2__+'/serialy/',2,icon)
+    addDir('Relácie',__baseurl2__+'/relacie/',2,icon)
+    addDir('Šport',__baseurl2__+'/sport/',2,icon)
+    addDir('Spravodajstvo',__baseurl2__+'/spravodajstvo/',2,icon)        
     #addDir('FUN TV',__baseurl__+'/fun-tv',3,icon)    
 
     
@@ -44,7 +45,7 @@ def CAT_ALL(url):
 
 def CAT_VOYO(url):
     doc = read_page(url)
-    zakazane = ['648-sultan', '/serialy/26482-5-dnu-do-pulnoci']
+    zakazane = ['648-sultan', '26482-5-dnu-do-pulnoci']
     items = doc.find('div', 'productsList')    
     for item in items.findAll('div', 'section_item'):
         porad = item.find('div', 'poster')
@@ -55,8 +56,28 @@ def CAT_VOYO(url):
         url = porad.a['href'].encode('utf-8')
         title = porad.a['title'].encode('utf-8')
         thumb = porad.a.img['src'].encode('utf-8')
-        print title,url,thumb
+        print title, url, thumb
         addDir(title,__baseurl2__+url,5,thumb)
+    try:
+        items = doc.find('div', 'pagination')
+        for item in items.findAll('span', 'normal'):
+            url = __baseurl2__+str(item.a['href'])
+            
+            doc = read_page(url)
+            items = doc.find('div', 'productsList')    
+            for item in items.findAll('div', 'section_item'):
+                porad = item.find('div', 'poster')
+                info = item.find('div', 'item_info')
+                info = info.find('a', 'watch_now only')
+                if re.search('Prehrať', str(info), re.U):
+                    continue
+                url = porad.a['href'].encode('utf-8')
+                title = porad.a['title'].encode('utf-8')
+                thumb = porad.a.img['src'].encode('utf-8')
+                print title, url, thumb
+                addDir(title,__baseurl2__+url,5,thumb)
+    except:
+        print 'Stránkování nenalezeno',url
 
 def CAT_FUN(url):
     doc = read_page(url)
