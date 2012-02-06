@@ -1,3 +1,6 @@
+2012-02-06:
+ * zmena parsovani streamu 
+
 2012-02-03:
  * oprava linku na kategorie poradu 
  * oprava parsovani multipage seznamu

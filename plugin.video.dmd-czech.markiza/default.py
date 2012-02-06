@@ -2,13 +2,9 @@
 import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
-import aes,random,decimal
 
-__baseurl__ = 'http://video.markiza.sk'
-__baseurl2__= 'http://voyo.markiza.sk'
+__baseurl__= 'http://voyo.markiza.sk'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-UA =  'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)'
-key = 'EaDUutg4ppGYXwNMFdRJsadenFSnI6gJ'
 
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.markiza')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
@@ -20,32 +16,15 @@ nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 
 def OBSAH():
-    addDir('Seriály',__baseurl2__+'/serialy/',2,icon)
-    addDir('Relácie',__baseurl2__+'/relacie/',2,icon)
-    addDir('Šport',__baseurl2__+'/sport/',2,icon)
-    addDir('Spravodajstvo',__baseurl2__+'/spravodajstvo/',2,icon)        
-    #addDir('FUN TV',__baseurl__+'/fun-tv',3,icon)    
-
-    
-def CAT_ALL(url):
-    doc = read_page(url)
-    for sekce in doc.findAll('div', 'archive-list-items'):
-        for item in sekce.findAll('div', 'content'):
-                item = item.find('div', 'image')
-                link = item.a['href'].encode('utf-8')
-                name = item.a['title'].encode('utf-8')
-                thumb = item.a.img['src'].encode('utf-8')
-                if re.search('voyo', link, re.U):
-                    #print 'VOYO:'+link,thumb,name
-                    addDir(name,link,5,thumb)
-                else:
-                    #print 'MARKIZA:'+link,thumb,name
-                    addDir(name,link,4,thumb)
+    addDir('Seriály',__baseurl__+'/serialy/',1,icon)
+    addDir('Relácie',__baseurl__+'/relacie/',1,icon)
+    addDir('Šport',__baseurl__+'/sport/',1,icon)
+    addDir('Spravodajstvo',__baseurl__+'/spravodajstvo/',1,icon)        
 
 
 def CAT_VOYO(url):
     doc = read_page(url)
-    zakazane = ['648-sultan', '26482-5-dnu-do-pulnoci']
+    zakazane = ['26482-5-dnu-do-pulnoci']
     items = doc.find('div', 'productsList')    
     for item in items.findAll('div', 'section_item'):
         porad = item.find('div', 'poster')
@@ -57,7 +36,7 @@ def CAT_VOYO(url):
         title = porad.a['title'].encode('utf-8')
         thumb = porad.a.img['src'].encode('utf-8')
         print title, url, thumb
-        addDir(title,__baseurl2__+url,5,thumb)
+        addDir(title,__baseurl__+url,5,thumb)
     try:
         items = doc.find('div', 'pagination')
         for item in items.findAll('span', 'normal'):
@@ -75,47 +54,10 @@ def CAT_VOYO(url):
                 title = porad.a['title'].encode('utf-8')
                 thumb = porad.a.img['src'].encode('utf-8')
                 print title, url, thumb
-                addDir(title,__baseurl2__+url,5,thumb)
+                addDir(title,__baseurl__+url,5,thumb)
     except:
         print 'Stránkování nenalezeno',url
 
-def CAT_FUN(url):
-    doc = read_page(url)
-    items = doc.find('div', id='VagonFunContent')
-    for item in items.findAll('div', 'item'):
-        name_a = item.find('div','text')
-        name_a = name_a.find('a')
-        name_a = name_a.getText(" ").encode('utf-8')
-        link = str(item.a['href']) 
-        thumb = str(item.img['src'])  
-        addDir(name_a,__baseurl__+link,4,thumb)
-
-
-def LIST_MF(url):
-    doc = read_page(url)
-    items = doc.find('div', id='VagonContent')
-    for item in items.findAll('div', 'item'):
-        name_a = item.find('div','title')
-        name_a = name_a.find('a')
-        name_a = name_a.getText(" ").encode('utf-8')
-        name = item.find('span')
-        name = name.getText(" ").encode('utf-8')
-        url = str(item.a['href']) 
-        id_video = re.compile('/([0-9]+)$').findall(url)
-        url = 'http://www.markiza.sk/xml/video/parts.rss?ID_entity='+id_video[0]
-        thumb = str(item.img['src'])  
-        title = name_a + ' ' + name 
-        addDir(title,url,10,thumb)
-    try:
-        pager = doc.find('div', 'right')
-        next_item = pager.find('a')
-        dalsi = next_item.text.encode('utf-8') 
-        if re.match('staršie', dalsi, re.U):
-            next_url = next_item['href']
-            #print next_url
-            addDir('Další strana',next_url,4,nexticon)
-    except:
-        print 'STRANKOVANI NENALEZENO'
 
 def LIST_VOYO(url):
     doc = read_page(url)
@@ -123,9 +65,9 @@ def LIST_VOYO(url):
     for item in items.findAll('div', 'poster'):
         title = item.a['title'].encode('utf-8') 
         name_a = item.a['href']
-        url = __baseurl2__+name_a
+        url = __baseurl__+name_a
         thumb = str(item.img['src'])  
-        addDir(title,url,11,thumb)
+        addDir(title,url,10,thumb)
     try:
         pager = doc.find('div', 'pagination')
         next_item = pager.findAll('a')
@@ -134,83 +76,51 @@ def LIST_VOYO(url):
 		continue
 	    else:
 		next_url = item['href']
-        addDir('Další strana >>',__baseurl2__+ next_url,5,nexticon)
+        addDir('Další strana >>',__baseurl__+ next_url,5,nexticon)
     except:
         print 'STRANKOVANI NENALEZENO'
 
               
-def VIDEOLINK(url,name):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    match = re.compile('<media:player url="(.+?)"/>').findall(httpdata)
-    thumb = re.compile('<media:thumbnail url="(.+?)"/>').findall(httpdata)
-    title = re.compile('<title>(.+?)</title>').findall(httpdata)
-    no = 0
-    notit = 1
-    for link in match:
-        print '#'+str(notit) +' '+ title[0], link, thumb[no]
-        addLink('#'+str(notit) +' '+ title[0],link,thumb[no],name)
-        no +=1
-        notit +=1
-
 def VIDEOLINK_VOYO(url,name):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    param1 = re.compile('mainVideo = new mediaData\((.+?), (.+?), (.+?),').findall(httpdata)    
-    for prod,unit,media in param1:
-        site = re.compile('siteId: ([0-9]+)').findall(httpdata)
-        section = re.compile('sectionId: ([0-9]+)').findall(httpdata)
-        nahodne_no = str(gen_random_decimal(0,99999999999999))
-        subsite = re.compile('subsite: \'(.+?)\',').findall(httpdata)
-        width = re.compile('width: ([0-9]+)').findall(httpdata)
-        height = re.compile('height: ([0-9]+)').findall(httpdata)
-        product_page = 'http://voyo.markiza.sk/bin/eshop/ws/plusPlayer.php?x=playerFlash&prod='+prod+'&unit='+unit+'&media='+media+'&site='+site[0]+'&section='+section[0]+'&subsite='+subsite[0]+'&embed=0&mute=0&size=&realSite='+site[0]+'&width='+width[0]+'&height='+height[0]+'&hdEnabled=1&hash=&finish=finishedPlayer&dev=null&r='+nahodne_no
-    data=geturl(product_page)
-    if re.search('VAROVANIE', str(data), re.U):
-        xbmc.executebuiltin("XBMC.Notification('Doplněk Markíza.sk','Tento pořad nelze sledovat mimo území SR!',30000,"+icon+")")
-    else:
-        match = re.compile('var voyoPlusConfig.*[^"]+"(.+?)";').findall(data)
-        aes_decrypt = aes.decrypt(match[0],key,128).encode('utf-8')
-        aes_decrypt = aes_decrypt.replace('\/','/')
-        #print aes_crypt
-        server = re.compile('"host":"(.+?)"').findall(aes_decrypt)
-        filename = re.compile('"filename":"(.+?)"').findall(aes_decrypt)
-        bitrates = re.compile('"bitrates":(.+?)\}').findall(aes_decrypt)
-        swfurl = 'http://voyo.markiza.sk/static/shared/app/flowplayer/play.swf'
-        lqurl = server[0]+' playpath=mp4:'+filename[0]+'-1.mp4 pageUrl='+url+' swfUrl='+swfurl+'swfVfy=true'
-        addLink(name,lqurl,icon,name)
-
-        #if re.search('400', bitrates[0], re.U):
-            #url      = 'rtmpe://vod.markiza.sk/voyosk playpath=mp4:2011/12/06/20111205_PARTICKA-1.mp4'
-            #lqurl = server[0]+' playpath=mp4:'+filename[0]+'-1.mp4 pageUrl='+url+' swfUrl='+swfurl+'swfVfy=true'
-            #addLink(name,lqurl,icon,name)
-        #if re.search('700', bitrates[0], re.U):
-            #hqurl = server[0]+' playpath=mp4:'+filename[0]+'700-1.mp4 pageUrl='+url+' swfUrl='+swfurl+'swfVfy=true'
-            #addLink(name,hqurl,icon,name)
-
-def _getfile(product_page):
-	f = open(stranka, "r")
-	result = f.read()
-	f.close()
-	return result
-
-
-def geturl(url):
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', UA)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        return link
-
-def gen_random_decimal(i,d):
-        return decimal.Decimal('%d.%d' % (random.randint(0,i),random.randint(0,d)))
+    URL2ALIAS = {'rodinna-kliatba':'rodkliatba',
+                 'druhy-dych':'druhydych',
+                 'mesto-tienov':'mestotienov',
+                 'televizne-noviny':'tn',
+                 'prve-televizne-noviny':'ptn',
+                 'rychle-televizne-noviny-13-00':'rtn1300',
+                 'rychle-televizne-noviny-14-00':'rtn1400',
+                 'rychle-televizne-noviny-15-00':'rtn1500',
+                 'rychle-televizne-noviny-16-00':'rtn1600',
+                 'rychle-televizne-noviny-17-00':'rtn1700',
+                 'rychle-televizne-noviny-18-00':'rtn1800',
+                 'prve-pocasie':'ppocasie',
+                 'sportove-noviny':'sport',
+                 'zo-zakulisia-markizy':'zakulisie',
+                 'na-telo':'natelo',
+                 'modre-z-neba':'mzn',
+                 'bez-servitky':'bezservitky',
+                 'mafianske-popravy':'mafpop'}
+    if re.search('rychle-televizne-noviny', url, re.U):
+        match = re.compile('\/[0-9]+-(.+?)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-.+?').findall(url)
+        for jmeno,hodina,minuta,mesic,den,rok in match:
+            jmeno = jmeno+'-'+hodina+'-'+minuta
+            if URL2ALIAS.has_key(jmeno):
+                jmeno = URL2ALIAS[jmeno].swapcase()        
+    else:            
+        match = re.compile('\/[0-9]+-(.+?)-([0-9]+)-([0-9]+)-([0-9]+)-.+?').findall(url)
+        for jmeno,mesic,den,rok in match:
+            print jmeno,mesic,den,rok
+            if URL2ALIAS.has_key(jmeno):
+                jmeno = URL2ALIAS[jmeno]
+            if re.search('-', jmeno, re.U):
+                jmeno = re.compile('(.+?)-.+?').findall(jmeno)
+                jmeno = jmeno[0]
+        jmeno = jmeno.swapcase()
+    cesta = 'mp4:'+rok+'/'+den+'/'+mesic+'/'+rok+'-'+den+'-'+mesic+'_'+jmeno+'-1.mp4'
+    print jmeno,den,mesic,rok,cesta
+    swfurl = 'http://voyo.markiza.sk/static/shared/app/flowplayer/13-flowplayer.cluster-3.2.1-01-004.swf'
+    lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
+    addLink(name,lqurl,icon,name)
 
 def get_params():
         param=[]
@@ -278,20 +188,7 @@ if mode==None or url==None or len(url)<1:
        
 elif mode==1:
         print ""+url
-        CAT_ALL(url)
-
-elif mode==2:
-        print ""+url
         CAT_VOYO(url)
-
-elif mode==3:
-        print ""+url
-        CAT_FUN(url)
-
-elif mode==4:
-        print ""+url
-        LIST_MF(url)
-
 
 elif mode==5:
         print ""+url
@@ -299,10 +196,6 @@ elif mode==5:
 
         
 elif mode==10:
-        print ""+url
-        VIDEOLINK(url,name)
-
-elif mode==11:
         print ""+url
         VIDEOLINK_VOYO(url,name)
 
