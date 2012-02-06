@@ -40,7 +40,7 @@ def CAT_VOYO(url):
     try:
         items = doc.find('div', 'pagination')
         for item in items.findAll('span', 'normal'):
-            url = __baseurl2__+str(item.a['href'])
+            url = __baseurl__+str(item.a['href'])
             
             doc = read_page(url)
             items = doc.find('div', 'productsList')    
