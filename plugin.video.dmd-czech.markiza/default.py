@@ -119,7 +119,8 @@ def VIDEOLINK_VOYO(url,name):
     cesta = 'mp4:'+rok+'/'+den+'/'+mesic+'/'+rok+'-'+den+'-'+mesic+'_'+jmeno+'-1.mp4'
     print jmeno,den,mesic,rok,cesta
     swfurl = 'http://voyo.markiza.sk/static/shared/app/flowplayer/13-flowplayer.cluster-3.2.1-01-004.swf'
-    lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
+    #lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
+    lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' conn=O:1 conn=NN:0:2274958.000000 conn=NS:1: conn=NN:2:1408.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'    
     addLink(name,lqurl,icon,name)
 
 def get_params():
