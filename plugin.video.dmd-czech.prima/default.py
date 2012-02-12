@@ -113,21 +113,23 @@ def VIDEOLINK(url,name):
         print 'LQ '+__cdn_url__+name,stream_video[0],icon,''
         addLink('LQ '+name,__cdn_url__+stream_video[0],icon,'')        
     else:
-        livebox = re.compile("width, height, '(.+?)', '(.+?)', '(.+?)'").findall(data)
+        #livebox = re.compile("width, height, '(.+?)', '(.+?)', '(.+?)'").findall(data)
+        hq_stream = re.compile("'hq_id':'(.+?)'").findall(data)
+        lq_stream = re.compile("'lq_id': '(.+?)'").findall(data)
+        thumb = re.compile("'thumbnail': '(.+?)'").findall(data)
         #hq_stream = livebox[0]
         #lq_stream = livebox[1]
         #thumb = livebox[2]
-        for hq_stream,lq_stream,thumb in livebox:
-            nahled = 'http://embed.livebox.cz/iprima/'+thumb
-            hq_url = 'rtmp://iprima.livebox.cz/iprima/'+hq_stream                
-            lq_url = 'rtmp://iprima.livebox.cz/iprima/'+lq_stream                
-            print nahled, hq_url, lq_url
-            if __settings__.getSetting('kvalita_sel') == "true":
-                print 'HQ '+name,hq_url,nahled,name
-                addLink('HQ '+name,hq_url,nahled,name)
-            if __settings__.getSetting('kvalita_sel') == "false":
-                print 'LQ '+name,lq_url,nahled,name
-                addLink('LQ '+name,lq_url,nahled,name)
+        nahled = 'http://embed.livebox.cz/iprima/'+thumb[0]
+        hq_url = 'rtmp://iprima.livebox.cz/iprima/'+hq_stream[0]
+        lq_url = 'rtmp://iprima.livebox.cz/iprima/'+lq_stream[0]
+        print nahled, hq_url, lq_url
+        if __settings__.getSetting('kvalita_sel') == "true":
+            print 'HQ '+name,hq_url,nahled,name
+            addLink('HQ '+name,hq_url,nahled,name)
+        if __settings__.getSetting('kvalita_sel') == "false":
+            print 'LQ '+name,lq_url,nahled,name
+            addLink('LQ '+name,lq_url,nahled,name)
 
 
 def get_params():
