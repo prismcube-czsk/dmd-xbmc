@@ -58,6 +58,7 @@ def OBSAH_ZAB():
     addDir('Sůdna sieň','http://www.joj.sk/sudna-sien/sudna-sien-archiv.html',4,__dmdbase__+'sudna-sien.jpg')
     addDir('Šéfka','http://www.sefka.sk/epizody.html',5,__dmdbase__+'sefka-logo.jpg')
     addDir('Tajný sen','http://www.joj.sk/tajny-sen/tajny-sen-archiv.html',4,__dmdbase__+'tajny-sen.jpg')
+    addDir('Riskni milión','http://risknimilion.joj.sk/archiv.html',4,__dmdbase__+'riskni.jpg')    
 
 
     
