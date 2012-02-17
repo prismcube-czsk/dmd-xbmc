@@ -28,7 +28,7 @@ def OBSAH():
     addDir('Zprávy','http://voyo.nova.cz/zpravy/',1,icon)
     
 def CATEGORIES(url):
-    zakazane = ['/serialy/3926-zenaty-se-zavazky', '/serialy/26482-5-dnu-do-pulnoci', '/serialy/26481-odvazny-crusoe', '/serialy/3924-patty-hewes','/serialy/3931-v-dobrem-i-ve-zlem']
+    zakazane = ['/serialy/27700-prvni-krok', '/tvod/serialy/27522-zvire', '/serialy/27540-powder-park', '/serialy/27483-osklive-kacatko-a-ja','/serialy/26481-odvazny-crusoe','/serialy/26482-5-dnu-do-pulnoci','/serialy/3924-patty-hewes','/serialy/27216-lazytown','/serialy/3923-tudorovci','/serialy/3906-kobra-11']
     pole_poradu = 0
     doc = read_page(url)
     for porady in doc.findAll('div', 'productsList'):
@@ -128,7 +128,7 @@ def VIDEOLINK(url,name):
         __settings__.openSettings()        
     elif chyba == 1:    
         print 'Špatné časové razítko'
-        xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Nesprávné časové razítko!',30000,"+icon+")")      
+        xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Pořad lze přehrát pouze na webu Voyo.cz!',30000,"+icon+")")      
     elif chyba == 0:
         baseurl = re.compile('<baseUrl>(.+?)</baseUrl>').findall(httpdata)
         streamurl = re.compile('<media>\s<quality>(.+?)</quality>.\s<url>(.+?)</url>\s</media>').findall(httpdata)        

@@ -1,6 +1,9 @@
+2012-02-17:
+ * oprava parametru streamu, filtrace aktualne nespustitelnych poradu
+
 2012-02-09:
  * oprava parametru streamu, thenx to perso...@alanellis.co.uk
-  
+ 
 2012-02-06:
  * zmena parsovani streamu 
 

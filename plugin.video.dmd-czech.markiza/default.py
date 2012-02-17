@@ -24,7 +24,7 @@ def OBSAH():
 
 def CAT_VOYO(url):
     doc = read_page(url)
-    zakazane = ['26482-5-dnu-do-pulnoci']
+    zakazane = ['/serialy/1827-tudorovci-sex-moc-a-intrigy','/serialy/1826-sudkyna-hattchetova','/serialy/1824-dr-oz','/serialy/1691-comeback-i','/serialy/1693-dokonaly-svet-i','/serialy/1775-v-dobrom-aj-v-zlom']
     items = doc.find('div', 'productsList')    
     for item in items.findAll('div', 'section_item'):
         porad = item.find('div', 'poster')
@@ -36,6 +36,8 @@ def CAT_VOYO(url):
         title = porad.a['title'].encode('utf-8')
         thumb = porad.a.img['src'].encode('utf-8')
         print title, url, thumb
+        if url in zakazane:
+            continue
         addDir(title,__baseurl__+url,5,thumb)
     try:
         items = doc.find('div', 'pagination')
@@ -54,6 +56,8 @@ def CAT_VOYO(url):
                 title = porad.a['title'].encode('utf-8')
                 thumb = porad.a.img['src'].encode('utf-8')
                 print title, url, thumb
+                if url in zakazane:
+                    continue
                 addDir(title,__baseurl__+url,5,thumb)
     except:
         print 'Stránkování nenalezeno',url
@@ -82,6 +86,16 @@ def LIST_VOYO(url):
 
               
 def VIDEOLINK_VOYO(url,name):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    response.close()
+    param1 = re.compile('mainVideo = new mediaData\((.+?), (.+?), (.+?),').findall(httpdata)    
+    for prod,unit,media in param1:
+        conn1 = prod
+        conn2 = unit
+        conn3 = media
     URL2ALIAS = {'rodinna-kliatba':'rodkliatba',
                  'druhy-dych':'druhydych',
                  'mesto-tienov':'mestotienov',
@@ -99,7 +113,13 @@ def VIDEOLINK_VOYO(url,name):
                  'na-telo':'natelo',
                  'modre-z-neba':'mzn',
                  'bez-servitky':'bezservitky',
-                 'mafianske-popravy':'popravy'}
+                 'mafianske-popravy':'popravy',
+                 'tudorovci-sex-moc-a-intrigy':'tudorovci',
+                 'sudkyna-hattchetova':'hattchetova',
+                 'dr-oz':'droz',
+                 'comeback-i':'comebacki',
+                 'v-dobrom-aj-v-zlom':'vdobrom',                 
+                 'dokonaly-svet-i':'sveti'}
     if re.search('rychle-televizne-noviny', url, re.U):
         match = re.compile('\/[0-9]+-(.+?)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-.+?').findall(url)
         for jmeno,hodina,minuta,mesic,den,rok in match:
@@ -120,7 +140,9 @@ def VIDEOLINK_VOYO(url,name):
     print jmeno,den,mesic,rok,cesta
     swfurl = 'http://voyo.markiza.sk/static/shared/app/flowplayer/13-flowplayer.cluster-3.2.1-01-004.swf'
     #lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
-    lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' conn=O:1 conn=NN:0:2274958.000000 conn=NS:1: conn=NN:2:1408.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'    
+    lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' conn=O:1 conn=NN:0:'+conn3+'.000000 conn=NS:1: conn=NN:2:'+conn1+'.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'    
+    #lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' conn=O:1 conn=NN:0:'+conn3+'.000000 conn=NS:1:'+conn1+'.000000 conn=NN:2:'+conn2+'.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'    
+
     addLink(name,lqurl,icon,name)
 
 def get_params():
