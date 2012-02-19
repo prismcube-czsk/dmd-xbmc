@@ -36,6 +36,7 @@ def OBSAH_SER():
     addDir('Hoď svišťom','http://hodsvistom.joj.sk/hod-svistom-epizody.html',4,'http://img.csfd.cz/posters/30/300577_1.jpg')
     addDir('Keby bolo keby','http://www.joj.sk/keby-bolo-keby/keby-bolo-keby-epizody.html',4,__dmdbase__+'kbk.jpg')
     addDir('Mafstory','http://mafstory.joj.sk/mafstory-epizody.html',4,__dmdbase__+'mafstory.jpg')
+    addDir('Nevinní','http://nevinni.joj.sk/nevinni-epizody.html',4,__dmdbase__+'nevinni.jpg')    
     addDir('Panelák','http://panelak.joj.sk/panelak-epizody.html',4,__dmdbase__+'panelak.jpg')
     addDir('Profesionáli','http://profesionali.joj.sk/profesionali-epizody.html',4,__dmdbase__+'profesionali.jpg')
     addDir('Prvé oddelenie','http://www.joj.sk/prve-oddelenie/prve-oddelenie-epizody.html',4,__dmdbase__+'prve-oddelenie.jpg')
