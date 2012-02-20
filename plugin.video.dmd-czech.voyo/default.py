@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-import urllib2,urllib,re,os,string,time,base64,md5,datetime
+import urllib2,urllib,re,os,string,time,base64,datetime
+try:
+    import hashlib
+except ImportError:
+    import md5
+
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://voyo.nova.cz'

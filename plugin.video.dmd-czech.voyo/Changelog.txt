@@ -1,3 +1,5 @@
+2012-02-20:
+ * uprava knihoven
 2012-02-17:
  * aktualizace chranenych serialu, prizpusobeni chyboveho hlaseni
 2012-01-18:
