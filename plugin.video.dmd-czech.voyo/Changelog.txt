@@ -1,3 +1,5 @@
+2012-02-23:
+ * oprava pouziti knihovny hashlib a md5
 2012-02-20:
  * uprava knihoven
 2012-02-17:

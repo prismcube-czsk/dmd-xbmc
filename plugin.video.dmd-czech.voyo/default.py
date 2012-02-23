@@ -107,7 +107,10 @@ def VIDEOLINK(url,name):
     timestamp = datum.strftime('%Y%m%d%H%M%S')
     videoid = urllib.quote(nova_app_id + '|' + mediaid[0])
     md5hash = nova_app_id + '|' + mediaid[0] + '|' + timestamp + '|' + secret_token
-    md5hash = md5.new(md5hash)
+    try:
+        md5hash = hashlib.md5(md5hash)
+    except:
+        md5hash = md5.new(md5hash)
     signature = urllib.quote(base64.b64encode(md5hash.digest()))
     config = nova_service_url + '?t=' + timestamp + '&d=1&tm=nova&h=0&c=' +videoid+ '&s='+signature    
     print config
