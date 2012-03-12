@@ -1,3 +1,5 @@
+2012-03-12:
+ * special pro Spike :)
 2011-11-15:
  * oprava zobrazovani poradu pod polozkou "Zive iVysilani" a pridan do nazvu poradu v nem nazev programu a odehrana doba.
 2011-08-24:

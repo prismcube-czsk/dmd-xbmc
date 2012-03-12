@@ -108,6 +108,7 @@ def VIDEOLINK(url,name):
     con.close()
     # naplneni promenne obsahem stranky
     print url
+    
     stream_video = re.compile('cdnID=([0-9]+)').findall(data)
     if len(stream_video) > 0:
         print 'LQ '+__cdn_url__+name,stream_video[0],icon,''
@@ -116,13 +117,20 @@ def VIDEOLINK(url,name):
         #livebox = re.compile("width, height, '(.+?)', '(.+?)', '(.+?)'").findall(data)
         hq_stream = re.compile("'hq_id':'(.+?)'").findall(data)
         lq_stream = re.compile("'lq_id': '(.+?)'").findall(data)
+        geo_zone = re.compile("'zoneGEO': (.+?),").findall(data)        
         thumb = re.compile("'thumbnail': '(.+?)'").findall(data)
         #hq_stream = livebox[0]
         #lq_stream = livebox[1]
         #thumb = livebox[2]
         nahled = 'http://embed.livebox.cz/iprima/'+thumb[0]
-        hq_url = 'rtmp://iprima.livebox.cz/iprima/'+hq_stream[0]
-        lq_url = 'rtmp://iprima.livebox.cz/iprima/'+lq_stream[0]
+        print geo_zone[0]
+        if geo_zone[0] == "1":
+            hq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth=_any_|1331590697|554aec1e6ad14938aa1c24dee72061a4a12c4c67/mp4:'+hq_stream[0]
+            lq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth=_any_|1331590697|554aec1e6ad14938aa1c24dee72061a4a12c4c67/mp4:'+lq_stream[0]
+        else:
+            hq_url = 'rtmp://iprima.livebox.cz/iprima/'+hq_stream[0]
+            lq_url = 'rtmp://iprima.livebox.cz/iprima/'+lq_stream[0]
+            
         print nahled, hq_url, lq_url
         if __settings__.getSetting('kvalita_sel') == "true":
             print 'HQ '+name,hq_url,nahled,name
@@ -130,7 +138,6 @@ def VIDEOLINK(url,name):
         if __settings__.getSetting('kvalita_sel') == "false":
             print 'LQ '+name,lq_url,nahled,name
             addLink('LQ '+name,lq_url,nahled,name)
-
 
 def get_params():
         param=[]

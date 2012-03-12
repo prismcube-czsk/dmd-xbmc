@@ -33,7 +33,7 @@ RE_DATE   = re.compile('(\d{1,2}\.\s*\d{1,2}\.\s*\d{4})')
 def OBSAH():
     addDir('Nejnovější pořady',__baseurl__+'/?nejnovejsi=vsechny-porady',12,icon)
     addDir('Nejsledovanější videa týdne',__baseurl__+'/?nejsledovanejsi=tyden',11,icon)
-    addDir('Podle datumu',__baseurl__+'/podle-data-vysilani/',5,icon)
+    addDir('Podle data',__baseurl__+'/podle-data-vysilani/',5,icon)
     addDir('Podle abecedy',__baseurl__+'/podle-abecedy/',2,icon)
     addDir('Podle kategorie',__baseurl__,1,icon)
     addDir('Živé iVysílání',__baseurl__+'/ajax/liveBox.php',4,icon)
