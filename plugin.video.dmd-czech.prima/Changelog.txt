@@ -1,3 +1,5 @@
+2012-03-13:
+ * oprava vcerejsi opravy :)
 2012-03-12:
  * oprava neprehratelnych poradu
 2012-02-12:

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import urllib2,urllib,re,os
+import urllib2,urllib,re,os,random,decimal
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://www.iprima.cz/videoarchiv'
@@ -98,35 +98,34 @@ def INDEX(url,page):
                 addDir('>> Další strana ('+str(next_page+1)+' z '+max_page+')',url,1,nexticon,next_page)
         
 def VIDEOLINK(url,name):
-    # parametry pro skript
     strquery = '?method=json&action=video'
-    # pozadavek na skript
     request = urllib2.Request(url, strquery)
     con = urllib2.urlopen(request)
-    # nacteni stranky
     data = con.read()
     con.close()
-    # naplneni promenne obsahem stranky
     print url
-    
     stream_video = re.compile('cdnID=([0-9]+)').findall(data)
     if len(stream_video) > 0:
         print 'LQ '+__cdn_url__+name,stream_video[0],icon,''
         addLink('LQ '+name,__cdn_url__+stream_video[0],icon,'')        
     else:
-        #livebox = re.compile("width, height, '(.+?)', '(.+?)', '(.+?)'").findall(data)
         hq_stream = re.compile("'hq_id':'(.+?)'").findall(data)
         lq_stream = re.compile("'lq_id': '(.+?)'").findall(data)
         geo_zone = re.compile("'zoneGEO': (.+?),").findall(data)        
         thumb = re.compile("'thumbnail': '(.+?)'").findall(data)
-        #hq_stream = livebox[0]
-        #lq_stream = livebox[1]
-        #thumb = livebox[2]
         nahled = 'http://embed.livebox.cz/iprima/'+thumb[0]
         print geo_zone[0]
         if geo_zone[0] == "1":
-            hq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth=_any_|1331590697|554aec1e6ad14938aa1c24dee72061a4a12c4c67/mp4:'+hq_stream[0]
-            lq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth=_any_|1331590697|554aec1e6ad14938aa1c24dee72061a4a12c4c67/mp4:'+lq_stream[0]
+            key = 'http://embed.livebox.cz/iprima/player-embed.js?__tok'+str(gen_random_decimal(1073741824))+'__='+str(gen_random_decimal(1073741824))
+            req = urllib2.Request(key)
+            req.add_header('User-Agent', _UserAgent_)
+            req.add_header('Referer', url)
+            response = urllib2.urlopen(req)
+            keydata = response.read()
+            response.close()
+            keydata = re.compile("auth=(.*?)'").findall(keydata)
+            hq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth='+keydata[0]+'/mp4:'+hq_stream[0]
+            lq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth='+keydata[0]+'/mp4:'+lq_stream[0]
         else:
             hq_url = 'rtmp://iprima.livebox.cz/iprima/'+hq_stream[0]
             lq_url = 'rtmp://iprima.livebox.cz/iprima/'+lq_stream[0]
@@ -138,6 +137,9 @@ def VIDEOLINK(url,name):
         if __settings__.getSetting('kvalita_sel') == "false":
             print 'LQ '+name,lq_url,nahled,name
             addLink('LQ '+name,lq_url,nahled,name)
+
+def gen_random_decimal(d):
+        return decimal.Decimal('%d' % (random.randint(0,d)))
 
 def get_params():
         param=[]

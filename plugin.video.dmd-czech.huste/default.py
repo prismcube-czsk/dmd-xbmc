@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import urllib2,urllib,re,os
+import urllib2,urllib,re,os,time
 from parseutils import *
 from urlparse import urlparse
+from datetime import datetime
 import xbmcplugin,xbmcgui,xbmcaddon
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.huste')
@@ -18,7 +19,8 @@ def OBSAH():
     addDir('Šport','http://sport.huste.tv',4,icon)
     addDir('Relálie a seriály','http://zabava.huste.tv',2,icon)    
     addDir('Filmy','http://filmy.huste.tv',3,icon)
-    addDir('Hlášky','http://hlasky.huste.tv',4,icon)    
+    addDir('Hlášky','http://hlasky.huste.tv',4,icon)
+    addDir('Sport Live & Archiv(BETA)','http://www.huste.tv/services/CurrentLive.xml?nc=6946',11,icon)     
 
 def OBSAH_HUDBA(url):
     addDir('= Interpreti podle abecedy =','http://hudba.huste.tv',5,icon)
@@ -132,6 +134,49 @@ def FILMY_INDEX(url):
             #print next_label,page_url
     except:
         print 'STRÁNKOVÁNÍ NENALEZENO'
+
+
+def LIVE(url):
+    doc = read_page(url)
+    zapasy = doc.find('events')
+    for zapas in zapasy.findAll('event'):
+        title = str(zapas['title'].encode('utf-8'))
+        nahled = str(zapas['large_image'])
+        cas = str(zapas['starttime'])
+        cas = cas.replace("+01:00", "");
+        if hasattr(datetime, 'strptime'):
+            #python 2.6
+            strptime = datetime.strptime
+        else:
+            #python 2.4 equivalent
+            strptime = lambda date_string, format: datetime(*(time.strptime(date_string, format)[0:6]))
+        cas = strptime(cas, '%Y-%m-%dT%H:%M:%S')
+        cas = cas.strftime('%d.%m. %H:%M')
+        archiv = str(zapas['archive'])
+        link = str(zapas['url'])
+        #print title,nahled,cas,archiv,link
+        try:
+            soubory = zapas.find('files')
+            for soubor in soubory.findAll('file'):
+                rtmp_url = str(soubor['url'])
+                kvalita = str(soubor['quality'])
+                rtmp_cesta = str(soubor['path'])
+                #print rtmp_url,kvalita,rtmp_cesta
+            server = re.compile('rtmp://(.+?)/').findall(rtmp_url)
+            tcurl = 'rtmp://'+server[0]
+            swfurl = 'http://c.static.huste.tv/fileadmin/templates/swf/HusteMainPlayer.swf'
+            if archiv == "1":
+                rtmp_url = tcurl+' playpath='+rtmp_cesta+' pageUrl=http://live.huste.tv/ swfurl='+swfurl+' swfVfy=true'  
+                name = 'Záznam - ' + cas + ' ' + title
+            else:
+                rtmp_url = tcurl+' playpath='+rtmp_cesta+' pageUrl=http://live.huste.tv/ swfurl='+swfurl+' swfVfy=true  live=true'
+                name = 'Live - ' + cas + ' ' + title
+            print name,rtmp_url,nahled
+            addLink(name,rtmp_url,nahled,name)
+        except:
+            name = 'Nedostupné - ' + cas + ' ' + title
+            addLink(name,'',nahled,name)
+            continue
                 
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
@@ -260,6 +305,10 @@ elif mode==8:
 elif mode==9:
         print ""+url
         FILMY_INDEX(url)
+
+elif mode==11:
+        print ""+url
+        LIVE(url)
         
 elif mode==10:
         print ""+url
