@@ -33,7 +33,7 @@ def OBSAH():
     addDir('Zprávy','http://voyo.nova.cz/zpravy/',1,icon)
     
 def CATEGORIES(url):
-    zakazane = ['/serialy/27700-prvni-krok', '/tvod/serialy/27522-zvire', '/serialy/27540-powder-park', '/serialy/27483-osklive-kacatko-a-ja','/serialy/26481-odvazny-crusoe','/serialy/26482-5-dnu-do-pulnoci','/serialy/3924-patty-hewes','/serialy/27216-lazytown','/serialy/3923-tudorovci','/serialy/3906-kobra-11']
+    zakazane = ['/tvod/serialy/27522-zvire', '/serialy/27540-powder-park', '/serialy/27483-osklive-kacatko-a-ja','/serialy/26481-odvazny-crusoe','/serialy/26482-5-dnu-do-pulnoci','/serialy/3924-patty-hewes','/serialy/27216-lazytown','/serialy/3923-tudorovci','/serialy/3906-kobra-11']
     pole_poradu = 0
     doc = read_page(url)
     for porady in doc.findAll('div', 'productsList'):
