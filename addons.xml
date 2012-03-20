@@ -186,8 +186,8 @@
   </extension>
 </addon>
 <addon id="plugin.video.dmd-czech.prima"
-       name="Prima TV Archiv"
-       version="1.5"
+       name="Prima PLAY"
+       version="1.6"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -200,7 +200,7 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <summary>Prima TV video-archive plugin</summary>
-    <summary lang="cs">Prima TV - archiv</summary>
+    <summary lang="cs">Prima  PLAY</summary>
     <description>
         Plugin to play TV video archive iprima.cz/videoarchiv
     </description>
