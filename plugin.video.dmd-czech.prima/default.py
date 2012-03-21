@@ -18,7 +18,10 @@ love = xbmc.translatePath( os.path.join( home, 'love.png' ) )
 cool = xbmc.translatePath( os.path.join( home, 'cool.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 file = __settings__.getSetting('xml_file')
-
+kvalita =__settings__.getSetting('kvalita')
+if kvalita == '':
+    xbmc.executebuiltin("XBMC.Notification('Doplněk Prima PLAY','Vyberte preferovanou kvalitu!',30000,"+icon+")")
+    __settings__.openSettings() 
 def replace_words(text, word_dic):
     rc = re.compile('|'.join(map(re.escape, word_dic)))
     def translate(match):
@@ -187,6 +190,7 @@ def VIDEOLINK(url,name):
     else:
         hq_stream = re.compile("'hq_id':'(.+?)'").findall(data)
         lq_stream = re.compile("'lq_id':'(.+?)'").findall(data)
+        hd_stream = re.sub('1000','1500',hq_stream[0])
         geo_zone = re.compile("'zoneGEO':(.+?),").findall(data)        
         thumb = re.compile("'thumbnail':'(.+?)'").findall(data)
         nahled = 'http://embed.livebox.cz/iprima/'+thumb[0]
@@ -200,20 +204,24 @@ def VIDEOLINK(url,name):
         response.close()
         keydata = re.compile("auth=(.*?)'").findall(keydata)
         if geo_zone[0] == "1":
+            hd_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth='+keydata[0]+'/mp4:'+hd_stream
             hq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth='+keydata[0]+'/mp4:'+hq_stream[0]
             lq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth='+keydata[0]+'/mp4:'+lq_stream[0]
         else:
+            hd_url = 'rtmp://bcastnw.livebox.cz:80/iprima_token?auth='+keydata[0]+'/mp4:'+hd_stream
             hq_url = 'rtmp://bcastnw.livebox.cz:80/iprima_token?auth='+keydata[0]+'/mp4:'+hq_stream[0]
             lq_url = 'rtmp://bcastnw.livebox.cz:80/iprima_token?auth='+keydata[0]+'/mp4:'+lq_stream[0]
 
-            #hq_url = 'rtmp://iprima.livebox.cz/play/'+hq_stream[0]
-            #lq_url = 'rtmp://iprima.livebox.cz/play/'+lq_stream[0]
-            
-        print nahled, hq_url, lq_url
-        if __settings__.getSetting('kvalita_sel') == "true":
-            print 'HQ '+name,hq_url,nahled,name
+        #print nahled, hq_url, lq_url
+        if kvalita == "HD":
+            print 'HD '+name,hq_url,nahled,name
+            addLink('HD '+name,hd_url,nahled,name)
+            addLink('HQ '+name,hq_url,nahled,name)            
+        elif kvalita == "HQ":
+            print 'HQ '+name,lq_url,nahled,name
             addLink('HQ '+name,hq_url,nahled,name)
-        if __settings__.getSetting('kvalita_sel') == "false":
+            addLink('LQ '+name,lq_url,nahled,name)
+        else:            
             print 'LQ '+name,lq_url,nahled,name
             addLink('LQ '+name,lq_url,nahled,name)
 

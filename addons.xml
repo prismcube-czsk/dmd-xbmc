@@ -187,7 +187,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.prima"
        name="Prima PLAY"
-       version="1.7"
+       version="2.0"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
