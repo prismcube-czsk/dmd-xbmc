@@ -190,7 +190,7 @@ def VIDEOLINK(url,name):
     else:
         hq_stream = re.compile("'hq_id':'(.+?)'").findall(data)
         lq_stream = re.compile("'lq_id':'(.+?)'").findall(data)
-        hd_stream = re.sub('1000','1500',hq_stream[0])
+        hd_stream = re.sub('_1000','_1500',hq_stream[0])
         geo_zone = re.compile("'zoneGEO':(.+?),").findall(data)        
         thumb = re.compile("'thumbnail':'(.+?)'").findall(data)
         nahled = 'http://embed.livebox.cz/iprima/'+thumb[0]
