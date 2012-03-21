@@ -137,7 +137,7 @@ def OBSAH_COOL(url):
     addDir('Moto(s)poušť','13432',4,__dmdbase__+'13432.jpg',0,2)
     addDir('Největší bitvy II. světové války','16421',4,__dmdbase__+'16421.jpg',0,2)
     addDir('Spartakus: Krev a písek','15767',4,__dmdbase__+'15767.jpg',0,2)
-    addDir('Těžká dřina','13317',4,__dmdbase__+'13317.jpg',0,2)
+    addDir('Těžká dřina','12317',4,__dmdbase__+'12317.jpg',0,2)
     addDir('Vítejte doma','14881',4,__dmdbase__+'14881.jpg',0,2)
     addDir('menZone','15766',4,__dmdbase__+'15766.jpg',0,2)
     
