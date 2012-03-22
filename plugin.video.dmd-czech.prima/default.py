@@ -22,6 +22,7 @@ kvalita =__settings__.getSetting('kvalita')
 if kvalita == '':
     xbmc.executebuiltin("XBMC.Notification('Doplněk Prima PLAY','Vyberte preferovanou kvalitu!',30000,"+icon+")")
     __settings__.openSettings() 
+
 def replace_words(text, word_dic):
     rc = re.compile('|'.join(map(re.escape, word_dic)))
     def translate(match):
@@ -61,88 +62,26 @@ word_dic = {
 }
 
 def OBSAH():
-    addDir('Family','http://play.iprima.cz/',1,family,'','')
-    addDir('Love','http://play.iprima.cz/',2,love,'','')
-    addDir('COOL','http://play.iprima.cz/',3,cool,'','')
+    addDir('Family','http://play.iprima.cz/iprima',1,family,'','1')
+    addDir('Love','http://play.iprima.cz/love',1,love,'','3')
+    addDir('COOL','http://play.iprima.cz/cool',1,cool,'','2')
     
-def OBSAH_FAMILY(url):
-    addDir('Aféry','9415',4,__dmdbase__+'9415.jpg',0,1)
-    addDir('Ano,šéfe!','2290',4,__dmdbase__+'2290.jpg',0,1)
-    addDir('Aréna národů','15727',4,__dmdbase__+'15727.jpg',0,1)
-    addDir('Autosalon','2288',4,__dmdbase__+'2288.jpg',0,1)    
-    addDir('Bubo bubo','13037',4,__dmdbase__+'13037.jpg',0,1)
-    addDir('Cesty domů','6840',4,__dmdbase__+'6840.jpg',0,1)
-    addDir('Fakta Brabory Techecí','3976',4,__dmdbase__+'3976.jpg',0,1)
-    addDir('Farmář hledá ženu','6130',4,__dmdbase__+'6130.jpg',0,1)
-    addDir('Filmy','15151',4,__dmdbase__+'15151.jpg',0,1)
-    addDir('Hotel Paradise','16268',4,__dmdbase__+'16268.jpg',0,1)    
-    addDir('Hotel Paradise - Videospeciál','16369',4,__dmdbase__+'16369.jpg',0,1)    
-    addDir('Jak se staví dům','2291',4,__dmdbase__+'2291.jpg',0,1)
-    addDir('Jak se staví sen','1187',4,__dmdbase__+'1187.jpg',0,1)
-    addDir('Jste to co jíte','2287',4,__dmdbase__+'2287.jpg',0,1)
-    addDir('Krimi zprávy','3773',4,__dmdbase__+'3773.jpg',0,1)
-    addDir('Letiště','2297',4,__dmdbase__+'2297.jpg',0,1)
-    addDir('Moje místo','13347',4,__dmdbase__+'13347.jpg',0,1)
-    addDir('Máš minutu','9900',4,__dmdbase__+'9900.jpg',0,1)
-    addDir('Nemocnice XXXXL','16200',4,__dmdbase__+'16200.jpg',0,1)
-    addDir('Nikdo není dokonalý speciál','6548',4,__dmdbase__+'6548.jpg',0,1)
-    addDir('Nové hnízdo','12732',4,__dmdbase__+'12732.jpg',0,1)
-    addDir('O mé rodině a ...','13583',4,__dmdbase__+'13583.jpg',0,1)
-    addDir('Partie','1185',4,__dmdbase__+'1185.jpg',0,1)
-    addDir('Partička','9416',4,__dmdbase__+'9416.jpg',0,1)
-    addDir('Partička speciály','14104',4,__dmdbase__+'14104.jpg',0,1)
-    addDir('Prima tip na večeři','2295',4,__dmdbase__+'2295.jpg',0,1)
-    addDir('Prostřeno!','4114',4,__dmdbase__+'4114.jpg',0,1)
-    addDir('Přešlapy','2494',4,__dmdbase__+'2494.jpg',0,1)
-    addDir('Receptář Prima nápadů','2501',4,__dmdbase__+'2501.jpg',0,1)
-    addDir('S italem v kuchyni','2544',4,__dmdbase__+'2544.jpg',0,1)
-    addDir('Show Jana Krause','6577',4,__dmdbase__+'6577.jpg',0,1)
-    addDir('Skečbar','7099',4,__dmdbase__+'7099.jpg',0,1)
-    addDir('Soukromá dramata','6550',4,__dmdbase__+'6550.jpg',0,1)
-    addDir('Top Star Magazín','1184',4,__dmdbase__+'1184.jpg',0,1)
-    addDir('VIP Prostřeno!','15291',4,__dmdbase__+'15291.jpg',0,1)
-    addDir('VIP zprávy','6037',4,__dmdbase__+'6037.jpg',0,1)
-    addDir('Velmi křehké vztahy','2283',4,__dmdbase__+'2283.jpg',0,1)
-    addDir('Vrabci v hrsti','11980',4,__dmdbase__+'11980.jpg',0,1)
-    addDir('Vraždy v Midsomeru','15977',4,__dmdbase__+'15977.jpg',0,1)
-    addDir('Vánoční pečení','14878',4,__dmdbase__+'14878.jpg',0,1)
-    addDir('Zprávy FTV Prima','2317',4,__dmdbase__+'2317.jpg',0,1)
-    addDir('Zázraky Života','4288',4,__dmdbase__+'4288.jpg',0,1)
-    addDir('Česko na talíři','14020',4,__dmdbase__+'14020.jpg',0,1)
-    addDir('Čápi s mákem','6547',4,__dmdbase__+'6547.jpg',0,1)
-    addDir('Šéf na grilu','10728',4,__dmdbase__+'10728.jpg',0,1)
-    addDir('Ženy na cestách','15610',4,__dmdbase__+'15610.jpg',0,1)
-    addDir('Životní úklid','14019',4,__dmdbase__+'14019.jpg',0,1)
+def KATEGORIE(url,page,kanal):
+    porady = []
+    request = urllib2.Request(url)
+    con = urllib2.urlopen(request)
+    data = con.read()
+    con.close()
+    match = re.compile('"name":"(.+?)","tid":"(.+?)"').findall(data)
+    for porad,porad_id in match:
+        porady.append([porad,porad_id])
+        porady.sort()   
+    for porad, porad_id in porady:
+        #print porad, porad_id
+        #porad=replace_words(porad)
+        addDir(replace_words(porad, word_dic),porad_id,4,__dmdbase__+porad_id+'.jpg',0,kanal)
 
-def OBSAH_LOVE(url):
-    addDir('Aféry','9415',4,__dmdbase__+'9415.jpg',0,3)
-    addDir('Eliso, vrať se!','14521',4,__dmdbase__+'14521.jpg',0,3)
-    addDir('Farmář hledá ženu','6130',4,__dmdbase__+'6130.jpg',0,3)
-    addDir('Filmy','15151',4,__dmdbase__+'15151.jpg',0,3)
-    addDir('Hotel Paradise','16268',4,__dmdbase__+'16268.jpg',0,3)    
-    addDir('Hotel Paradise - Videospeciál','16369',4,__dmdbase__+'16369.jpg',0,3)    
-    addDir('Hříšná láska','16118',4,__dmdbase__+'16118.jpg',0,3)
-    addDir('Jak se staví dům','2291',4,__dmdbase__+'2291.jpg',0,3)
-    addDir('Jak se staví sen','1187',4,__dmdbase__+'1187.jpg',0,3)
-    addDir('Jste to co jíte','2287',4,__dmdbase__+'2287.jpg',0,3)
-    addDir('Letiště','2297',4,__dmdbase__+'2297.jpg',0,3)
-    addDir('Nemocnice XXXXL','16200',4,__dmdbase__+'16200.jpg',0,3)
-    addDir('Přešlapy','2494',4,__dmdbase__+'2494.jpg',0,3)
-    addDir('S italem v kuchyni','2544',4,__dmdbase__+'2544.jpg',0,3)
-    addDir('Top Star LOVE','16465',4,__dmdbase__+'16465.jpg',0,3)
-    addDir('Top Star Magazín','1184',4,__dmdbase__+'1184.jpg',0,3)
-    addDir('Tráva','14879',4,__dmdbase__+'14879.jpg',0,3)
 
-def OBSAH_COOL(url):
-    addDir('Autosalon','2288',4,__dmdbase__+'2288.jpg',0,2)
-    addDir('Filmy','15151',4,__dmdbase__+'15151.jpg',0,2)
-    addDir('Misfits: Zmetci','16103',4,__dmdbase__+'16103.jpg',0,2)
-    addDir('Moto(s)poušť','13432',4,__dmdbase__+'13432.jpg',0,2)
-    addDir('Největší bitvy II. světové války','16421',4,__dmdbase__+'16421.jpg',0,2)
-    addDir('Spartakus: Krev a písek','15767',4,__dmdbase__+'15767.jpg',0,2)
-    addDir('Těžká dřina','12317',4,__dmdbase__+'12317.jpg',0,2)
-    addDir('Vítejte doma','14881',4,__dmdbase__+'14881.jpg',0,2)
-    addDir('menZone','15766',4,__dmdbase__+'15766.jpg',0,2)
     
 def INDEX(url,page,kanal):
     if int(page) != 0:
@@ -156,7 +95,6 @@ def INDEX(url,page,kanal):
             name = replace_words(name, word_dic)
             thumb = replace_words(thumb, word_dic)
             thumb = re.sub('98x55','280x158',thumb)
-            addDir(str(name),'http://play.iprima.cz/iprima/'+videoid+'/',10,'http://www.iprima.cz/'+thumb,'','')
             if kanal == 1:
                 addDir(str(name),'http://play.iprima.cz/iprima/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')
             elif kanal == 2:
@@ -169,10 +107,9 @@ def INDEX(url,page,kanal):
         if int(page_total) > 12:
             act_page = act_page.replace('"','')
             next_page = int(act_page)  + 1
-            max_page =  round(int(page_total)/12 )
+            max_page =  int(round(int(page_total)/12 ) )
             if next_page < max_page+1:
                 max_page = str(max_page+1)
-                #max_page = re.sub('.0','',max_page)
                 #print '>> Další strana >>',url,1,next_page
                 addDir('>> Další strana ('+str(next_page+1)+' z '+max_page+')',url,4,nexticon,next_page,kanal)
         
@@ -224,6 +161,7 @@ def VIDEOLINK(url,name):
         else:            
             print 'LQ '+name,lq_url,nahled,name
             addLink('LQ '+name,lq_url,nahled,name)
+
 
 def gen_random_decimal(d):
         return decimal.Decimal('%d' % (random.randint(0,d)))
@@ -300,18 +238,14 @@ print "Page: "+str(page)
 print "Kanal: "+str(kanal)
 
 if mode==None or url==None or len(url)<1:
-        print ""
         OBSAH()
        
 elif mode==1:
-        print ""
-        OBSAH_FAMILY(url)
-elif mode==2:
-        print ""
-        OBSAH_LOVE(url)
-elif mode==3:
-        print ""
-        OBSAH_COOL(url)
+        print ""+str(url)
+        print ""+str(kanal)
+        print ""+str(page)
+        KATEGORIE(url,page,kanal)
+
 elif mode==4:
         print ""+str(url)
         print ""+str(kanal)

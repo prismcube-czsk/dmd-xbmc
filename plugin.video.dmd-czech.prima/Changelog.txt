@@ -1,3 +1,5 @@
+2012-03-22:
+ * oprava duplicitnich polozek, automaticke seznamy poradu, oprava HD kvality
 2012-03-21:
  * zmena vyberu preferovane kvality, pridana moznost HD kvality (nefunguje u vsech poradu!!!)
 2012-03-20:
