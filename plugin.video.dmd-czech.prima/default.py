@@ -4,7 +4,7 @@ from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://www.iprima.cz/videoarchiv'
 __cdn_url__  = 'http://cdn-dispatcher.stream.cz/?id='
-__dmdbase__ = 'http://iamm.uvadi.cz/xbmc/prima/'
+__dmdbase__ = 'http://iamm.netuje.cz/xbmc/prima/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.prima')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
