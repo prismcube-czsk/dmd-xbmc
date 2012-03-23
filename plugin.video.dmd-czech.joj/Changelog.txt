@@ -1,3 +1,5 @@
+2012-03-22:
+ * zmena vynuseneho stream serveru
 2012-02-19:
  * pridan porad Nevinni
 2012-02-12:

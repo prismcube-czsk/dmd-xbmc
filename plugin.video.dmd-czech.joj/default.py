@@ -213,11 +213,11 @@ def VIDEOLINK(url,name):
         for kvalita,serverno,cesta in joj_file:
             name = str.swapcase(kvalita)+ ' - ' + title[0]
             if __settings__.getSetting('stream_server') == "true":
-                server = 'n04.joj.sk'
+                server = 'n09.joj.sk'
             else:
                 server = 'n0'+serverno+'.joj.sk'
             tcurl = 'rtmp://'+server
-            swfurl = 'http://www.joj.sk/fileadmin/templates/swf/JojPlayer.swf?no_cache=176146'
+            swfurl = 'http://player.joj.sk/JojPlayer.swf?no_cache=137034'
             port = '1935'
             rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
             addLink(name,rtmp_url,thumb[0],name)
@@ -238,7 +238,7 @@ def VIDEOLINK(url,name):
         for kvalita,serverno,cesta in joj_file:
             name = str.swapcase(kvalita)+ ' - ' + title[0]
             if __settings__.getSetting('stream_server') == "true":
-                server = 'n04.joj.sk'
+                server = 'n09.joj.sk'
             else:
                 server = 'n0'+serverno+'.joj.sk'
             tcurl = 'rtmp://'+server
@@ -265,7 +265,7 @@ def TALENT(url,name):
     for kvalita,serverno,cesta in joj_file:
         titul = str.swapcase(kvalita)+ ' - ' + name
         if __settings__.getSetting('stream_server') == "true":
-            server = 'n04.joj.sk'
+            server = 'n09.joj.sk'
         else:
                 server = 'n0'+serverno+'.joj.sk'
         tcurl = 'rtmp://'+server
@@ -293,9 +293,9 @@ def VP_PLAY(url,name):
     for kvalita,serverno,cesta in joj_file:
         titul = str.swapcase(kvalita)+ ' - ' + name
         if __settings__.getSetting('stream_server') == "true":
-            server = 'n04.joj.sk'
+            server = 'n09.joj.sk'
         else:
-                server = 'n0'+serverno+'.joj.sk'
+                server = 'n'+serverno+'.joj.sk'
         tcurl = 'rtmp://'+server
         swfurl = 'http://player.joj.sk/VideoportalPlayer.swf?no_cache=173329'
         port = '1935'
