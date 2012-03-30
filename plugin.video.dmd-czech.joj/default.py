@@ -17,7 +17,8 @@ def OBSAH():
     addDir('Publicistika','http://www.joj.sk',1,icon)
     addDir('Seriály','http://www.joj.sk',2,icon)
     addDir('Zábava','http://www.joj.sk',3,icon)
-    addDir('Videoportal.sk','http://www.videoportal.sk/kategorie.html',9,icon)        
+    addDir('Videoportal.sk','http://www.videoportal.sk/kategorie.html',9,icon)
+    addDir('Speciál Hotel Paradise','http://hotelparadise.joj.sk/hotelparadise-video/video-epizody.html',20,icon)        
 def OBSAH_PUB():
     addDir('Črepiny *','http://crepiny.joj.sk/crepiny-s-hviezdickou-archiv.html',4,__dmdbase__+'crepiny-s-hviezdickou.jpg')
     addDir('Exclusiv','http://www.joj.sk/exclusiv/exclusiv-archiv.html',4,__dmdbase__+'exclusiv.jpg')
@@ -302,6 +303,39 @@ def VP_PLAY(url,name):
         rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
         addLink(titul,rtmp_url,thumb[0],titul)
 
+def PARADISE_CAT_LIST(url):
+    doc = read_page(url)
+    items = doc.find('div', 'sub active')
+    for item in items.findAll('a'):
+        link = item['href'].encode('utf-8')
+        name = item['title'].encode('utf-8')
+        print link,name
+        addDir(name,link,21,icon)
+
+def PARADISE_LIST(url):
+    doc = read_page(url)
+    items = doc.find('div', 'c-630 c')
+    for item in items.findAll('li','i c'):
+        try:
+            name = item.img['alt'].encode('utf-8')
+            if re.search('image not found', name, re.U):
+                name = 'Video nelze přehrát!!!'
+        except:
+            name = 'Bezejmenný titul'
+        url = str(item.a['href']) 
+        thumb = str(item.img['src'])   
+        #print name,url,thumb
+        addDir(name,url,10,thumb)
+    try:
+        items = doc.find('ul', 'x-pager x-pager-center j-centerer-bull c')
+        dalsi = items.find('li', 'next')
+        if len(dalsi) != 0:
+            next_url = str(dalsi.a['href']) 
+            addDir('>> Další strana >>',next_url,21,nexticon)
+    except:
+        print 'strankovani nenalezeno'
+
+
 
 def get_params():
         param=[]
@@ -417,5 +451,11 @@ elif mode==13:
         print ""+url
         VP_PLAY(url,name)
 
+elif mode==20:
+        print ""+url
+        PARADISE_CAT_LIST(url)
+elif mode==21:
+        print ""+url
+        PARADISE_LIST(url)
         
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
