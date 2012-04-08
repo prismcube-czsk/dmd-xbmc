@@ -27,8 +27,7 @@ def OBSAH_PUB():
     addDir('Noviny','http://www.joj.sk/relacia-noviny/noviny-archiv.html',4,__dmdbase__+'noviny_01.jpg.jpg')
     addDir('Noviny o 12:00','http://www.joj.sk/noviny-o-12-00/noviny-o-12-00-archiv.html',4,__dmdbase__+'noviny-o-12-00.jpg.jpg')
     addDir('Noviny o 17:00','http://www.joj.sk/noviny-o-17-00/noviny-o-17-00-archiv.html',4,'http://c.static.joj.sk/uploads/tx_media/thumbs/310x175/noviny-o-17-00_79970.jpg')
-    addDir('Promi noviny','http://www.joj.sk/promi-noviny/promi-noviny-archiv.html',4,__dmdbase__+'promi-noviny.jpg')
-    addDir('Prvé noviny','http://www.joj.sk/prve-noviny/prve-noviny-archiv.html',4,__dmdbase__+'prve-noviny.jpg')
+    addDir('Top Star','http://www.joj.sk/top-star/top-star-archiv.html',4,'http://b.static.joj.sk/uploads/tx_media/thumbs/150x82/joj-2-122004-0401-h264-pal_142574.jpg')
     addDir('Šport','http://www.joj.sk/relacia-sport/sport-archiv.html',4,__dmdbase__+'sport.jpg')
 def OBSAH_SER():
     addDir('Aféry','http://afery.joj.sk/afery-epizody.html',4,__dmdbase__+'afery.jpg')
@@ -48,10 +47,10 @@ def OBSAH_ZAB():
     addDir('ČS má Talent','http://www.csmatalent.cz/video-cz.html',6,__dmdbase__+'talent.jpg')
     addDir('Hladá sa milionár','http://www.joj.sk/hlada-sa-milionar/hlada-sa-milionar-archiv.html',4,__dmdbase__+'hlada-sa-milionar.jpg')
     addDir('Chutíš mi','http://www.chutismi.sk/chutis-mi-archiv.html',4,__dmdbase__+'chutismi.jpg')
+    addDir('Extrémne rodiny','http://extremnerodiny.joj.sk/extremne-rodiny-archiv.html',4,'http://c.static.joj.sk/uploads/tx_media/thumbs/306x172/extremne-rodiny_84528.jpg')
     addDir('Farmár hľadá ženu 2','http://www.farmarhladazenu.sk/epizody.html',8,'http://t2.gstatic.com/images?q=tbn:ANd9GcRRJbqnrXcT-Ius3Qo29sc-KPVKuNkVjRq5zx51P3FSdpzLL0VD')
     addDir('Kapor na torte','http://www.joj.sk/kapor-na-torte-den-prvy/kapor-na-torte-den-prvy-archiv.html',4,__dmdbase__+'kapor-na-torte.jpg')
     addDir('Kutyil s.r.o','http://www.joj.sk/kutyil/kutyil-epizody.html',4,__dmdbase__+'kutyil-logo.jpg')
-    addDir('Lampa','http://plus.joj.sk/lampa/lampa-tv-archiv.html',4,__dmdbase__+'lampa.jpg')
     addDir('Mama ožeň ma','http://www.mamaozenma.sk/mama-ozen-ma-epizody.html',7,'http://reality-show.panacek.com/wp-content/2015-mama_ozen_ma2.jpg')
     addDir('Nebožies','http://plus.joj.sk/neboziec/epizody.html',4,'http://a.static.joj.sk/uploads/tx_media/thumbs/310x175/logo_77360.jpg')
     addDir('Nové bývanie','http://novebyvanie.joj.sk/nove-byvanie-archiv.html',4,__dmdbase__+'nove-byvanie.jpg')
@@ -223,12 +222,16 @@ def VIDEOLINK(url,name):
             rtmp_url = tcurl+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
             addLink(name,rtmp_url,thumb[0],name)
     except:
-        basepath = re.compile('basePath=(.+?)&amp').findall(httpdata)
-        basepath = re.sub('%3A',':',basepath[0])
-        basepath = re.sub('%2F','/',basepath)
-        print basepath
-        videoid = re.compile('videoId=(.+?)&amp').findall(httpdata)
+        try:
+            basepath = re.compile('basePath=(.+?)&amp').findall(httpdata)
+            basepath = re.sub('%3A',':',basepath[0])
+            basepath = re.sub('%2F','/',basepath)
+            videoid = re.compile('videoId=(.+?)&amp').findall(httpdata)
+        except:
+            videoid = re.compile('video:(.+?).html').findall(str(url))
+            basepath = 'http://hotelparadise.joj.sk/'
         playlisturl = basepath+'services/Video.php?clip='+videoid[0]
+        print playlisturl
         req = urllib2.Request(playlisturl)
         req.add_header('User-Agent', _UserAgent_)
         response = urllib2.urlopen(req)
