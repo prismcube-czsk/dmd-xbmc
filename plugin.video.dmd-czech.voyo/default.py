@@ -33,41 +33,26 @@ def OBSAH():
     addDir('Zprávy','http://voyo.nova.cz/zpravy/',1,icon)
     
 def CATEGORIES(url):
-    zakazane = ['/tvod/serialy/27522-zvire', '/serialy/27540-powder-park', '/serialy/27483-osklive-kacatko-a-ja','/serialy/26481-odvazny-crusoe','/serialy/26482-5-dnu-do-pulnoci','/serialy/3924-patty-hewes','/serialy/27216-lazytown','/serialy/3923-tudorovci','/serialy/3906-kobra-11']
-    pole_poradu = 0
+    zakazane = ['/porady/28368-duck-tv', '/tvod/serialy/27522-zvire', '/serialy/27540-powder-park', '/serialy/27483-osklive-kacatko-a-ja','/serialy/26481-odvazny-crusoe','/serialy/26482-5-dnu-do-pulnoci','/serialy/3924-patty-hewes','/serialy/27216-lazytown','/serialy/3923-tudorovci','/serialy/3906-kobra-11']
     doc = read_page(url)
-    for porady in doc.findAll('div', 'productsList'):
-            pole_poradu = pole_poradu + 1        
-            if pole_poradu == 1:
+    items = doc.find('div', 'cw_30 column left_column')
+    for item in items.findAll('div', 'section_item'):
+        if re.search('Přehrát', str(item), re.U):
                 continue
-            for item in porady.findAll('div', 'section_item'):
-                item = item.find('div', 'poster')
-                url = item.a['href'].encode('utf-8')
-                title = item.a['title'].encode('utf-8')
-                thumb = item.a.img['src'].encode('utf-8')
-                #print title,url,thumb
-                if url in zakazane:
-                    continue
-                addDir(title,__baseurl__+url,2,thumb)
+        item2 = item.find('div', 'poster')    
+        url = item2.a['href'].encode('utf-8')
+        title = item2.a['title'].encode('utf-8')
+        thumb = item2.a.img['src'].encode('utf-8')
+        #print title,url,thumb
+        if url in zakazane:
+            continue
+        addDir(title,__baseurl__+url,2,thumb)
     try:
         items = doc.find('div', 'pagination')
-        for item in items.findAll('span', 'normal'):
-            url = __baseurl__+str(item.a['href'])
-            doc = read_page(url)
-            pole_poradu = 0
-            for porady in doc.findAll('div', 'productsList'):
-                pole_poradu = pole_poradu + 1        
-                if pole_poradu == 1:
-                    continue
-                for item in porady.findAll('div', 'section_item'):
-                    item = item.find('div', 'poster')
-                    url = item.a['href'].encode('utf-8')
-                    title = item.a['title'].encode('utf-8')
-                    thumb = item.a.img['src'].encode('utf-8')
-                    #print title,url,thumb
-                    if url in zakazane:
-                        continue
-                    addDir(title,__baseurl__+url,2,thumb)
+        dalsi = items.find('span', 'next next_page')
+        if len(dalsi) != 0:
+            next_url = str(dalsi.a['href']) 
+        addDir('>> Další strana >>',__baseurl__+next_url,1,nexticon)
     except:
         print 'Stránkování nenalezeno'
 
