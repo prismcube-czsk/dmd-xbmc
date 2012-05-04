@@ -129,9 +129,11 @@ def VIDEOLINK(url,name):
         lq_stream = re.compile("'lq_id':'(.+?)'").findall(data)
         hd_stream = re.sub('_1000','_1500',hq_stream[0])
         geo_zone = re.compile("'zoneGEO':(.+?),").findall(data)        
-        thumb = re.compile("'thumbnail':'(.+?)'").findall(data)
-        nahled = 'http://embed.livebox.cz/iprima/'+thumb[0]
-        print geo_zone[0]
+        try:
+            thumb = re.compile("'thumbnail': '(.+?)'").findall(data)
+            nahled = thumb[0]
+        except:
+            nahled = icon
         key = 'http://embed.livebox.cz/iprimaplay/player-embed-v2.js?__tok'+str(gen_random_decimal(1073741824))+'__='+str(gen_random_decimal(1073741824))
         req = urllib2.Request(key)
         req.add_header('User-Agent', _UserAgent_)

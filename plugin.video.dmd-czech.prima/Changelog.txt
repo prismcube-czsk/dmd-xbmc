@@ -1,3 +1,5 @@
+2012-05-04:
+ * pridana vyjimka pro odstraneni chby zpusobene spatnou detekci nahledu videa
 2012-03-23:
  * pridany nahledy poradu
 2012-03-22:
