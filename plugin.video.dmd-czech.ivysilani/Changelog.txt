@@ -1,3 +1,5 @@
+2012-05-14:
+ * oprava zmenene hlavicky pro zasilani pozadavku POST
 2012-03-12:
  * special pro Spike :)
 2011-11-15:

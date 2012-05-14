@@ -283,7 +283,15 @@ def VIDEOLINK(url,name):
     # Converting dictionary to text arrays    options[UserIP]=xxxx&options[playlistItems][0][..]....
     strquery = http_build_query(query)
     # Ask a link page XML
-    request = urllib2.Request('http://www.ceskatelevize.cz/ajax/playlistURL.php', strquery)
+    request = urllib2.Request('http://www.ceskatelevize.cz/ajax/playlistURL.php')
+    request.add_data(strquery)
+    request.add_header("Referer",url)    
+    request.add_header("Origin","http://www.ceskatelevize.cz")
+    request.add_header("Accept","*/*")
+    request.add_header("X-Requested-With","XMLHttpRequest")
+    request.add_header("x-client","127.0.0.1")
+    request.add_header("User-Agent",_UserAgent_)
+    request.add_header("Content-Type","application/x-www-form-urlencoded")
     con = urllib2.urlopen(request)
     # Read lisk XML page
     data = con.read()
