@@ -289,7 +289,7 @@ def VIDEOLINK(url,name):
     request.add_header("Origin","http://www.ceskatelevize.cz")
     request.add_header("Accept","*/*")
     request.add_header("X-Requested-With","XMLHttpRequest")
-    request.add_header("x-client","127.0.0.1")
+    request.add_header("x-addr","127.0.0.1")
     request.add_header("User-Agent",_UserAgent_)
     request.add_header("Content-Type","application/x-www-form-urlencoded")
     con = urllib2.urlopen(request)
