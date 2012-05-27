@@ -4,7 +4,7 @@
 # Conector para VK Server
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #
-# Modify: 2011-09-12, by Ivo Brhel
+# Modify: 2012-05-10,  Ivo Brhel
 #
 #------------------------------------------------------------
 
@@ -88,6 +88,7 @@ def getURL( page_url , premium = False , user="" , password="", video_password="
                     video_urls.append( ["360p [vk]",get_mp4_video_link(match[0],match[1],match[2],"360.mp4")])
                     video_urls.append( ["480p [vk]",get_mp4_video_link(match[0],match[1],match[2],"480.mp4")])
                     video_urls.append( ["720p [vk]",get_mp4_video_link(match[0],match[1],match[2],"720.mp4")])
+                    video_urls.append( ["1080p [vk]",get_mp4_video_link(match[0],match[1],match[2],"1080.mp4")])
                 else:
                     video_urls.append( ["240p [vk]",get_mp4_video_link(match[0],match[1],match[2],"240.mp4")])
                     video_urls.append( ["360p [vk]",get_mp4_video_link(match[0],match[1],match[2],"360.mp4")])
@@ -96,7 +97,7 @@ def getURL( page_url , premium = False , user="" , password="", video_password="
         print("[vk.py] %s - %s" % (video_url[0],video_url[1]))
 
     #return video_urls
-    result = video_urls[len(video_urls)-1]
+    result = video_urls[-1]
     return result[1]
     
 

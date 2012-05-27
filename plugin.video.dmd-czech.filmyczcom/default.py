@@ -3,7 +3,7 @@ import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 import vk,novamov,videobb
-#import videonet
+import videonet,youtube
 
 __baseurl__ = 'http://filmycz.com'
 #_UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -182,6 +182,15 @@ def VIDEONET_LINK(url,name):
        		print "24VIDEO.NET URL: "+url
 #==========================================================================
 
+#==========================================================================
+def YOUTUBE_LINK(url,name):
+	try:
+		videourl=youtube.getURL(url)
+		addLink(name+" - youtube.com",videourl,'','')
+	except:
+       		print "YOUTUBE.COM URL: "+url
+#==========================================================================
+
 
 #==========================================================================
 def VIDEOLINK(url,name):
@@ -201,10 +210,10 @@ def VIDEOLINK(url,name):
 	except:
 		pass 
 	if url.find('youtube.com') != -1:
-		continue
-	#elif url.find('24video.net') != -1:
-	#	match=re.search('flashvars=\"id=(?P<id>.+?)&amp;idHtml=(?P<html>.+?)&amp;.*rootUrl=(?P<url>.+?)&amp;', link, re.IGNORECASE | re.DOTALL)
-	#	VIDEONET_LINK(('%s%s%s?mode=play'% (match.group('url') , match.group('html'),match.group('id'))),name)
+		YOUTUBE_LINK(url,name)
+	elif url.find('24video.net') != -1:
+		match=re.search('flashvars=\"id=(?P<id>.+?)&amp;idHtml=(?P<html>.+?)&amp;.*rootUrl=(?P<url>.+?)&amp;', link, re.IGNORECASE | re.DOTALL)
+		VIDEONET_LINK(('%s%s%s?mode=play'% (match.group('url') , match.group('html'),match.group('id'))),name)
 	elif url.find('videobb.com') != -1:
 		VIDEOBB_LINK(url,name)
 	elif url.find('novamov.com') != -1:
