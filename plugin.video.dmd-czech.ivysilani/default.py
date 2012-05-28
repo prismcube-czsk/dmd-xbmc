@@ -56,7 +56,20 @@ def KATEGORIE():
 def LIVE_OBSAH(url):
     program=[r'ČT1 - ', r'ČT2 - ', r'ČT24 - ', r'ČT4 - ']
     i = 0
-    doc = read_page(url)
+    request = urllib2.Request(url)
+    request.add_header("Referer",__baseurl__)    
+    request.add_header("Origin","http://www.ceskatelevize.cz")
+    request.add_header("Accept","*/*")
+    request.add_header("X-Requested-With","XMLHttpRequest")
+    request.add_header("x-addr","127.0.0.1")
+    request.add_header("User-Agent",_UserAgent_)
+    request.add_header("Content-Type","application/x-www-form-urlencoded")
+    con = urllib2.urlopen(request)
+    # Read lisk XML page
+    data = con.read()
+    con.close()
+    doc = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+
     items = doc.find('div', 'clearfix')
     for item in items.findAll('div', 'channel'):
             prehrano = item.find('div','progressBar')
