@@ -72,7 +72,8 @@ def KATEGORIE(url,page,kanal):
     con = urllib2.urlopen(request)
     data = con.read()
     con.close()
-    match = re.compile('"name":"(.+?)","tid":"(.+?)"').findall(data)
+    data = re.compile('var topcat = \[(.+?)\];').findall(data)
+    match = re.compile('"name":"(.+?)","tid":"(.+?)"').findall(data[0])
     for porad,porad_id in match:
         porady.append([porad,porad_id])
         porady.sort()   
