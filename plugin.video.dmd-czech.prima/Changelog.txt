@@ -1,3 +1,5 @@
+2012-06-07:
+ * pridana dalsi vyjimka pro nektere neprehratelne porady
 2012-06-06:
  * odebrany duplicitni porady
 2012-05-04:
