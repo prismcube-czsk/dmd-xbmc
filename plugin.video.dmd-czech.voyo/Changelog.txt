@@ -1,3 +1,5 @@
+2012-06-26:
+ * pridany vyjimky pro prehrani videi v podseznamech (napr.Farma)
 2012-04-14:
  * zmena vypisu poradu (nyni po strankach), puvodni reseni nepocitalo s velkym poctem stran v kategorii, coz melo za nasledek nenacteni posledni strany
 2012-03-17:

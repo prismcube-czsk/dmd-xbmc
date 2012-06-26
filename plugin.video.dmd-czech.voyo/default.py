@@ -58,6 +58,7 @@ def CATEGORIES(url):
 
         
 def INDEX(url):
+    vyjimka = ['/porady/29564-farma-necenzurovane-dily', '/tvod/porady/29563-farma-deniky-soutezicich']
     doc = read_page(url)
     items = doc.find('div', 'productsList')
     for item in items.findAll('div', 'section_item'):
@@ -67,6 +68,9 @@ def INDEX(url):
             thumb = item.a.img['src'].encode('utf-8')
             if __settings__.getSetting('test_nastaveni') == "true":
                 print title,url,thumb
+            if url in vyjimka:
+                addDir(title,__baseurl__+url,2,thumb)
+                continue
             addDir(title,__baseurl__+url,3,thumb)
     try:
         items = doc.find('div', 'pagination')
