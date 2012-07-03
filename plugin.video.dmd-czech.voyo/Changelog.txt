@@ -1,3 +1,5 @@
+2012-07-03:
+ * oprava linku
 2012-06-26:
  * pridany vyjimky pro prehrani videi v podseznamech (napr.Farma)
 2012-04-14:

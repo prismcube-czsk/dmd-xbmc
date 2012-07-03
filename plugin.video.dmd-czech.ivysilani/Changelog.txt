@@ -1,3 +1,5 @@
+2012-07-03:
+ * pridano nastaveni mnozstvi zobrazenych stranek ve vypisu poradu 1,2,4,neomezene (by libor.zoubek)
 2012-05-28:
  * oprava ziveho vysilani
 2012-05-15:

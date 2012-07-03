@@ -23,7 +23,7 @@ def OBSAH():
 
 
 def CAT_VOYO(url):
-    doc = read_page(url)
+    doc = markiza_read(url)
     zakazane = ['/serialy/1691-comeback-i','/serialy/1693-dokonaly-svet-i']
     items = doc.find('div', 'productsList')    
     for item in items.findAll('div', 'section_item'):
@@ -44,7 +44,7 @@ def CAT_VOYO(url):
         for item in items.findAll('span', 'normal'):
             url = __baseurl__+str(item.a['href'])
             
-            doc = read_page(url)
+            doc = markiza_read(url)
             items = doc.find('div', 'productsList')    
             for item in items.findAll('div', 'section_item'):
                 porad = item.find('div', 'poster')
@@ -64,7 +64,7 @@ def CAT_VOYO(url):
 
 
 def LIST_VOYO(url):
-    doc = read_page(url)
+    doc = markiza_read(url)
     items = doc.find('div', 'productsList')
     for item in items.findAll('div', 'poster'):
         title = item.a['title'].encode('utf-8') 
@@ -140,11 +140,32 @@ def VIDEOLINK_VOYO(url,name):
     print jmeno,den,mesic,rok,cesta
     swfurl = 'http://voyo.markiza.sk/static/shared/app/flowplayer/13-flowplayer.cluster-3.2.1-01-004.swf'
     #lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
-    lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' app=voyosk flashver=WIN11,1,102,62 conn=O:1 conn=NN:0:2279338.000000 conn=NS:1: conn=NN:2:1847.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
+    #lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' app=voyosk flashver=WIN11,1,102,62 conn=O:1 conn=NN:0:2279338.000000 conn=NS:1: conn=NN:2:1847.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
     #lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' app=voyosk flashver=WIN11,1,102,62 conn=O:1 conn=NN:0:'+conn3+'.000000 conn=NS:1: conn=NN:2:'+conn1+'.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'
     #lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' conn=O:1 conn=NN:0:'+conn3+'.000000 conn=NS:1:'+conn1+'.000000 conn=NN:2:'+conn2+'.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'    
-
+    lqurl = 'rtmpe://vod.markiza.sk/voyosk playpath='+cesta+' conn=O:1 conn=NN:0:2274958.000000 conn=NS:1: conn=NN:2:1408.000000 conn=NS:3:null conn=O:0 pageUrl='+url+' swfUrl='+swfurl+' swfUrl=true'
     addLink(name,lqurl,icon,name)
+
+
+
+def markiza_read(url):
+    try:
+        read_page(url)
+    except:
+        pass
+    count = 0
+    while (count < 20):
+        count = count + 1
+        try:
+            doc1 = read_page(url)
+            doc2 = read_page(url)
+        except:
+            pass
+            break
+        if doc1 == doc2:
+            return doc1
+
+
 
 def get_params():
         param=[]

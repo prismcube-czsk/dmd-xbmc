@@ -193,12 +193,12 @@ def NEWEST(url):
 # =============================================
 
 
-def VIDEO_LIST(url):
+def VIDEO_LIST(url,video_listing=-1):
     link = url
     if not re.search('dalsi-casti',url):
         link = url + 'dalsi-casti/'
     doc = read_page(link)
-    if re.search('Bonusy',str(doc),re.U):
+    if re.search('Bonusy',str(doc),re.U) and video_listing == -1:
         bonuslink = url+'bonusy/'
         if re.search('dalsi-casti',url):
             bonusurl = re.compile('(.+?)dalsi-casti/?').findall(url)
@@ -240,7 +240,20 @@ def VIDEO_LIST(url):
         next_url = next_page_i.a['href']
         next_label = 'Další strana (Zobrazena videa '+act_page[0]+'-'+act_page[2]+' ze '+act_page[4]+')'
         #print next_label,next_url
-        addDir(next_label,'http://www.ceskatelevize.cz'+next_url,6,nexticon)
+        video_listing_setting = int(__settings__.getSetting('video-listing')) 
+	if video_listing_setting > 0:
+		next_label = 'Další strana (celkem '+act_page[4]+' videí)'
+	if (video_listing_setting > 0 and video_listing == -1):
+		if video_listing_setting == 3:
+			video_listing = 99999
+		elif video_listing_setting == 2:
+			video_listing = 3
+		else:
+			video_listing = video_listing_setting
+	if (video_listing_setting > 0 and video_listing > 0):
+		VIDEO_LIST('http://ceskatelevize.cz'+next_url,video_listing-1)
+	else:
+		addDir(next_label,'http://www.ceskatelevize.cz'+next_url,6,nexticon)
     except:
         print 'STRANKOVANI NENALEZENO!'
 
