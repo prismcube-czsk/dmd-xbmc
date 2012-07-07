@@ -1,3 +1,6 @@
+2012-07-07:
+ * pridan porad Vo Stvorici po Slovensku (thanx to perso...@alanellis.co.uk)
+
 2012-07-03:
  * neplaceny obsah na nejakou dobu snad opet v provozu (by pali.rohar)
 

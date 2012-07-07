@@ -119,6 +119,7 @@ def VIDEOLINK_VOYO(url,name):
                  'dr-oz':'droz',
                  'comeback-i':'comebacki',
                  'v-dobrom-aj-v-zlom':'vdobrom',                 
+                 'vo-stvorici-po-slovensku':'vostrovici',
                  'dokonaly-svet-i':'sveti'}
     if re.search('rychle-televizne-noviny', url, re.U):
         match = re.compile('\/[0-9]+-(.+?)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-.+?').findall(url)
@@ -148,23 +149,40 @@ def VIDEOLINK_VOYO(url,name):
 
 
 
-def markiza_read(url):
-    try:
-        read_page(url)
-    except:
-        pass
-    count = 0
-    while (count < 20):
-        count = count + 1
-        try:
-            doc1 = read_page(url)
-            doc2 = read_page(url)
-        except:
-            pass
-            break
-        if doc1 == doc2:
-            return doc1
-
+def markiza_read(url):
+
+    try:
+
+        read_page(url)
+
+    except:
+
+        pass
+
+    count = 0
+
+    while (count < 20):
+
+        count = count + 1
+
+        try:
+
+            doc1 = read_page(url)
+
+            doc2 = read_page(url)
+
+        except:
+
+            pass
+
+            break
+
+        if doc1 == doc2:
+
+            return doc1
+
+
+
 
 
 def get_params():
