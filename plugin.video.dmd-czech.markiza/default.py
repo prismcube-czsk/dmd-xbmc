@@ -119,7 +119,7 @@ def VIDEOLINK_VOYO(url,name):
                  'dr-oz':'droz',
                  'comeback-i':'comebacki',
                  'v-dobrom-aj-v-zlom':'vdobrom',                 
-                 'vo-stvorici-po-slovensku':'vostrovici',
+                 'vo-stvorici-po-slovensku':'vostvorici',
                  'dokonaly-svet-i':'sveti'}
     if re.search('rychle-televizne-noviny', url, re.U):
         match = re.compile('\/[0-9]+-(.+?)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-.+?').findall(url)
