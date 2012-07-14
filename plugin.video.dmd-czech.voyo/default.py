@@ -58,7 +58,7 @@ def CATEGORIES(url):
 
         
 def INDEX(url):
-    vyjimka = ['/porady/29564-farma-necenzurovane-dily', '/porady/29563-farma-deniky-soutezicich']
+    vyjimka = ['/porady/29745-farma-cele-dily', '/porady/29564-farma-necenzurovane-dily', '/porady/29563-farma-deniky-soutezicich']
     doc = read_page(url)
     items = doc.find('div', 'productsList')
     for item in items.findAll('div', 'section_item'):
