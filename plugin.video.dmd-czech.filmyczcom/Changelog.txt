@@ -1,3 +1,5 @@
+2012-08-07:
+ * doplneni info o filmu, oprava vk.com a 24video.net
 2012-05-27:
  * pridani upoutavky z youtube.com
  * pridani serveru 24video.net

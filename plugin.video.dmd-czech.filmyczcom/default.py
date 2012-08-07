@@ -4,6 +4,7 @@ from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 import vk,novamov,videobb
 import videonet,youtube
+import servertools
 
 __baseurl__ = 'http://filmycz.com'
 #_UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -23,7 +24,7 @@ def OBSAH():
     addDir('Hledat ...',__baseurl__,4,icon)
     addDir('Podle kategorie',__baseurl__,1,icon)
     addDir('Serialy',__baseurl__+'/serialy/1-online',5,icon)
-    addDir('Filmy Online',__baseurl__+'/',2,icon)
+    addDir('Filmy',__baseurl__+'/',2,icon)
 #==========================================================================
 
 
@@ -55,7 +56,7 @@ def KATEGORIE():
 #==========================================================================
 searchurl = __baseurl__+'/component/search/'
 def SEARCH():
-	keyb = xbmc.Keyboard('', 'Search Filmy CZ')
+	keyb = xbmc.Keyboard('', 'Hledani Filmy.CZ')
         keyb.doModal()
         if (keyb.isConfirmed()):
         	search = keyb.getText()
@@ -76,21 +77,48 @@ def SEARCH():
 
 
 #==========================================================================
+def getUrlData(url):
+	req = urllib2.Request(url)
+    	req.add_header('User-Agent',_UserAgent_)
+    	response = urllib2.urlopen(req)
+    	data=response.read()
+    	response.close()
+	return data
+#==========================================================================
+
+
+#==========================================================================
 def INDEX(url):
     doc = read_page(url)  
     items = doc.findAll('div','pos-media')
     for item in items:
             try:
+		rating = item.find('div','vote-message').getText(" ").encode('utf-8')
+		r = re.search('(?P<rating>.+?)rating',rating)
+		if r:
+			ra = r.group('rating').split('/')
+			rating = float(ra[0])
             	item2 = item.findNextSibling()
 	        popis = item2.getText(" ").encode('utf-8')
+	        s  = re.search('Originální název: (?P<origname>.+?)Český název: (?P<jmeno>.+?)Datum vydání: (?P<rok>.+?)Žánry: (?P<zanry>.+?)Hrají: (?P<herci>.+?)Obsah: (?P<obsah>.+?)$',popis)
+	        if s:
+			origname = s.group('origname')
+			name     = s.group('jmeno')
+			rok      = s.group('rok')
+			zanry    = s.group('zanry')
+			herci    = s.group('herci').replace(' a ',',').split(',')
+			obsah    = s.group('obsah')
+			
+	        infoLabels =  {'Title': name, 'Genre': zanry, 'Year': rok, 'Cast': herci, 'Rating': rating, 'OriginalTitle': origname, 'Plot': obsah}
+	    
 	    except:
-	        popis=''
+	        infoLabels={}
       	    item = item.find('a')
             name = item['title'].encode('utf-8')
             link = item['href']
 	    item = item.find('img')
             icon = item['src']
-            addDir(name,__baseurl__+link,3,icon,popis)
+            addDir(name,__baseurl__+link,3,icon,infoLabels=infoLabels)
     try:
         pager = doc.find('div','pagination-bg')
         act_page_a = pager.find('span')
@@ -194,34 +222,30 @@ def YOUTUBE_LINK(url,name):
 
 #==========================================================================
 def VIDEOLINK(url,name):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    link = response.read()
-    response.close()
-    match=re.compile('<p>(.+?)</p>\s*.*<p style=.*><.*mce_(src|href)=\"(.+?)\".*').findall(link)
-    if (len(match) < 1) or (match[0][0].find('<br /></p><p><br />') != -1) :
-    	match=re.compile('.*mce_(src|href)=\"(.+?)\".*').findall(link)
-    for item in match:
-    	url = item[len(item)-1].replace('&amp;','&')
-	try:
-		n=item[2]
-		name=item[0]
-	except:
-		pass 
-	if url.find('youtube.com') != -1:
-		YOUTUBE_LINK(url,name)
-	elif url.find('24video.net') != -1:
-		match=re.search('flashvars=\"id=(?P<id>.+?)&amp;idHtml=(?P<html>.+?)&amp;.*rootUrl=(?P<url>.+?)&amp;', link, re.IGNORECASE | re.DOTALL)
-		VIDEONET_LINK(('%s%s%s?mode=play'% (match.group('url') , match.group('html'),match.group('id'))),name)
-	elif url.find('videobb.com') != -1:
-		VIDEOBB_LINK(url,name)
-	elif url.find('novamov.com') != -1:
-		NOVAMOV_LINK(url,name)
-	elif url.find('vk.com') != -1 or url.find('vkontakte.ru') != -1:
-		VKCOM_LINK(url,name)
-	else:
-		print "VIDEOLINK URL: "+url
+	
+    print "URL: "+url
+    data=getUrlData(url) 
+    
+    items = servertools.findvideo(data)
+    #print items
+
+    for server,adresa in items:
+	adresa = adresa.replace('&amp;','&')
+	server = server.lower()
+	
+	if server == "youtube":
+		YOUTUBE_LINK(adresa,name+' - UKAZKA')
+
+	if server == "24video":
+		VIDEONET_LINK(adresa,name)
+	if server == "videobb":
+		VIDEOBB_LINK(adresa,name)
+	if server == "novamov":
+		NOVAMOV_LINK(adresa,name)
+	if server == "vk":
+		VKCOM_LINK(adresa,name)
+	#else:
+	#	print "VIDEOLINK URL: "+url
 #==========================================================================
 	
 
@@ -253,12 +277,15 @@ def addLink(name,url,iconimage,popis):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
-def addDir(name,url,mode,iconimage,popis=''):
+#def addDir(name,url,mode,iconimage,popis=''):
+def addDir(name,url,mode,iconimage,infoLabels={}):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        #liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": popis} )
+        #liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": popis} )
+        if not 'Title' in infoLabels:
+		infoLabels["Title"] = name
+        liz.setInfo( type="Video", infoLabels=infoLabels )
         liz.setProperty( "Fanart_Image", fanart )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok

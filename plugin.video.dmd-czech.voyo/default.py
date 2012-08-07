@@ -28,15 +28,37 @@ if secret_token == '':
     xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Zadejte tajné heslo!',30000,"+icon+")")
     __settings__.openSettings() 
 def OBSAH():
-    addDir('Seriály','http://voyo.nova.cz/serialy/',1,icon)
-    addDir('Pořady','http://voyo.nova.cz/porady/',1,icon)
+    addDir('Seriály','http://voyo.nova.cz/serialy/',5,icon)
+    addDir('Pořady','http://voyo.nova.cz/porady/',5,icon)
     addDir('Zprávy','http://voyo.nova.cz/zpravy/',1,icon)
     
+def CATEGORIES_OLD(url):
+    doc = read_page(url)
+    items = doc.find('div', 'productsList series')
+    print items
+    for item in items.findAll('div', 'section_item'):
+        if re.search('Přehrát', str(item), re.U):
+                continue
+        item2 = item.find('div', 'poster')    
+        url = item2.a['href'].encode('utf-8')
+        title = item2.a['title'].encode('utf-8')
+        thumb = item2.a.img['src'].encode('utf-8')
+        #print title,url,thumb
+        addDir(title,__baseurl__+url,4,thumb)
+    try:
+        items = doc.find('div', 'pagination')
+        dalsi = items.find('span', 'next next_page')
+        if len(dalsi) != 0:
+            next_url = str(dalsi.a['href']) 
+        addDir('>> Další strana >>',__baseurl__+next_url,1,nexticon)
+    except:
+        print 'Stránkování nenalezeno'
+
 def CATEGORIES(url):
     zakazane = ['/porady/28368-duck-tv', '/tvod/serialy/27522-zvire', '/serialy/27540-powder-park', '/serialy/27483-osklive-kacatko-a-ja','/serialy/26481-odvazny-crusoe','/serialy/26482-5-dnu-do-pulnoci','/serialy/3924-patty-hewes','/serialy/27216-lazytown','/serialy/3923-tudorovci','/serialy/3906-kobra-11']
     doc = read_page(url)
-    items = doc.find('div', 'cw_30 column left_column')
-    for item in items.findAll('div', 'section_item'):
+    items = doc.find('div', 'productsList series')
+    for item in items.findAll('li', 'item_ul'):
         if re.search('Přehrát', str(item), re.U):
                 continue
         item2 = item.find('div', 'poster')    
@@ -52,16 +74,36 @@ def CATEGORIES(url):
         dalsi = items.find('span', 'next next_page')
         if len(dalsi) != 0:
             next_url = str(dalsi.a['href']) 
-        addDir('>> Další strana >>',__baseurl__+next_url,1,nexticon)
+        addDir('>> Další strana >>',__baseurl__+next_url,5,nexticon)
     except:
         print 'Stránkování nenalezeno'
-
         
-def INDEX(url):
-    vyjimka = ['/porady/29930-farma-komentare-vypadnutych','/porady/29745-farma-cele-dily', '/porady/29564-farma-necenzurovane-dily', '/porady/29563-farma-deniky-soutezicich']
+def INDEX_OLD(url):
     doc = read_page(url)
     items = doc.find('div', 'productsList')
     for item in items.findAll('div', 'section_item'):
+            item = item.find('div', 'poster')
+            url = item.a['href'].encode('utf-8')
+            title = item.a['title'].encode('utf-8')
+            thumb = item.a.img['src'].encode('utf-8')
+            print title,url,thumb
+            addDir(title,__baseurl__+url,3,thumb)
+    try:
+        items = doc.find('div', 'pagination')
+        for item in items.findAll('a'):
+            page = item.text.encode('utf-8') 
+            if re.match('další', page, re.U):
+                next_url = item['href']
+                #print next_url
+                addDir('>> Další strana >>',__baseurl__+next_url,4,nexticon)                
+    except:
+        print 'strankovani nenalezeno'
+
+def INDEX(url):
+    vyjimka = ['/porady/29930-farma-komentare-vypadnutych','/porady/29745-farma-cele-dily', '/porady/29564-farma-necenzurovane-dily', '/porady/29563-farma-deniky-soutezicich']
+    doc = read_page(url)
+    items = doc.find('div', 'productsList series')
+    for item in items.findAll('li', 'item_ul'):
             item = item.find('div', 'poster')
             url = item.a['href'].encode('utf-8')
             title = item.a['title'].encode('utf-8')
@@ -82,6 +124,7 @@ def INDEX(url):
                 addDir('>> Další strana >>',__baseurl__+next_url,2,nexticon)                
     except:
         print 'strankovani nenalezeno'
+
         
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
@@ -232,14 +275,19 @@ if mode==None or url==None or len(url)<1:
 
 elif mode==1:
         print ""+url
+        CATEGORIES_OLD(url)
+elif mode==5:
+        print ""+url
         CATEGORIES(url)
+     
        
 elif mode==2:
         print ""+url
         INDEX(url)
 elif mode==4:
         print ""+url
-        FILMY(url)
+        INDEX_OLD(url)        
+
         
 elif mode==3:
         print ""+url
