@@ -56,7 +56,7 @@ def KATEGORIE():
 #==========================================================================
 searchurl = __baseurl__+'/component/search/'
 def SEARCH():
-	keyb = xbmc.Keyboard('', 'Hledani Filmy.CZ')
+	keyb = xbmc.Keyboard('', 'Hledani FilmyCZ')
         keyb.doModal()
         if (keyb.isConfirmed()):
         	search = keyb.getText()
@@ -67,12 +67,14 @@ def SEARCH():
 	        data = urllib.urlencode(values)
 	        req = urllib2.Request(searchurl,data,headers)
 	        req.add_header('User-Agent', _UserAgent_)
-	        response = urllib2.urlopen(req).read()
-		#
-		match=re.compile('</span>[\s|.]*<a href=\"(.+?)\"[\s|.]*>[\s.]*(.+?)[\s.]+</a').findall(response)
+	        response = urllib2.urlopen(req)
+	        data=response.read()
+	        response.close()
+		match = re.compile("<dt class=\"result-title\">[\s|\S]*?<a href=\"(.+?)\">[\s]*?(.+?)</a>[\s]+</dt").findall(data) 
 		for item in match:
-			name=item[1]
+			name=item[1].replace('\t','')
             		addDir(name,__baseurl__+item[0],3,icon)
+            		
 #==========================================================================
 
 
@@ -97,7 +99,7 @@ def INDEX(url):
 		r = re.search('(?P<rating>.+?)rating',rating)
 		if r:
 			ra = r.group('rating').split('/')
-			rating = float(ra[0])
+			rating = float(ra[0])*2
             	item2 = item.findNextSibling()
 	        popis = item2.getText(" ").encode('utf-8')
 	        s  = re.search('Originální název: (?P<origname>.+?)Český název: (?P<jmeno>.+?)Datum vydání: (?P<rok>.+?)Žánry: (?P<zanry>.+?)Hrají: (?P<herci>.+?)Obsah: (?P<obsah>.+?)$',popis)
@@ -109,7 +111,7 @@ def INDEX(url):
 			herci    = s.group('herci').replace(' a ',',').split(',')
 			obsah    = s.group('obsah')
 			
-	        infoLabels =  {'Title': name, 'Genre': zanry, 'Year': rok, 'Cast': herci, 'Rating': rating, 'OriginalTitle': origname, 'Plot': obsah}
+	        infoLabels =  {'Title': name, 'Genre': zanry, 'Year': int(rok), 'Cast': herci, 'Rating': rating, 'OriginalTitle': origname, 'Plot': obsah}
 	    
 	    except:
 	        infoLabels={}
@@ -118,7 +120,7 @@ def INDEX(url):
             link = item['href']
 	    item = item.find('img')
             icon = item['src']
-            addDir(name,__baseurl__+link,3,icon,infoLabels=infoLabels)
+            addDir(name,__baseurl__+link,3,icon,infoLabels)
     try:
         pager = doc.find('div','pagination-bg')
         act_page_a = pager.find('span')
@@ -148,11 +150,13 @@ def SERIALY(url):
 	req = urllib2.Request(url)
 	req.add_header('User-Agent', _UserAgent_)
 	response = urllib2.urlopen(req)
-	link = response.read()
+	data = response.read()
 	response.close()
-	match  = re.compile("mce_href=\"(.+?)\">(.+?)</a>").findall(link)
+	match = re.compile('<div class=\"contentheading\"><h1>Seriály online</h1></div>[\s|\S]+<dl class=\"social-links\">'). findall(data)
+	match = re.compile('<p><a href=\"(.+?)\">(.+?)</a></p>').findall(match[0])
+
 	for item in match:
-		addDir(item[1],__baseurl__+item[0],6,'','')
+		addDir(item[1],__baseurl__+item[0],6,'',infoLabels={})
 #==========================================================================
 
 
@@ -161,13 +165,20 @@ def SERIALY_DET(url):
 	req = urllib2.Request(url)
 	req.add_header('User-Agent', _UserAgent_)
 	response = urllib2.urlopen(req)
-	link = response.read()
+	data = response.read()
 	response.close()
-	match  = re.compile("mce_href=\"(.+?)\">[\s]*?(.+?)</a>").findall(link)
+	match = re.compile('<div class=\"contentheading\"><h1>[\s|\S]+<dl class=\"social-links\">'). findall(data)
+	match = re.compile('href=\"(.+?)\">(.+?)</a>').findall(match[0])
 	for item in match:
+		r = re.search('mce_href=\"(?P<mce>.+?)$',item[0])
+		if r:
+			url = r.group('mce')
+		else:
+			url = item[0]
 		name=item[1].replace('&nbsp;',' ')
 		name=name.replace('<b></b>','')
-		addDir(name,__baseurl__+item[0],3,'','')
+		name=name.replace('<strong></strong>','')
+		addDir(name,__baseurl__+url,3,'',infoLabels={})
 #==========================================================================
 
 
@@ -226,26 +237,50 @@ def VIDEOLINK(url,name):
     print "URL: "+url
     data=getUrlData(url) 
     
-    items = servertools.findvideo(data)
-    #print items
-
-    for server,adresa in items:
-	adresa = adresa.replace('&amp;','&')
-	server = server.lower()
+    
+    match=re.compile('<p>(.+?)</p>\s*.*<p style=.*><.*mce_(src|href)=\"(.+?)\".*').findall(data)
+    if (len(match) < 1) or (match[0][0].find('<br /></p><p><br />') != -1) :
+	items = servertools.findvideo(data)
+	for server,adresa in items:
+		adresa = adresa.replace('&amp;','&')
+		server = server.lower()
 	
-	if server == "youtube":
-		YOUTUBE_LINK(adresa,name+' - UKAZKA')
+		if server == "youtube":
+			YOUTUBE_LINK(adresa,name+' - UKAZKA')
 
-	if server == "24video":
-		VIDEONET_LINK(adresa,name)
-	if server == "videobb":
-		VIDEOBB_LINK(adresa,name)
-	if server == "novamov":
-		NOVAMOV_LINK(adresa,name)
-	if server == "vk":
-		VKCOM_LINK(adresa,name)
-	#else:
-	#	print "VIDEOLINK URL: "+url
+		if server == "24video":
+			VIDEONET_LINK(adresa,name)
+		if server == "videobb":
+			VIDEOBB_LINK(adresa,name)
+		if server == "novamov":
+			NOVAMOV_LINK(adresa,name)
+		if server == "vk":
+			VKCOM_LINK(adresa,name)
+		#else:
+		#	print "VIDEOLINK URL: "+url
+    else:
+	for item in match:
+		url = item[len(item)-1].replace('&amp;','&')
+		try:
+			n=item[2]
+			name=item[0]
+		except:
+			pass 	    
+		if url.find('youtube.com') != -1:
+			YOUTUBE_LINK(url,name)
+		elif url.find('24video.net') != -1:
+			match=re.search('flash[v|V]ars.*\"id=(?P<id>.+?)&amp;idHtml=(?P<html>.+?)&amp;.*rootUrl=(?P<url>.+?)&amp;', data, re.IGNORECASE | re.DOTALL)
+			VIDEONET_LINK(('%s%s%s?mode=play'% (match.group('url') , match.group('html'),match.group('id'))),name)
+		elif url.find('videobb.com') != -1:
+			VIDEOBB_LINK(url,name)
+		elif url.find('novamov.com') != -1:
+			NOVAMOV_LINK(url,name)
+		elif url.find('vk.com') != -1 or url.find('vkontakte.ru') != -1:
+			VKCOM_LINK(url,name)
+		else:
+			print "VIDEOLINK URL: "+url
+   
+
 #==========================================================================
 	
 
@@ -277,12 +312,10 @@ def addLink(name,url,iconimage,popis):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
-#def addDir(name,url,mode,iconimage,popis=''):
 def addDir(name,url,mode,iconimage,infoLabels={}):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        #liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": popis} )
         if not 'Title' in infoLabels:
 		infoLabels["Title"] = name
         liz.setInfo( type="Video", infoLabels=infoLabels )
