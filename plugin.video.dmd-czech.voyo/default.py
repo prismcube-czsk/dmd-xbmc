@@ -100,7 +100,7 @@ def INDEX_OLD(url):
         print 'strankovani nenalezeno'
 
 def INDEX(url):
-    vyjimka = ['/porady/29930-farma-komentare-vypadnutych','/porady/29745-farma-cele-dily', '/porady/29564-farma-necenzurovane-dily', '/porady/29563-farma-deniky-soutezicich']
+    vyjimka = ['/porady/30359-farma-nejnovejsi-dily','/porady/29930-farma-komentare-vypadnutych','/porady/29745-farma-cele-dily', '/porady/29564-farma-necenzurovane-dily', '/porady/29563-farma-deniky-soutezicich']
     doc = read_page(url)
     items = doc.find('div', 'productsList series')
     for item in items.findAll('li', 'item_ul'):
