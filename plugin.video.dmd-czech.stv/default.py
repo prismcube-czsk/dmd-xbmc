@@ -69,7 +69,7 @@ def VIDEOLINK(url,name):
     streamer = re.compile('<meta rel="streamer">(.+?)</meta>').findall(str(doc))
     print location[0], streamer[0]
     cesta = 'mp4:'+location[0]
-    server = streamer[0]   
+    server = re.compile('<!\[CDATA\[(.+?)\]\]>').findall(str(streamer[0]))[0]
     title = title[0] + ' ' + name
     swfurl = 'http://www.stv.sk/online/player/player-licensed-sh.swf'
     rtmp_url = server+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true'  
