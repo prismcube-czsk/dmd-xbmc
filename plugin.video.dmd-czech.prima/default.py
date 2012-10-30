@@ -142,7 +142,8 @@ def VIDEOLINK(url,name):
         response = urllib2.urlopen(req)
         keydata = response.read()
         response.close()
-        keydata = re.compile("auth=(.*?)'").findall(keydata)
+        keydata = re.compile("auth='\+'(.*?)'").findall(keydata)
+        print keydata
         if geo_zone[0] == "1":
             hd_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth='+keydata[0]+'/mp4:'+hd_stream
             hq_url = 'rtmp://bcastiw.livebox.cz:80/iprima_token_'+geo_zone[0]+'?auth='+keydata[0]+'/mp4:'+hq_stream[0]

@@ -1,3 +1,5 @@
+2012-10-30:
+ * oprava autorizace
 2012-06-07:
  * pridana dalsi vyjimka pro nektere neprehratelne porady
 2012-06-06:
