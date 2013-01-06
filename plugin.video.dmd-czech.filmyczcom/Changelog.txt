@@ -1,3 +1,5 @@
+2013-01-06:
+ * oprava resolveru youtube
 2012-11-29:
  * oprava resolveru vk.com
 2012-08-14:
