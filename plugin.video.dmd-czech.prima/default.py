@@ -16,6 +16,7 @@ nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 family = xbmc.translatePath( os.path.join( home, 'family.png' ) )
 love = xbmc.translatePath( os.path.join( home, 'love.png' ) )
 cool = xbmc.translatePath( os.path.join( home, 'cool.png' ) )
+zoom = xbmc.translatePath( os.path.join( home, 'zoom.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 file = __settings__.getSetting('xml_file')
 kvalita =__settings__.getSetting('kvalita')
@@ -65,6 +66,7 @@ def OBSAH():
     addDir('Family','http://play.iprima.cz/iprima',1,family,'','1')
     addDir('Love','http://play.iprima.cz/love',1,love,'','3')
     addDir('COOL','http://play.iprima.cz/cool',1,cool,'','2')
+    addDir('ZOOM','http://play.iprima.cz/zoom',1,zoom,'','4')
     
 def KATEGORIE(url,page,kanal):
     porady = []
@@ -86,9 +88,11 @@ def KATEGORIE(url,page,kanal):
     
 def INDEX(url,page,kanal):
     if int(page) != 0:
-        strquery = '?method=json&action=relevant&per_page=12&channel='+str(kanal)+'&page='+str(page)
+        strquery = '?method=json&action=relevant&per_page=12&page='+str(page)
+        #strquery = '?method=json&action=relevant&per_page=12&channel='+str(kanal)+'&page='+str(page)
     else:
-        strquery = '?method=json&action=relevant&per_page=12&channel='+str(kanal)
+        strquery = '?method=json&action=relevant&per_page=12'
+        #strquery = '?method=json&action=relevant&per_page=12&channel='+str(kanal)
     doc = read_page('http://play.iprima.cz/videoarchiv_ajax/all/'+str(url)+strquery)
     tid = re.compile('"tid":"(.+?)"').findall(str(doc))
     match = re.compile('"nid":"(.+?)","title":"(.+?)","image":"(.+?)","date":"(.+?)"').findall(str(doc))
@@ -102,6 +106,8 @@ def INDEX(url,page,kanal):
                 addDir(str(name),'http://play.iprima.cz/cool/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')
             elif kanal == 3:
                 addDir(str(name),'http://play.iprima.cz/love/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')
+            elif kanal == 4:
+                addDir(str(name),'http://play.iprima.cz/zoom/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')                
     strankovani = re.compile('"total":(.+?),"from":.+?,"to":.+?,"page":(.+?),').findall(str(doc))
     for page_total,act_page in strankovani:
         print page_total,act_page

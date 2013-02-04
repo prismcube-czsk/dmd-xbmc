@@ -11,7 +11,7 @@ import simplejson as json
 __baseurl__ = 'http://www.ceskatelevize.cz/ivysilani'
 #__dmdbase__ = 'http://iamm.netuje.cz/xbmc/stream/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-swfurl='http://img8.ceskatelevize.cz/libraries/player/flashPlayer.swf?version=1.43'
+swfurl='http://img.ceskatelevize.cz/libraries/player/flashPlayer.swf?version=1.45.5'
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.ivysilani')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
 __settings__ = xbmcaddon.Addon(id='plugin.video.dmd-czech.ivysilani')
@@ -334,6 +334,10 @@ def VIDEOLINK(url,name):
             for cesta,kvalita in video:
                 #rtmp_url = base+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true live=true'
                 rtmp_url = base+'/'+cesta
+                if __settings__.getSetting('fix-rtmp-url') == "true":
+                    idx = rtmp_url.find('://') + 1
+                    rtmp_url = rtmp_url[:idx] + rtmp_url[idx:].replace(':', '/')
+                print rtmp_url
                 addLink(kvalita+' '+name,rtmp_url,icon,info[0])
                 #print rtmp_url,kvalita+info[0] #vystupni parametry RTMP
 
