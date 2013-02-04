@@ -77,8 +77,11 @@ def LIVE(url):
         else:
             #python 2.4 equivalent
             strptime = lambda date_string, format: datetime(*(time.strptime(date_string, format)[0:6]))
-        cas = strptime(cas, '%Y-%m-%dT%H:%M:%S')
-        cas = cas.strftime('%d.%m. %H:%M')
+        try:
+            cas = strptime(cas, '%Y-%m-%dT%H:%M:%S')
+            cas = cas.strftime('%d.%m. %H:%M')
+        except:
+            cas = ""
         archiv = str(zapas['archive'])
         link = str(zapas['url'])
         #print title,nahled,cas,archiv,link
