@@ -15,9 +15,11 @@ swfurl='http://img.ceskatelevize.cz/libraries/player/flashPlayer.swf?version=1.4
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.ivysilani')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
 __settings__ = xbmcaddon.Addon(id='plugin.video.dmd-czech.ivysilani')
+__lang__   = addon.getLocalizedString
 home = __settings__.getAddonInfo('path')
 REV = os.path.join( profile, 'list_revision')
 icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
+search = xbmc.translatePath( os.path.join( home, 'search.png' ) )
 nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
@@ -36,6 +38,7 @@ def OBSAH():
     addDir('Podle data',__baseurl__+'/podle-data-vysilani/',5,icon)
     addDir('Podle abecedy',__baseurl__+'/podle-abecedy/',2,icon)
     addDir('Podle kategorie',__baseurl__,1,icon)
+    addDir('Vyhledat...(beta)',__baseurl__,13,search)
     addDir('Živé iVysílání',__baseurl__+'/ajax/liveBox.php',4,icon)
 
 def KATEGORIE():
@@ -288,7 +291,38 @@ def BONUSY(link):
     except:
         print 'STRANKOVANI NENALEZENO!'
 
-
+def HLEDAT():
+    #https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=20&hl=cs&prettyPrint=false&source=gcsc&gss=.cz&sig=981037b0e11ff304c7b2bfd67d56a506&cx=000499866030418304096:fg4vt0wcjv0&q=vypravej+tv&googlehost=www.google.com&callback=google.search.Search.apiary6680&nocache=1360011801862
+    #https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=20&start=20&hl=cs&prettyPrint=false&source=gcsc&gss=.cz&sig=981037b0e11ff304c7b2bfd67d56a506&cx=000499866030418304096:fg4vt0wcjv0&q=vypravej+tv&googlehost=www.google.com&callback=google.search.Search.apiary6680&nocache=1360011801862
+    kb = xbmc.Keyboard('',__lang__(30006),False)
+    kb.doModal()
+    if kb.isConfirmed():
+            what = kb.getText()
+            if not what == '':
+                        what = re.sub(' ','+',what)
+                        url = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=20&hl=cs&prettyPrint=false&source=gcsc&gss=.cz&sig=981037b0e11ff304c7b2bfd67d56a506&cx=000499866030418304096:fg4vt0wcjv0&q='+what+'&googlehost=www.google.com&callback=google.search.Search.apiary6680&nocache=1360011801862'
+                        req = urllib2.Request(url)
+                        req.add_header('User-Agent', _UserAgent_)
+                        response = urllib2.urlopen(req)
+                        httpdata = response.read()
+                        response.close()
+                        match = re.compile('google.search.Search.apiary6680\((.*)\)').findall(httpdata)
+                        items = json.loads(match[0])[u'results']
+                        for item in items:
+                            name = item[u'titleNoFormatting']
+                            name = name.encode('utf-8')
+                            url = item[u'url']
+                            url = url.encode('utf-8')
+                            try:
+                                image = item[u'richSnippet'][u'cseImage'][u'src']
+                                image = image.encode('utf-8')
+                            except:
+                                image = icon
+                            if re.search('diskuse', url, re.U):
+                                continue
+                            #if not re.search('([0-9]{15}-)', url, re.U):
+                            #continue
+                            addDir(name,url,10,image)
                 
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
@@ -503,5 +537,8 @@ elif mode==11:
 elif mode==12:
         print ""+url
         NEWEST(url)
+
+elif mode==13:
+        HLEDAT()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
