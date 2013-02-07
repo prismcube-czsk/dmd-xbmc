@@ -268,7 +268,7 @@ mode=None
 try:
         url=urllib.unquote_plus(params["url"])
 except:
-        pass
+        url = ''
 try:
         name=urllib.unquote_plus(params["name"])
 except:

@@ -257,7 +257,7 @@
     </description>
   </extension>
 </addon>
-<addon id="plugin.video.dmd.streams" name="DMD Streams" version="0.0.2" provider-name="DMD">
+<addon id="plugin.video.dmd.streams" name="DMD Streams" version="0.0.3" provider-name="DMD">
   <requires>
     <import addon="xbmc.python" version="1.0" />
     <import addon="script.module.beautifulsoup" version="3.0.8" />
