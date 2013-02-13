@@ -40,10 +40,16 @@ def INDEX(url):
         thumb = item.find('a', 'framedThumbnail')
         thumb = str(item.img['src'])            
         info = item.find('div', 'carouselListItemText')
-        name = info.find('a')
-        name = name.getText(" ").encode('utf-8')
-        name2 = info.find('div','showTitle')
-        name2 = name2.getText(" ").encode('utf-8')
+        try:
+            name = info.find('a')
+            name = name.getText(" ").encode('utf-8')
+        except:
+            name = ""
+        try:
+            name2 = info.find('div',' carouselItemText')
+            name2 = name2.getText(" ").encode('utf-8')
+        except:
+            name2 = "Neznámý"
         link = str(info.a['href'])
         #print name+' '+name2,__baseurl__+link,2,thumb
         addDir(name+' '+name2,__baseurl__+link,2,thumb)    

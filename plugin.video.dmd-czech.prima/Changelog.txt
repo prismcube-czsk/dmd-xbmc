@@ -1,3 +1,5 @@
+2013-02-13:
+ * oficialni pridani HD kvality
 2013-02-04:
  * oprava zobrazovani videi, pridan archiv ZOOM
 2012-11-26:
