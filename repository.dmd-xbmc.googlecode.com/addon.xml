@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="repository.dmd-xbmc.googlecode.com" version="1.3" name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)" provider-name="Jiri Vyhnalek">
+<addon id="repository.dmd-xbmc.googlecode.com" version="3.0.0" name="DMD-Czech XBMC Repository (dmd-xbmc.googlecode.com)" provider-name="Jiri Vyhnalek">
 
   <extension point="xbmc.addon.repository" name="dmd-xbmc.googlecode.com addons repository">
     <info compressed="false">http://dmd-xbmc.googlecode.com/svn/trunk/addons.xml</info>
