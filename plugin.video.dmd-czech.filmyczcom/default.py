@@ -3,8 +3,12 @@ import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 import vk,novamov,videobb
-import videonet,youtube
+import videonet,ytube
 import servertools
+try:
+	import download
+except:
+	pass
 
 __baseurl__ = 'http://filmycz.com'
 #_UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -224,7 +228,7 @@ def VIDEONET_LINK(url,name):
 #==========================================================================
 def YOUTUBE_LINK(url,name):
 	try:
-		videourl=youtube.getURL(url)
+		videourl=ytube.getURL(url)
 		addLink(name+" - youtube.com",videourl,'','')
 	except:
        		print "YOUTUBE.COM URL: "+url
@@ -232,12 +236,28 @@ def YOUTUBE_LINK(url,name):
 
 
 #==========================================================================
+def IFRAME_LINK(url,name):
+	try:
+		data  = getUrlData(__baseurl__+url)
+		match = re.compile('<a href="(.+?)"').findall(data)
+		data  = getUrlData(match[0])
+		match = re.compile('location\.replace\("(.+?)"\)').findall(data)
+		data  = getUrlData(match[0])
+		items = servertools.findvideo(data)
+		for server,adresa in items:
+			adresa = adresa.replace('&amp;','&')
+			server = server.lower()
+			if server == "youtube":
+				YOUTUBE_LINK(adresa,name)
+	except:
+       		print "IFRAME URL: "+url
+#==========================================================================
+
+
+#==========================================================================
 def VIDEOLINK(url,name):
-	
     print "URL: "+url
     data=getUrlData(url) 
-    
-    
     match=re.compile('<p>(.+?)</p>\s*.*<p style=.*><.*mce_(src|href)=\"(.+?)\".*').findall(data)
     if (len(match) < 1) or (match[0][0].find('<br /></p><p><br />') != -1) :
 	items = servertools.findvideo(data)
@@ -256,6 +276,8 @@ def VIDEOLINK(url,name):
 			NOVAMOV_LINK(adresa,name)
 		if server == "vk":
 			VKCOM_LINK(adresa,name)
+		if server == "iframe":
+			IFRAME_LINK(adresa,name)
 		#else:
 		#	print "VIDEOLINK URL: "+url
     else:
@@ -279,11 +301,36 @@ def VIDEOLINK(url,name):
 			VKCOM_LINK(url,name)
 		else:
 			print "VIDEOLINK URL: "+url
-   
-
 #==========================================================================
 	
 
+#==========================================================================
+def DOWNLOAD(url,name):
+	if len(url) > 0:
+		downloads = addon.getSetting('downloads')
+		if '' == downloads:
+			xbmcgui.Dialog().ok('FilmyCZ','Nastavte složku pro stahování')
+			return
+		localfile = '%s%s' % (downloads,name)
+		localfile = localfile.replace(':','')
+		download.download(addon,localfile,url)
+		#download.DownloaderClass(videourl,localfile)
+#==========================================================================
+	
+	
+#==========================================================================
+def PLAY(video_url,title):
+	if video_url:
+		print 'Sending %s to player' % video_url
+		listitem = xbmcgui.ListItem(title)
+		listitem.setInfo('video', {'Title': title})
+		return xbmc.Player( xbmc.PLAYER_CORE_MPLAYER ).play(video_url, listitem)
+#==========================================================================
+	
+	
+	
+	
+	
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -304,14 +351,35 @@ def get_params():
 
 
 
+
+def addItem(name,url,mode,iconimage,infoLabels={}):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        if not 'Title' in infoLabels:
+		infoLabels["Title"] = name
+        liz.setInfo( type="Video", infoLabels=infoLabels )
+        liz.setProperty( "Fanart_Image", fanart )
+        # -----
+        liz.addContextMenuItems([ ( 'Stáhnout ...', "RunPlugin(%s?url=%s&mode=15&name=%s)" % ( sys.argv[0],  urllib.quote_plus(url), urllib.quote_plus(name) ) )] )
+        #------
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+        return ok
+
+        
 def addLink(name,url,iconimage,popis):
+	addItem(name,url,7,iconimage,infoLabels={ "Title": name, "Plot": popis} )
+	return True
+	'''
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": popis} )
         liz.setProperty( "Fanart_Image", fanart )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
-
+        '''
+        
+        
 def addDir(name,url,mode,iconimage,infoLabels={}):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
@@ -373,6 +441,16 @@ elif mode==5:
 elif mode==6:
         print ""+url
         SERIALY_DET(url)
+
+elif mode==7:
+        print ""+url
+        PLAY(url,name)
+        
+        
+elif mode==15:
+        print ""+url
+        DOWNLOAD(url,name)
+        
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

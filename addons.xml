@@ -299,7 +299,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="1.5.0">
+        version="1.5.1">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -315,11 +315,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.filmyczcom"
        name="Filmy CZ"
-       version="1.4.0"
+       version="1.5.0"
        provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.0"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
