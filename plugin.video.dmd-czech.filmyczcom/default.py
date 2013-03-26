@@ -3,7 +3,7 @@ import urllib2,urllib,re,os
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
 import vk,novamov,videobb
-import videonet,ytube
+import videonet,ytube,videomail
 import servertools
 try:
 	import download
@@ -236,6 +236,17 @@ def YOUTUBE_LINK(url,name):
 
 
 #==========================================================================
+def VIDEOMAIL_LINK(url,name):
+	try:
+		videourl=videomail.getURL(url)
+		addLink(name+" - videomail.ru",videourl,'','')
+	except:
+       		print "VIDEOMAIL.RU URL: "+url
+#==========================================================================
+
+
+
+#==========================================================================
 def IFRAME_LINK(url,name):
 	try:
 		data  = getUrlData(__baseurl__+url)
@@ -276,6 +287,8 @@ def VIDEOLINK(url,name):
 			NOVAMOV_LINK(adresa,name)
 		if server == "vk":
 			VKCOM_LINK(adresa,name)
+		if server == "videomail":
+			VIDEOMAIL_LINK(adresa,name)
 		if server == "iframe":
 			IFRAME_LINK(adresa,name)
 		#else:

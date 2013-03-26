@@ -1,3 +1,5 @@
+2013-03-21
+ * resolver vmail.ru
 2013-03-06
  * oprava resolveru youtube
  * oprava resolveru novamov

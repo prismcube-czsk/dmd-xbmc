@@ -31,7 +31,7 @@ if secret_token == '':
 def OBSAH():
     addDir('Seriály','http://voyo.nova.cz/serialy/',5,icon,1)
     addDir('Pořady','http://voyo.nova.cz/porady/',5,icon,1)
-    addDir('Zprávy','http://voyo.nova.cz/zpravy/',4,icon,1)
+    addDir('Zprávy','http://voyo.nova.cz/zpravy/',5,icon,1)
     
 def CATEGORIES_OLD(url,page):
     doc = read_page(url)
@@ -236,16 +236,16 @@ def VIDEOLINK(url,name):
             except:
                 rtmp_url_hd = 0
         if __settings__.getSetting('kvalita_sel') == "HQ":
-            addLink(name,rtmp_url_hq,icon,desc)
+            addLink('HQ '+name,rtmp_url_hq,icon,desc)
         elif __settings__.getSetting('kvalita_sel') == "LQ":
-            addLink(name,rtmp_url_lq,icon,desc)
+            addLink('LQ '+name,rtmp_url_lq,icon,desc)
         elif __settings__.getSetting('kvalita_sel') == "HD":
             if rtmp_url_hd == 0:
-                addLink(name,rtmp_url_hq,icon,desc)                
+                addLink('HQ '+name,rtmp_url_hq,icon,desc)                
             else:
-                addLink(name,rtmp_url_hd,icon,desc)
+                addLink('HD '+name,rtmp_url_hd,icon,desc)
         else:
-            addLink(name,rtmp_url_hq,icon,desc)                
+            addLink('HQ '+name,rtmp_url_hq,icon,desc)                
 
 
 def get_params():
@@ -340,6 +340,9 @@ elif mode==4:
         
 elif mode==3:
         print ""+url
-        VIDEOLINK(url,name)
-
+        try:
+            VIDEOLINK(url, name)
+        except IndexError:
+            INDEX(url, name)
+ 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
