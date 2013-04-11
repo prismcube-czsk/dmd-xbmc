@@ -1,3 +1,5 @@
+2013-04-11:
+ * oprava stream serveru pro HD kvalitu
 2013-04-07:
  * oprava nastavení proxy
 2013-03-26:
