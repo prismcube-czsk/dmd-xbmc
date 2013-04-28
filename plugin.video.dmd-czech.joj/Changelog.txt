@@ -1,3 +1,5 @@
+2013-04-28:
+ * oprava doplňku, thanx to mx3Lm za poskytnutí zdrojů
 2013-03-04:
  * aktualizace pořadů
 2012-10-02:
