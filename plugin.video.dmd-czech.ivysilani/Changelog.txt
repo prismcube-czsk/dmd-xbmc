@@ -1,3 +1,5 @@
+2013-05-28:
+ * oprava linku k videu
 2013-03-26:
  * přidáno upozornění na bonus video
 2013-02-06:

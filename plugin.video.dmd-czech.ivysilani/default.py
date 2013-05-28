@@ -374,6 +374,7 @@ def VIDEOLINK(url,name):
     # Read lisk XML page
     data = con.read()
     con.close()
+    data = urllib.unquote(data).decode('utf8')
     doc = read_page(data)
     items = doc.find('body')
     for item in items.findAll('switchitem'):
