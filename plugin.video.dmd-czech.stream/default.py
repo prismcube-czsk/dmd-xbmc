@@ -22,9 +22,9 @@ user_name =__settings__.getSetting('user_name')
 
 def OBSAH():
     addDir('Všechny Pořady','http://www.stream.cz/televize/nazev',1,icon)
-    addDir('Pořady Stream.cz','http://www.stream.cz/',3,icon)
+    addDir('Pořady Stream.cz','http://www.stream.cz/televize/429-stream',3,icon)
     addDir('Partnerské pořady','http://www.stream.cz/',4,icon)
-    addDir('Komerční videa','http://www.stream.cz/',5,icon)   
+    addDir('Komerční videa','http://www.stream.cz/?m=stream&a=commercial_channel',5,icon)   
     addDir('Uživatelská videa','http://www.stream.cz/kategorie/2-uzivatelska-videa',2,icon)
     addDir('Hledat...',__baseurl__,13,icon)
     addDir('Moje videa',__baseurl__,15,icon)
@@ -87,7 +87,7 @@ def INDEX_STREAM(url):
     httpdata = response.read()
     response.close()
     match = re.compile('<h4 class="redTitelBox">Pořady Stream.cz</h4>(.+?)<h4 class="redTitelBox">Partnerské pořady</h4>', re.S).findall(httpdata)
-    item = re.compile('<li><a href="(.+?)">(.+?)</a></li>').findall(match[0])
+    item = re.compile('<a href="(.+?)">(.+?)</a>').findall(match[0])
     for link,name in item:
         if not re.match('http://www.stream.cz', link, re.U):
                 link = 'http://www.stream.cz'+link
@@ -101,7 +101,7 @@ def INDEX_PARTNERSKE(url):
     httpdata = response.read()
     response.close()
     match = re.compile('<h4 class="redTitelBox">Partnerské pořady</h4>(.+?)<h4 class="redTitelBox">Uživatelská videa</h4>', re.S).findall(httpdata)
-    item = re.compile('<li><a href="(.+?)">(.+?)</a></li>').findall(match[0])
+    item = re.compile('<a href="(.+?)">(.+?)</a>').findall(match[0])
     for link,name in item:
         if not re.match('http://www.stream.cz', link, re.U):
                 link = 'http://www.stream.cz'+link
@@ -114,8 +114,8 @@ def INDEX_KOMERCNI(url):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('<h4 class="redTitelBox">Komerční Kanály</h4>(.+?)<div class="vertical540Box hpZeroTop">', re.S).findall(httpdata)
-    item = re.compile('<li><a href="(.+?)">(.+?)</a></li>').findall(match[0])
+    match = re.compile('<div class="themesList">(.+?)<div class="vertical300Box">', re.S).findall(httpdata)
+    item = re.compile('<a href="(.+?)">(.+?)</a>').findall(match[0])
     for link,name in item:
         if not re.match('http://www.stream.cz', link, re.U):
                 link = 'http://www.stream.cz'+link
