@@ -246,15 +246,16 @@ def LIST_3(url):
 
 def LIST_4(url):
     doc = read_page(url)
-    items = doc.find('ul', 'l c')
+    items = doc.find('ul', 'listing preloader')
     for item in items.findAll('li'):
         try:
             name = item.a['title'].encode('utf-8')
         except:
             name = 'Bezejmenný titul'
         url = str(item.a['href']) 
-        thumb = str(item.img['src'])   
-        addDir(name, 'http://www.mamaozenma.sk/' + url, 10, thumb, 1)
+        #thumb = str(item.img['src'])   
+        #addDir(name, 'http://www.mamaozenma.sk/' + url, 10, thumb, 1)
+        addDir(name, url, 10, icon, 1)
     try:
         items = doc.find('ul', 'b-box b-pager-x c')
         dalsi = items.find('li', 'next')
