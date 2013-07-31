@@ -25,7 +25,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.stv"
        name="STV Archiv"
-       version="0.2.0"
+       version="0.3.0"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
