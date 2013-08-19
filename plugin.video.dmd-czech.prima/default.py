@@ -17,6 +17,7 @@ family = xbmc.translatePath( os.path.join( home, 'family.png' ) )
 love = xbmc.translatePath( os.path.join( home, 'love.png' ) )
 cool = xbmc.translatePath( os.path.join( home, 'cool.png' ) )
 zoom = xbmc.translatePath( os.path.join( home, 'zoom.png' ) )
+vyvoleni = xbmc.translatePath( os.path.join( home, 'vyvoleni.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 file = __settings__.getSetting('xml_file')
 kvalita =__settings__.getSetting('kvalita')
@@ -59,7 +60,29 @@ word_dic = {
 '\u0164': 'Ť',
 '\u017d': 'Ž',
 '\u010e': 'Ď',
-'\u0147': 'Ň'
+'\u0147': 'Ň',
+'\\xc3\\xa1': 'á',
+'\\xc4\\x97': 'é',
+'\\xc3\\xad': 'í',
+'\\xc3\\xbd': 'ý',
+'\\xc5\\xaf': 'ů',
+'\\xc4\\x9b': 'ě',
+'\\xc5\\xa1': 'š',
+'\\xc5\\xa4': 'ť',
+'\\xc4\\x8d': 'č',
+'\\xc5\\x99': 'ř',
+'\\xc5\\xbe': 'ž',
+'\\xc4\\x8f': 'ď',
+'\\xc5\\x88': 'ň',
+'\\xc5\\xae': 'Ů',
+'\\xc4\\x94': 'Ě',
+'\\xc5\\xa0': 'Š',
+'\\xc4\\x8c': 'Č',
+'\\xc5\\x98': 'Ř',
+'\\xc5\\xa4': 'Ť',
+'\\xc5\\xbd': 'Ž',
+'\\xc4\\x8e': 'Ď',
+'\\xc5\\x87': 'Ň',
 }
 
 def OBSAH():
@@ -67,6 +90,7 @@ def OBSAH():
     addDir('Love','http://play.iprima.cz/love',1,love,'','3')
     addDir('COOL','http://play.iprima.cz/cool',1,cool,'','2')
     addDir('ZOOM','http://play.iprima.cz/zoom',1,zoom,'','4')
+    addDir('Vyvolení','http://www.iprima.cz/vyvoleni/videa-z-vily',2,vyvoleni,'','')    
     
 def KATEGORIE(url,page,kanal):
     porady = []
@@ -119,6 +143,32 @@ def INDEX(url,page,kanal):
                 max_page = str(max_page+1)
                 #print '>> Další strana >>',url,1,next_page
                 addDir('>> Další strana ('+str(next_page+1)+' z '+max_page+')',url,4,nexticon,next_page,kanal)
+
+def VYVOLENI(url,page,kanal):
+    if kanal !=1:
+        addDir('Exkluzivně','http://www.iprima.cz/vyvoleni/videa-z-vily/exkluzivne',2,vyvoleni,'','1')
+        addDir('Videa z TV','http://www.iprima.cz/vyvoleni/videa-z-vily/videa-z-tv',2,vyvoleni,'','1')
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    response.close()
+    items = re.compile('<div class="views-field-prima-field-image-primary-nid">(.+?)<span class="cover"></span></span></a></div>',re.S).findall(str(httpdata))
+    match = re.compile('<a href="(.+?)"><span class="container-image-195x110"><img src="(.+?)" alt="(.+?)"',re.S).findall(str(items))    
+
+    for url,thumb,name in match:  
+            name = replace_words(name, word_dic)
+            thumb = re.sub('98x55','280x158',thumb)
+            req = urllib2.Request('http://www.iprima.cz'+url)
+            req.add_header('User-Agent', _UserAgent_)
+            response = urllib2.urlopen(req)
+            httpdata = response.read()
+            response.close()
+            url = re.compile('"nid":"(.+?)","tid":"(.+?)"').findall(httpdata)    
+            for nid,tid in url:
+                url = 'http://play.iprima.cz/all/'+nid+'/all'
+            addDir(name,url,10,'http://www.iprima.cz/'+thumb,'','')
+                
         
 def VIDEOLINK(url,name):
     strquery = '?method=json&action=video'
@@ -277,6 +327,12 @@ elif mode==1:
         print ""+str(page)
         KATEGORIE(url,page,kanal)
 
+elif mode==2:
+        print ""+str(url)
+        print ""+str(kanal)
+        print ""+str(page)
+        VYVOLENI(url,page,kanal)
+        
 elif mode==4:
         print ""+str(url)
         print ""+str(kanal)

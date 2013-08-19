@@ -1,4 +1,6 @@
 2013-04-11:
+ * pridani vyvoleni
+2013-04-11:
  * oprava stream serveru pro HD kvalitu
 2013-04-07:
  * oprava nastavení proxy
