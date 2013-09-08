@@ -147,7 +147,7 @@ def INDEX(url,page,kanal):
 def VYVOLENI(url,page,kanal):
     if kanal !=1:
         addDir('Exkluzivně','http://www.iprima.cz/vyvoleni/videa-z-vily/exkluzivne',2,vyvoleni,'','1')
-        addDir('Videa z TV','http://www.iprima.cz/vyvoleni/videa-z-vily/videa-z-tv',2,vyvoleni,'','1')
+        addDir('Videa z TV','http://www.iprima.cz/vyvoleni/videa-z-vily/videa-z-tv',2,vyvoleni,'','1')        
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)

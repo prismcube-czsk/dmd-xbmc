@@ -25,6 +25,7 @@ fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 page_pole_url = []
 page_pole_no = []
 
+
 DATE_FORMAT = '%d.%m.%Y'
 DAY_NAME = (u'Po', u'Út', u'St', u'Čt', u'Pá', u'So', u'Ne')
 
@@ -116,39 +117,49 @@ def CAT_LIST(url):
 
 
 # =============================================
-
-# vypis CT1,CT2,CT24,CT4
 def DAY_LIST(url):
     doc = read_page(url)
-    items = doc.findAll('div','programmeColumn')    
-    for item in items:
-        item = item.find('div','logo')    
-        item = item.find('img')
-	icons= item['src']
-        name = item['alt'].encode('utf-8').strip()
-        addDir(name,url,9,icons)
+    data = doc.find("ul", {"id": "channels"})   
+    items = data.findAll("li")
+    kanaly=[]
+    for ite in items:
+        rows = ite.findAll("span", attrs={'class' : 'logo'})
+        for it in rows:
+		item = it.find('img')
+		icons= item['src']
+		name = item['alt'].encode('utf-8').strip()
+		addDir(name,url,9,icons)
 
-# vypis programu na zvolenem kanalu
+
 def DAY_PROGRAM_LIST( url, chnum ):
     doc = read_page(url)
-    items = doc.findAll('div','logo clearfix')    
-    for item in items:
-    	item = item.find('img')
-    	name = item['alt'].encode('utf-8').strip()
-    	if name==chnum:
-		items2 = item.findParent()
-		items2 = items2.findParent()
-		for item2 in items2.findAll('a'):
-			item3 = item2.findParent()
-			item3 = item3.findParent()
-			item3 = item3.findParent()
-			cas = item3.find('div','time')
-			cas = cas.getText(" ").encode('utf-8')
-        		name = item2.getText(" ").encode('utf-8')
-        		link = str(item2['href'])
-			icons= item['src']
-			if link!="#add":
-       				addDir(cas+' '+name,'http://www.ceskatelevize.cz'+link,10,icon)
+    data = doc.find('div', {"id": "programme"}) 
+    items = data.findAll('ul')
+    nazvy=['ČT1', 'ČT2', 'ČT24', 'ČT sport', 'ČT :D', 'ČT Art']
+    count=-1
+    for it1 in items:
+	count += 1    
+	if count != nazvy.index(chnum):
+		continue
+    	it2 = it1.findAll('div',{'class': 'overlay'})
+    	for it3 in it2:
+		name = it3.find("strong",  "title")
+		name = name.getText(" ").encode('utf-8')
+		
+		cas  = it3.find("span", {"class": "time s_95p"})
+		cas  = cas.getText(" ").encode('utf-8')
+		#icons = it3.find("img")
+		#icons = icon['src']
+
+		link = it3.find("a")
+		if link != None:
+			link = str(link['href'])
+			addDir(cas+' '+name,'http://www.ceskatelevize.cz'+link,10,icon)
+		else:
+			name = name +' - pořad se ještě nevysílá.'
+			thumb = 'http://img7.ceskatelevize.cz/ivysilani/gfx/empty/noLive.png'
+			addDir(cas+' '+name, url, 10, thumb)
+		
 
 
 def date2label(date):
@@ -195,7 +206,6 @@ def NEWEST(url):
             icons= item['src']
             #print "LINK: "+link
             addDir(name,'http://www.ceskatelevize.cz'+link,10,icons)
-
 
 # =============================================
 
@@ -343,6 +353,9 @@ def HLEDAT(url):
         addDir(next_title,next_url,13,nexticon)
         
 def VIDEOLINK(url,name):
+    if name.find('pořad se ještě nevysílá')!=-1:
+	    return
+
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
