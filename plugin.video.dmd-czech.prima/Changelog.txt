@@ -1,3 +1,5 @@
+2013-09-21:
+ * oprava na novou veryi webu iPrima
 2013-04-11:
  * pridani vyvoleni
 2013-04-11:

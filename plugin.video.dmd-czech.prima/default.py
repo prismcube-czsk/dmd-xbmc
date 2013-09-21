@@ -86,63 +86,73 @@ word_dic = {
 }
 
 def OBSAH():
-    addDir('Family','http://play.iprima.cz/iprima',1,family,'','1')
-    addDir('Love','http://play.iprima.cz/love',1,love,'','3')
-    addDir('COOL','http://play.iprima.cz/cool',1,cool,'','2')
-    addDir('ZOOM','http://play.iprima.cz/zoom',1,zoom,'','4')
-    addDir('Vyvolení','http://www.iprima.cz/vyvoleni/videa-z-vily',2,vyvoleni,'','')    
-    
-def KATEGORIE(url,page,kanal):
-    porady = []
+    addDir('Prima Family','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=family',4,family,0,'family')
+    addDir('Prima Cool','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=cool',4,cool,0,'cool')
+    addDir('Prima Love','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=love',4,love,0,'love')
+    addDir('Prima zoom','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=zoom',4,zoom,0,'zoom')
+    url = 'http://play.iprima.cz/az'
     request = urllib2.Request(url)
     con = urllib2.urlopen(request)
     data = con.read()
     con.close()
-    data = re.compile('var topcat = \[(.+?)\];').findall(data)
-    match = re.compile('"name":"(.+?)","tid":"(.+?)"').findall(data[0])
-    for porad,porad_id in match:
-        porady.append([porad,porad_id])
-        porady.sort()   
-    for porad, porad_id in porady:
-        #print porad, porad_id
-        #porad=replace_words(porad)
-        addDir(replace_words(porad, word_dic),porad_id,4,__dmdbase__+porad_id+'.jpg',0,kanal)
+    match = re.compile('callbackItem" data-id="(.+?)" data-alias="(.+?)"><a href="(.+?)">(.+?)</a></div>').findall(data)
+    for porad_id,data_alias,url,jmeno in match:
+        if re.search('vse', data_alias, re.U): 
+                continue
+        url = 'http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres='+data_alias+'&channel=vse'
+        #print porad_id,data_alias,url,jmeno
+        addDir(replace_words(jmeno, word_dic),url,4,__dmdbase__+data_alias+'.jpg',0,jmeno)
+
+    
+def KATEGORIE(url,page,kanal):
+    request = urllib2.Request(url)
+    con = urllib2.urlopen(request)
+    data = con.read()
+    con.close()
+    match = re.compile('<div class=".+?" data-video-id=".+?" data-thumbs-count=".+?"><div class="field-image-primary"><a href="(.+?)"><span class="container-image-195x110"><img src="(.+?)" alt="(.+?)"').findall(data)
+    for url,thumb,name in match:
+        print url,thumb,name
+        addDir(replace_words(name, word_dic),'http://play.iprima.cz'+url,10,'http://play.iprima.cz'+thumb,0,name)           
+    try:
+        match = re.compile('<li class="pager-item pager-second"><a href="(.+?)" title=".+?" class="active">.+?</a></li>').findall(data)
+        print match[0] 
+        addDir('>> Další strana','http://play.iprima.cz'+match[0],5,nexticon,'','')
+    except:
+        print 'strankovani nenalezeno'
+    try:
+        match = re.compile('<li class="pager-item pager-last"><a href="(.+?)" title=".+?" class="active">.+?</a></li>').findall(data)
+        print match[0] 
+        addDir('>>> Poslední strana','http://play.iprima.cz'+match[0],5,nexticon,'','')
+    except:
+        print 'strankovani nenalezeno'        
+
 
 
     
 def INDEX(url,page,kanal):
-    if int(page) != 0:
-        strquery = '?method=json&action=relevant&per_page=12&page='+str(page)
-        #strquery = '?method=json&action=relevant&per_page=12&channel='+str(kanal)+'&page='+str(page)
-    else:
-        strquery = '?method=json&action=relevant&per_page=12'
-        #strquery = '?method=json&action=relevant&per_page=12&channel='+str(kanal)
-    doc = read_page('http://play.iprima.cz/videoarchiv_ajax/all/'+str(url)+strquery)
-    tid = re.compile('"tid":"(.+?)"').findall(str(doc))
-    match = re.compile('"nid":"(.+?)","title":"(.+?)","image":"(.+?)","date":"(.+?)"').findall(str(doc))
-    for videoid,name,thumb,datum in match:
-            name = replace_words(name, word_dic)
-            thumb = replace_words(thumb, word_dic)
-            thumb = re.sub('98x55','280x158',thumb)
-            if kanal == 1:
-                addDir(str(name),'http://play.iprima.cz/iprima/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')
-            elif kanal == 2:
-                addDir(str(name),'http://play.iprima.cz/cool/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')
-            elif kanal == 3:
-                addDir(str(name),'http://play.iprima.cz/love/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')
-            elif kanal == 4:
-                addDir(str(name),'http://play.iprima.cz/zoom/'+videoid+'/'+tid[0],10,'http://www.iprima.cz/'+thumb,'','')                
-    strankovani = re.compile('"total":(.+?),"from":.+?,"to":.+?,"page":(.+?),').findall(str(doc))
-    for page_total,act_page in strankovani:
-        print page_total,act_page
-        if int(page_total) > 12:
-            act_page = act_page.replace('"','')
-            next_page = int(act_page)  + 1
-            max_page =  int(round(int(page_total)/12 ) )
-            if next_page < max_page+1:
-                max_page = str(max_page+1)
-                #print '>> Další strana >>',url,1,next_page
-                addDir('>> Další strana ('+str(next_page+1)+' z '+max_page+')',url,4,nexticon,next_page,kanal)
+    doc = read_page(url)
+    items = doc.find('div', 'items')
+    for item in items.findAll('div', 'item'):
+            item2 = item.find('div','field-image-primary')
+            thumb = item2.img['src']
+            item2 = item.find('div','field-title')
+            name_a = item2.find('a') 
+            name = name_a.getText(" ").encode('utf-8')
+            thumb = item.img['src']
+            #name_a = item.find('a') 
+            #name = name_a.getText(" ").encode('utf-8')
+            url = str(item2.a['href'])
+            item2 = item.find('div','field-video-count')
+            pocet = item2.getText(" ").encode('utf-8')
+            print name+pocet, thumb, url
+            addDir(replace_words(name+' '+pocet, word_dic),'http://play.iprima.cz'+url,5,'http://play.iprima.cz'+thumb,0,name)           
+    try:
+        dalsi = doc.find('li', 'pager-item pager-second')
+        next_url = str(dalsi.a['href'])
+        print next_url
+        addDir('>> Další strana','http://play.iprima.cz'+url,4,nexticon,'','')
+    except:
+        print 'strankovani nenalezeno'
 
 def VYVOLENI(url,page,kanal):
     if kanal !=1:
@@ -171,12 +181,11 @@ def VYVOLENI(url,page,kanal):
                 
         
 def VIDEOLINK(url,name):
-    strquery = '?method=json&action=video'
-    request = urllib2.Request(url, strquery)
+    request = urllib2.Request(url)
     con = urllib2.urlopen(request)
     data = con.read()
     con.close()
-    print url
+    print data
     stream_video = re.compile('cdnID=([0-9]+)').findall(data)
     if len(stream_video) > 0:
         print 'LQ '+__cdn_url__+name,stream_video[0],icon,''
@@ -187,9 +196,9 @@ def VIDEOLINK(url,name):
             hd_stream = hd_stream[0]
         except:
             hd_stream = 'Null'        
-        hq_stream = re.compile("'hq_id':'(.+?)'").findall(data)
-        lq_stream = re.compile("'lq_id':'(.+?)'").findall(data)
-        geo_zone = re.compile("'zoneGEO':(.+?),").findall(data)        
+        hq_stream = re.compile('"hq_id":"(.+?)"').findall(data)
+        lq_stream = re.compile('"lq_id":"(.+?)"').findall(data)
+        geo_zone = re.compile('"zoneGEO":(.+?),').findall(data)        
         try:
             thumb = re.compile("'thumbnail': '(.+?)'").findall(data)
             nahled = thumb[0]
@@ -338,6 +347,12 @@ elif mode==4:
         print ""+str(kanal)
         print ""+str(page)
         INDEX(url,page,kanal)
+
+elif mode==5:
+        print ""+str(url)
+        print ""+str(kanal)
+        print ""+str(page)
+        KATEGORIE(url,page,kanal)
         
 elif mode==10:
         print ""+url

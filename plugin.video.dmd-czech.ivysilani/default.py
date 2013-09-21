@@ -143,10 +143,12 @@ def DAY_PROGRAM_LIST( url, chnum ):
 		continue
     	it2 = it1.findAll('div',{'class': 'overlay'})
     	for it3 in it2:
-		name = it3.find("strong",  "title")
+		name = it3.find('a', {'class':'title'})
+		if name == None:
+			name = it3.find('strong', {'class':'title'})
 		name = name.getText(" ").encode('utf-8')
 		
-		cas  = it3.find("span", {"class": "time s_95p"})
+		cas  = it3.find("span", {"class": "time"})
 		cas  = cas.getText(" ").encode('utf-8')
 		#icons = it3.find("img")
 		#icons = icon['src']
