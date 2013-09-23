@@ -1,5 +1,7 @@
+2013-09-23:
+ * oprava stránkování
 2013-09-21:
- * oprava na novou veryi webu iPrima
+ * oprava na novou verzi webu iPrima
 2013-04-11:
  * pridani vyvoleni
 2013-04-11:

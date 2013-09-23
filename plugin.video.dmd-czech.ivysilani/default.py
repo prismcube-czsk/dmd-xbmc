@@ -40,7 +40,7 @@ def OBSAH():
     addDir('Podle abecedy',__baseurl__+'/podle-abecedy/',2,icon)
     addDir('Podle kategorie',__baseurl__,1,icon)
     addDir('Vyhledat...(beta)','0',13,search)
-    addDir('Živé iVysílání',__baseurl__+'/ajax/liveBox.php',4,icon)
+    addDir('Živé iVysílání',__baseurl__+'/ajax/liveBox.php?time=',4,icon)
 
 def KATEGORIE():
     addDir('Filmy',__baseurl__+'/filmy/',3,icon)
@@ -58,7 +58,8 @@ def KATEGORIE():
     addDir('Všechny',__baseurl__+'/zanr-vse/',3,icon)   
 
 def LIVE_OBSAH(url):
-    program=[r'ČT1 - ', r'ČT2 - ', r'ČT24 - ', r'ČT4 - ']
+    url = url+str(time.time())
+    program=[r'ČT1 - ', r'ČT2 - ', r'ČT24 - ', r'ČT4 - ', r'ČTD/ART - ']
     i = 0
     request = urllib2.Request(url)
     request.add_header("Referer",__baseurl__)    

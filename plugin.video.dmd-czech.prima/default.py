@@ -2,7 +2,7 @@
 import urllib2,urllib,re,os,random,decimal
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
-__baseurl__ = 'http://www.iprima.cz/videoarchiv'
+__baseurl__ = 'http://play.iprima.cz'
 __cdn_url__  = 'http://cdn-dispatcher.stream.cz/?id='
 __dmdbase__ = 'http://iamm.netuje.cz/xbmc/prima/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -105,28 +105,25 @@ def OBSAH():
 
     
 def KATEGORIE(url,page,kanal):
-    request = urllib2.Request(url)
+    if re.search('page', url, re.U):
+            match = re.compile('page=([0-9]+)').findall(url)
+            strquery = '?page='+match[0]
+            request = urllib2.Request(url, strquery)
+    else:
+        request = urllib2.Request(url)
     con = urllib2.urlopen(request)
     data = con.read()
     con.close()
     match = re.compile('<div class=".+?" data-video-id=".+?" data-thumbs-count=".+?"><div class="field-image-primary"><a href="(.+?)"><span class="container-image-195x110"><img src="(.+?)" alt="(.+?)"').findall(data)
     for url,thumb,name in match:
-        print url,thumb,name
-        addDir(replace_words(name, word_dic),'http://play.iprima.cz'+url,10,'http://play.iprima.cz'+thumb,0,name)           
+        #print url,thumb,name
+        addDir(replace_words(name, word_dic),__baseurl__+url,10,__baseurl__+thumb,0,name)           
     try:
-        match = re.compile('<li class="pager-item pager-second"><a href="(.+?)" title=".+?" class="active">.+?</a></li>').findall(data)
-        print match[0] 
-        addDir('>> Další strana','http://play.iprima.cz'+match[0],5,nexticon,'','')
+        match = re.compile('<li class="pager-next last"><a href="(.+?)"').findall(data)
+        #print match[0] 
+        addDir('>> Další strana',__baseurl__+match[0],5,nexticon,'','')
     except:
         print 'strankovani nenalezeno'
-    try:
-        match = re.compile('<li class="pager-item pager-last"><a href="(.+?)" title=".+?" class="active">.+?</a></li>').findall(data)
-        print match[0] 
-        addDir('>>> Poslední strana','http://play.iprima.cz'+match[0],5,nexticon,'','')
-    except:
-        print 'strankovani nenalezeno'        
-
-
 
     
 def INDEX(url,page,kanal):
@@ -144,13 +141,13 @@ def INDEX(url,page,kanal):
             url = str(item2.a['href'])
             item2 = item.find('div','field-video-count')
             pocet = item2.getText(" ").encode('utf-8')
-            print name+pocet, thumb, url
-            addDir(replace_words(name+' '+pocet, word_dic),'http://play.iprima.cz'+url,5,'http://play.iprima.cz'+thumb,0,name)           
+            #print name+pocet, thumb, url
+            addDir(replace_words(name+' '+pocet, word_dic),__baseurl__+url,5,'http://play.iprima.cz'+thumb,0,name)           
     try:
-        dalsi = doc.find('li', 'pager-item pager-second')
+        dalsi = doc.find('li', 'pager-next last')
         next_url = str(dalsi.a['href'])
-        print next_url
-        addDir('>> Další strana','http://play.iprima.cz'+url,4,nexticon,'','')
+        #print next_url
+        addDir('>> Další strana',__baseurl__+next_url,4,nexticon,'','')
     except:
         print 'strankovani nenalezeno'
 
