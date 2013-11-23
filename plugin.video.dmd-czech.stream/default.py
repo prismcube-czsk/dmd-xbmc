@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import urllib2,urllib,re,os
+import urllib2,urllib,re,os,random,decimal
 from parseutils import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
-__baseurl__ = 'http://old.stream.cz'
+__baseurl__ = 'http://www.stream.cz/ajax/'
 __dmdbase__ = 'http://iamm.netuje.cz/xbmc/stream/'
 __cdn_url__  = 'http://cdn-dispatcher.stream.cz/?id='
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -20,108 +20,116 @@ page_pole_no = []
 searchurl = __baseurl__+'/?a=search&search_text='
 user_name =__settings__.getSetting('user_name')
 
+def replace_words(text, word_dic):
+    rc = re.compile('|'.join(map(re.escape, word_dic)))
+    def translate(match):
+        return word_dic[match.group(0)]
+    return rc.sub(translate, text)
+
+word_dic = {
+'\u00e1': 'á',
+'\u00e9': 'é',
+'\u00ed': 'í',
+'\u00fd': 'ý',
+'\u00f3': 'ó',
+'\u00fa': 'ú',
+'\u016f': 'ů',
+'\u011b': 'ě',
+'\u0161': 'š',
+'\u0165': 'ť',
+'\u010d': 'č',
+'\u0159': 'ř',
+'\u017e': 'ž',
+'\u010f': 'ď',
+'\u0148': 'ň',
+'\u00C0': 'Á',
+'\u00c9': 'É',
+'\u00cd': 'Í',
+'\u00d3': 'Ó',
+'\u00da': 'Ú',
+'\u016e': 'Ů',
+'\u0115': 'Ě',
+'\u0160': 'Š',
+'\u010c': 'Č',
+'\u0158': 'Ř',
+'\u0164': 'Ť',
+'\u017d': 'Ž',
+'\u010e': 'Ď',
+'\u0147': 'Ň',
+'\\xc3\\xa1': 'á',
+'\\xc4\\x97': 'é',
+'\\xc3\\xad': 'í',
+'\\xc3\\xbd': 'ý',
+'\\xc5\\xaf': 'ů',
+'\\xc4\\x9b': 'ě',
+'\\xc5\\xa1': 'š',
+'\\xc5\\xa4': 'ť',
+'\\xc4\\x8d': 'č',
+'\\xc5\\x99': 'ř',
+'\\xc5\\xbe': 'ž',
+'\\xc4\\x8f': 'ď',
+'\\xc5\\x88': 'ň',
+'\\xc5\\xae': 'Ů',
+'\\xc4\\x94': 'Ě',
+'\\xc5\\xa0': 'Š',
+'\\xc4\\x8c': 'Č',
+'\\xc5\\x98': 'Ř',
+'\\xc5\\xa4': 'Ť',
+'\\xc5\\xbd': 'Ž',
+'\\xc4\\x8e': 'Ď',
+'\\xc5\\x87': 'Ň',
+}
+
+
 def OBSAH():
-    addDir('Všechny Pořady',__baseurl__+'/televize/nazev',1,icon)
-    addDir('Pořady Stream.cz',__baseurl__+'/televize/429-stream',3,icon)
-    addDir('Partnerské pořady',__baseurl__+'/',4,icon)
-    addDir('Komerční videa',__baseurl__+'/?m=stream&a=commercial_channel',5,icon)   
-    addDir('Uživatelská videa',__baseurl__+'/kategorie/2-uzivatelska-videa',2,icon)
-    addDir('Hledat...',__baseurl__,13,icon)
-    addDir('Moje videa',__baseurl__,15,icon)
+    addDir('Všechny Pořady','listShows',1,icon)
+    addDir('Komerční pořady','listCommercials',1,icon)
+    #addDir('Partnerské pořady',__baseurl__+'/',4,icon)
+    #addDir('Komerční videa',__baseurl__+'/?m=stream&a=commercial_channel',5,icon)   
+    #addDir('Uživatelská videa',__baseurl__+'/kategorie/2-uzivatelska-videa',2,icon)
+    #addDir('Hledat...',__baseurl__,13,icon)
+    #addDir('Moje videa',__baseurl__,15,icon)
     
-def INDEX_TV(url):
-    doc = read_page(url)
-    items = doc.find('div', 'vertical540Box')
-    for item in items.findAll('div', 'matrixThreeVideoList'):
-            name_a = item.find('div','matrixThreeData')
-            name_a = name_a.find('h5')            
-            name_a = name_a.find('a') 
-            name = name_a.getText(" ").encode('utf-8')
-            url = __baseurl__+str(item.a['href'])
-            thumb = item.find('a', 'videoListImg')
-            thumb = thumb['style']
-            thumb = thumb[(thumb.find('url(') + len('url(') + 1):] 
-            thumb = thumb[:(thumb.find(')') - 1)]
-            #print name, thumb, url
-            addDir(name,url,6,thumb)
-    try:
-        pager = doc.find('div', 'paging')
-        act_page_a = pager.find('strong',)
-        act_page = act_page_a.getText(" ").encode('utf-8')
-        next_page = int(act_page) + 1        
-        next_url_no = int(act_page)
-        for item in pager.findAll('a'):
-            page_url = item['href'].encode('utf-8')
-            page_no = item.getText(" ").encode('utf-8')
-            page_pole_url.append(page_url)
-            page_pole_no.append(page_no)
-        max_page_count = len(page_pole_no)-1
-        url_page = int(max_page_count)-1
-        if  re.match('další', page_pole_no[max_page_count], re.U):
-            next_url = item['href']
-            #next_url = page_pole_url[next_url_no]
-            max_page = page_pole_no[url_page]
-            next_label = 'Přejít na stranu '+str(next_page)+' z '+max_page
-            #print next_label,__baseurl__+next_url
-            addDir(next_label,__baseurl__+next_url,1,nexticon)
-    except:
-        print 'STRANKOVANI NENALEZENO!'
+def INDEX(url):
+    link = __baseurl__+'get_catalogue?0.'+str(gen_random_decimal(9999999999999999))
+    req = urllib2.Request(link)
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    response.close()
+    match = re.compile('<ul id="'+url+'" class="shows clearfix">(.+?)</ul>', re.S).findall(httpdata)
+    match2 = re.compile('<a href="/porady/(.+?)" class=".+?" data-show-id="(.+?)" data-action=".+?">(.+?)<img src="(.+?)"', re.S).findall(match[0])
+    for link, id, name, thumb in match2:
+            name = str.strip(name)
+            link = __baseurl__+'get_series?show_url='+link+'&0.'+str(gen_random_decimal(9999999999999999))
+            addDir(name,link,7,thumb)
 
-def INDEX_UZIVATEL(url):
+def LIST(url):
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('<li><a  href="(.+?)">(.+?)</a>').findall(httpdata)
-    for link,name in match:
-        if not re.match(__baseurl__, link, re.U):
-                link = __baseurl__+link
-        #print name,link
-        addDir(name,link,6,icon)
+    match = re.compile('<a href=".+?" data-action=".+?" data-episode-id="(.+?)">(.+?)</a>', re.S).findall(httpdata)
+    for id, name in match:
+            link = __baseurl__+'get_video_source?context=catalogue&id='+id+'&0.'+str(gen_random_decimal(9999999999999999))
+            addDir(name,link,10,icon)
 
-def INDEX_STREAM(url):
+def VIDEOLINK(url,name):
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('<h4 class="redTitelBox">Pořady Stream.cz</h4>(.+?)<h4 class="redTitelBox">Partnerské pořady</h4>', re.S).findall(httpdata)
-    item = re.compile('<a href="(.+?)">(.+?)</a>').findall(match[0])
-    for link,name in item:
-        if not re.match(__baseurl__, link, re.U):
-                link = __baseurl__+link
-        #print name,link
-        addDir(name,link,7,icon)
-
-def INDEX_PARTNERSKE(url):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    match = re.compile('<h4 class="redTitelBox">Partnerské pořady</h4>(.+?)<h4 class="redTitelBox">Uživatelská videa</h4>', re.S).findall(httpdata)
-    item = re.compile('<a href="(.+?)">(.+?)</a>').findall(match[0])
-    for link,name in item:
-        if not re.match(__baseurl__, link, re.U):
-                link = __baseurl__+link
-        #print name,link
-        addDir(name,link,7,icon)
-
-def INDEX_KOMERCNI(url):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    match = re.compile('<div class="themesList">(.+?)<div class="vertical300Box">', re.S).findall(httpdata)
-    item = re.compile('<a href="(.+?)">(.+?)</a>').findall(match[0])
-    for link,name in item:
-        if not re.match(__baseurl__, link, re.U):
-                link = __baseurl__+link
-        #print name,link
-        addDir(name,link,7,icon)
-
+    #httpdata = replace_words(httpdata, word_dic).encode('utf-8')
+    name = re.compile('"episode_name": "(.+?)"', re.S).findall(httpdata)
+    #items = json.loads(httpdata)[u'instances']
+    stream = re.compile('\{"instances": \[\{"source": "(.+?)", "type": "video/mp4", "quality_label": ".+?", "quality": "(.+?)"}').findall(httpdata)
+    name = replace_words(name[0], word_dic)
+    for stream_url, quality in stream:
+        print stream_url,quality
+        addLink(quality+' '+name,stream_url,'',name)
+            
 def MY_VIDEO(url):
     if url == __baseurl__:
         if user_name == '':
@@ -171,44 +179,6 @@ def MY_VIDEO(url):
             next_label = 'Přejít na stranu '+str(next_page)+' z '+max_page
             #print next_label,__baseurl__+next_url
             addDir(next_label,__baseurl__+next_url,15,nexticon)
-    except:
-        print 'STRANKOVANI NENALEZENO!'
-
-def LIST_TV(url):
-    doc = read_page(url)
-    items = doc.find('div', id='videa_kanalu_list')
-    for item in items.findAll('div', 'kanal_1video'):
-            thumb = item.find('a', 'kanal_1video_pic')
-            thumb = thumb['style']
-            thumb = thumb[(thumb.find('url(') + len('url(') + 1):] 
-            thumb = thumb[:(thumb.find(')') - 1)]
-        
-            item = item.find('div','kanal_1video_content')
-            name_a = item.find('a') 
-            name = name_a.getText(" ").encode('utf-8')
-            url = __baseurl__+str(item.a['href'])
-            #print name, thumb, url
-            addDir(name,url,20,thumb)
-    try:
-        pager = doc.find('div', 'paging')
-        act_page_a = pager.find('strong',)
-        act_page = act_page_a.getText(" ").encode('utf-8')
-        next_page = int(act_page) + 1        
-        next_url_no = int(act_page)
-        for item in pager.findAll('a'):
-            page_url = item['href'].encode('utf-8')
-            page_no = item.getText(" ").encode('utf-8')
-            page_pole_url.append(page_url)
-            page_pole_no.append(page_no)
-        max_page_count = len(page_pole_no)-1
-        url_page = int(max_page_count)-1
-        if  re.match('další', page_pole_no[max_page_count], re.U):
-            next_url = item['href']
-            #next_url = page_pole_url[next_url_no]
-            max_page = page_pole_no[url_page]
-            next_label = 'Přejít na stranu '+str(next_page)+' z '+max_page
-            #print next_label,__baseurl__+next_url
-            addDir(next_label,__baseurl__+next_url,7,nexticon)
     except:
         print 'STRANKOVANI NENALEZENO!'
 
@@ -347,42 +317,7 @@ def SEARCH2(url):
                     print 'STRANKOVANI NENALEZENO!'
     
                 
-def VIDEOLINK(url,name):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    try:
-        hd_video = re.compile('cdnHD=([0-9]+)').findall(httpdata)
-    except:
-        print 'HD stream nenalezen'
-    try:
-        hq_video = re.compile('cdnHQ=([0-9]+)').findall(httpdata)
-    except:
-        print 'HQ stream nenalezen'
-    try:
-        lq_video = re.compile('cdnLQ=([0-9]+)').findall(httpdata)
-    except:
-        print 'LQ stream nenalezen'
-    thumb = re.compile('<link rel="image_src" href="(.+?)" />').findall(httpdata)
-    popis = re.compile('<meta name="title" content="(.+?)" />').findall(httpdata)
-    if not len(popis) > 0:
-        popis = re.compile('<title>(.+?)</title>').findall(httpdata)   
 
-    #print name,urlhq,thumb
-    if len(hd_video)>0:
-        hdurl = __cdn_url__ + hd_video[0]
-        #print 'HD '+'name',hdurl,popis[0]
-        addLink('HD '+name,hdurl,'',popis[0])
-    if len(hq_video)>0:
-        hqurl = __cdn_url__ + hq_video[0]
-        #print 'HQ '+'name',hqurl,'',popis[0]
-        addLink('HQ '+name,hqurl,'',popis[0])
-    if len(lq_video)>0:
-        lqurl = __cdn_url__ + lq_video[0]
-        #print'LQ '+'name',lqurl,'',popis[0]
-        addLink('LQ '+name,lqurl,'',popis[0])
 
 def PAGER(doc):
     try:
@@ -427,6 +362,8 @@ def get_params():
         return param
 
 
+def gen_random_decimal(d):
+        return decimal.Decimal('%d' % (random.randint(0,d)))
 
 def addLink(name,url,iconimage,popis):
         ok=True
@@ -474,24 +411,7 @@ if mode==None or url==None or len(url)<1:
        
 elif mode==1:
         print ""
-        INDEX_TV(url)
-
-elif mode==2:
-        print ""+url
-        INDEX_UZIVATEL(url)
-
-elif mode==3:
-        print ""+url
-        INDEX_STREAM(url)
-
-elif mode==4:
-        print ""+url
-        INDEX_PARTNERSKE(url)
-
-elif mode==5:
-        print ""+url
-        INDEX_KOMERCNI(url)
-
+        INDEX(url)
 
 elif mode==6:
         print ""+url
@@ -499,7 +419,7 @@ elif mode==6:
 
 elif mode==7:
         print ""+url
-        LIST_TV(url)
+        LIST(url)
 
 
 elif mode==13:
@@ -513,7 +433,7 @@ elif mode==15:
         print ""+url
         MY_VIDEO(url)       
 
-elif mode==20:
+elif mode==10:
         print ""+url
         VIDEOLINK(url,name)
 
