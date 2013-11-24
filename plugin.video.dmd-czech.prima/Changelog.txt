@@ -1,3 +1,5 @@
+2013-11-24:
+ * oprava HD kvality
 2013-09-23:
  * oprava stránkování
 2013-09-21:
