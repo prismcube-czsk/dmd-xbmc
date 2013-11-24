@@ -1,3 +1,5 @@
+2013-11-24:
+  * uprava na yiskavani videa pomoci JSON poli 
 2013-11-23:
   * oprava archivu na novy web, zatim provizorni
 2013-10-21:

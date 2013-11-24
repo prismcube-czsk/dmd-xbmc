@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
+<addon id="plugin.video.tv.sme.sk"
+       name="TV SME.sk"
+       version="1.0.0"
+       provider-name="Radim Stoklasa">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>TV SME.sk video-archive plugin</summary>
+    <summary lang="sk">Internetová televízia SME.sk</summary>
+    <summary lang="cs">Internetová televize SME.sk</summary>
+    <description>
+        Plugin to play TV video archive tv.sme.sk
+    </description>
+    <description lang="cs">
+        Plugin pro přehrávání videí z archivu tv.sme.sk
+    </description>
+    <description lang="sk">
+        Plugin pre prehrávenie videí z archívu tv.sme.sk
+    </description>
+  </extension>
+</addon>
+
 <addon id="plugin.video.dmd-czech.ivysilani"
        name="iVysílání TV Archiv"
        version="1.4.6"
@@ -212,7 +239,7 @@
 
 <addon id="plugin.video.dmd-czech.stream"
        name="Stream TV Archiv"
-       version="1.1.0"
+       version="1.1.1"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
