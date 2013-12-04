@@ -116,9 +116,12 @@ def VIDEOLINK(url,name):
     name = data[u'episode_name']
     thumb = data[u'episode_image_original_url']    
     for item in data[u'instances']:
-        stream_url = item[u'instances'][0][u'source']
-        quality = item[u'instances'][0][u'quality']
-        addLink(quality+' '+name,stream_url,'',name)
+        try:
+            stream_url = item[u'instances'][0][u'source']
+            quality = item[u'instances'][0][u'quality']
+            addLink(quality+' '+name,stream_url,'',name)
+        except:
+            continue
             
 def get_params():
         param=[]
