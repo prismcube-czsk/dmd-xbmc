@@ -126,10 +126,10 @@ def DAY_LIST(url):
     for ite in items:
         rows = ite.findAll("span", attrs={'class' : 'logo'})
         for it in rows:
-		item = it.find('img')
-		icons= item['src']
-		name = item['alt'].encode('utf-8').strip()
-		addDir(name,url,9,icons)
+                item = it.find('img')
+                icons= item['src']
+                name = item['alt'].encode('utf-8').strip()
+                addDir(name,url,9,icons)
 
 
 def DAY_PROGRAM_LIST( url, chnum ):
@@ -139,30 +139,30 @@ def DAY_PROGRAM_LIST( url, chnum ):
     nazvy=['ČT1', 'ČT2', 'ČT24', 'ČT sport', 'ČT :D', 'ČT Art']
     count=-1
     for it1 in items:
-	count += 1    
-	if count != nazvy.index(chnum):
-		continue
-    	it2 = it1.findAll('div',{'class': 'overlay'})
-    	for it3 in it2:
-		name = it3.find('a', {'class':'title'})
-		if name == None:
-			name = it3.find('strong', {'class':'title'})
-		name = name.getText(" ").encode('utf-8')
-		
-		cas  = it3.find("span", {"class": "time"})
-		cas  = cas.getText(" ").encode('utf-8')
-		#icons = it3.find("img")
-		#icons = icon['src']
+        count += 1    
+        if count != nazvy.index(chnum):
+                continue
+        it2 = it1.findAll('div',{'class': 'overlay'})
+        for it3 in it2:
+                name = it3.find('a', {'class':'title'})
+                if name == None:
+                        name = it3.find('strong', {'class':'title'})
+                name = name.getText(" ").encode('utf-8')
+                
+                cas  = it3.find("span", {"class": "time"})
+                cas  = cas.getText(" ").encode('utf-8')
+                #icons = it3.find("img")
+                #icons = icon['src']
 
-		link = it3.find("a")
-		if link != None:
-			link = str(link['href'])
-			addDir(cas+' '+name,'http://www.ceskatelevize.cz'+link,10,icon)
-		else:
-			name = name +' - pořad se ještě nevysílá.'
-			thumb = 'http://img7.ceskatelevize.cz/ivysilani/gfx/empty/noLive.png'
-			addDir(cas+' '+name, url, 10, thumb)
-		
+                link = it3.find("a")
+                if link != None:
+                        link = str(link['href'])
+                        addDir(cas+' '+name,'http://www.ceskatelevize.cz'+link,10,icon)
+                else:
+                        name = name +' - pořad se ještě nevysílá.'
+                        thumb = 'http://img7.ceskatelevize.cz/ivysilani/gfx/empty/noLive.png'
+                        addDir(cas+' '+name, url, 10, thumb)
+                
 
 
 def date2label(date):
@@ -182,7 +182,7 @@ def DATE_LIST(url):
      addDir('Předchozí měsíc (%s)' % date2label(pdate).encode('utf-8'),__baseurl__ + '/' + pdate.strftime(DATE_FORMAT),5,icon)
      for i in range(0,30):
            pdate = date - datetime.timedelta(i)
-     	   addDir(date2label(pdate).encode('utf-8'),__baseurl__ + '/' + pdate.strftime(DATE_FORMAT),8,icon)
+           addDir(date2label(pdate).encode('utf-8'),__baseurl__ + '/' + pdate.strftime(DATE_FORMAT),8,icon)
 
 
 # vypis nejsledovanejsi za tyden
@@ -191,7 +191,7 @@ def MOSTVISITED(url):
     #items = doc.find('ul', 'clearfix content','mostWatchedBox')    
     items = doc.find(id="mostWatchedBox")    
     for item in items.findAll('a'):
-       	    name = item.getText(" ").encode('utf-8')
+            name = item.getText(" ").encode('utf-8')
             link = str(item['href'])
             item = item.find('img')
             icons= item['src']
@@ -203,7 +203,7 @@ def NEWEST(url):
     doc = read_page(url)
     items = doc.find(id="newestBox")    
     for item in items.findAll('a'):
-       	    name = item.getText(" ").encode('utf-8')
+            name = item.getText(" ").encode('utf-8')
             link = str(item['href'])
             item = item.find('img')
             icons= item['src']
@@ -213,7 +213,7 @@ def NEWEST(url):
 # =============================================
 
 
-def VIDEO_LIST(url,video_listing=-1):
+def VIDEO_LIST(url,nm,video_listing=-1):
     link = url
     if not re.search('dalsi-casti',url):
         link = url + 'dalsi-casti/'
@@ -229,26 +229,29 @@ def VIDEO_LIST(url,video_listing=-1):
     if re.search('Ouha',str(items),re.U):
         bonuslink = url+'bonusy/'
         BONUSY(bonuslink)
-    for item in items.findAll('li', 'itemBlock clearfix'):
-        try:
-            name_a = item.find('h3')
-            name_a = name_a.find('a')
-            name = name_a.getText(" ").encode('utf-8')
-            if len(name) < 2:
-                name = 'Titul bez názvu'
-            popis_a = item.find('p') 
-            popis = popis_a.getText(" ").encode('utf-8')
-            popis = re.sub('mdash;','-',popis)
-            if re.match('Reklama:',popis, re.U):
-                popis = 'Titul bez názvu'
-            url = 'http://www.ceskatelevize.cz'+str(item.a['href'])
-            url = re.sub('porady','ivysilani',url)
-            thumb = str(item.img['src'])
-            #print name+' '+popis, thumb, url
-            addDir(name+' '+popis,url,10,thumb)
-        except:
+    try:
+            for item in items.findAll('li', 'itemBlock clearfix'):
+                name_a = item.find('h3')
+                name_a = name_a.find('a')
+                name = name_a.getText(" ").encode('utf-8')
+                if len(name) < 2:
+                        name = 'Titul bez názvu'
+                popis_a = item.find('p') 
+                popis = popis_a.getText(" ").encode('utf-8')
+                popis = re.sub('mdash;','-',popis)
+                if re.match('Reklama:',popis, re.U):
+                        popis = 'Titul bez názvu'
+                url = 'http://www.ceskatelevize.cz'+str(item.a['href'])
+                url = re.sub('porady','ivysilani',url)
+                thumb = str(item.img['src'])
+                #print name+' '+popis, thumb, url
+                addDir(name+' '+popis,url,10,thumb)
+    except:
             #print 'Licence pro internetové vysílání již skončila.', thumb, 'http://www.ceskatelevize.cz'
-            addDir('Licence pro internetové vysílání již skončila.',link,60,thumb)
+            if items != None:
+                addDir('Licence pro internetové vysílání již skončila.',link,60,thumb)
+            else:
+                addDir(nm,url,10,'')
                
     try:
         pager = doc.find('div', 'pagingContent')
@@ -261,19 +264,19 @@ def VIDEO_LIST(url,video_listing=-1):
         next_label = 'Další strana (Zobrazena videa '+act_page[0]+'-'+act_page[2]+' ze '+act_page[4]+')'
         #print next_label,next_url
         video_listing_setting = int(__settings__.getSetting('video-listing')) 
-	if video_listing_setting > 0:
-		next_label = 'Další strana (celkem '+act_page[4]+' videí)'
-	if (video_listing_setting > 0 and video_listing == -1):
-		if video_listing_setting == 3:
-			video_listing = 99999
-		elif video_listing_setting == 2:
-			video_listing = 3
-		else:
-			video_listing = video_listing_setting
-	if (video_listing_setting > 0 and video_listing > 0):
-		VIDEO_LIST('http://ceskatelevize.cz'+next_url,video_listing-1)
-	else:
-		addDir(next_label,'http://www.ceskatelevize.cz'+next_url,6,nexticon)
+        if video_listing_setting > 0:
+                next_label = 'Další strana (celkem '+act_page[4]+' videí)'
+        if (video_listing_setting > 0 and video_listing == -1):
+                if video_listing_setting == 3:
+                        video_listing = 99999
+                elif video_listing_setting == 2:
+                        video_listing = 3
+                else:
+                        video_listing = video_listing_setting
+        if (video_listing_setting > 0 and video_listing > 0):
+                VIDEO_LIST('http://ceskatelevize.cz'+next_url,video_listing-1)
+        else:
+                addDir(next_label,'http://www.ceskatelevize.cz'+next_url,6,nexticon)
     except:
         print 'STRANKOVANI NENALEZENO!'
 
@@ -357,7 +360,7 @@ def HLEDAT(url):
         
 def VIDEOLINK(url,name):
     if name.find('pořad se ještě nevysílá')!=-1:
-	    return
+            return
 
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
@@ -462,7 +465,7 @@ def http_build_query(params, topkey = ''):
 def get_params():
         param=[]
         paramstring=sys.argv[2]
-	#print "PARAMSTRING: "+urllib.unquote_plus(paramstring)
+        #print "PARAMSTRING: "+urllib.unquote_plus(paramstring)
         if len(paramstring)>=2:
                 params=sys.argv[2]
                 cleanedparams=params.replace('?','')
@@ -547,7 +550,7 @@ elif mode==5:
 
 elif mode==6:
         print ""+url
-        VIDEO_LIST(url)
+        VIDEO_LIST(url,name)
 
 elif mode==7:
         print ""+url

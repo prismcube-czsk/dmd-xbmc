@@ -79,16 +79,28 @@ word_dic = {
 def OBSAH():
     addDir('Všechny Pořady','listShows',1,icon)
     addDir('Komerční pořady','listCommercials',1,icon)
+    addDir('Pohádky','dreams',1,icon)
     
 def INDEX(url):
     link = __baseurl__+'get_catalogue?0.'+str(gen_random_decimal(9999999999999999))
+    temp = 'porady'
+    if url == 'dreams':
+        link = __baseurl__+'get_catalogue?dreams&0.'+str(gen_random_decimal(9999999999999999))
+        temp = 'pohadky'
+        url = 'listShows'
     req = urllib2.Request(link)
     req.add_header('User-Agent', _UserAgent_)
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
     match = re.compile('<ul id="'+url+'" class="shows clearfix">(.+?)</ul>', re.S).findall(httpdata)
-    match2 = re.compile('<a href="/porady/(.+?)" class=".+?" data-show-id="(.+?)" data-action=".+?">(.+?)<img src="(.+?)"', re.S).findall(match[0])
+    
+    if temp == 'porady':
+        match2 = re.compile('<a href="/porady/(.+?)" class=".+?" data-show-id="(.+?)" data-action=".+?">(.+?)<img src="(.+?)"', re.S).findall(match[0])
+
+    else:
+        match2 = re.compile('<a href="/pohadky/(.+?)" class=".+?" data-show-id="(.+?)" data-action=".+?">(.+?)<img src="(.+?)"', re.S).findall(match[0])
+
     for link, id, name, thumb in match2:
             name = str.strip(name)
             link = __baseurl__+'get_series?show_url='+link+'&0.'+str(gen_random_decimal(9999999999999999))
