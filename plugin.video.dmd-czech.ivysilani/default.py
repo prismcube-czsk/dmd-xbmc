@@ -90,7 +90,7 @@ def LIVE_OBSAH(url):
                 name = program[i]+'Právě teď běží pořad, který nemůžeme vysílat po internetu.'
                 thumb = 'http://img7.ceskatelevize.cz/ivysilani/gfx/empty/noLive.png'
             #print name, thumb, url
-            addDir(name,url,10,thumb)
+            addDir(name,url,14,thumb)
             i=i+1
 def ABC(url):
     req = urllib2.Request(url)
@@ -358,7 +358,7 @@ def HLEDAT(url):
         next_title = '>> Další strana (výsledky '+ str(match_page[0]) + ' - ' + str(next_page) + ')'
         addDir(next_title,next_url,13,nexticon)
         
-def VIDEOLINK(url,name):
+def VIDEOLINK(url,name, live):
     if name.find('pořad se ještě nevysílá')!=-1:
             return
 
@@ -380,18 +380,30 @@ def VIDEOLINK(url,name):
     # Converting dictionary to text arrays    options[UserIP]=xxxx&options[playlistItems][0][..]....
     strquery = http_build_query(query)
     # Ask a link page XML
-    request = urllib2.Request('http://www.ceskatelevize.cz/ajax/playlistURL.php')
+    #
+    req = urllib2.Request('http://img.ceskatelevize.cz/libraries/player/ajaxPlaylist.js?ver=1.2')
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    data = response.read()
+    response.close()
+    playlist_url= re.search("url\: \"([^\"]+)",data, re.DOTALL)
+    playlist_url = 'http://www.ceskatelevize.cz' + playlist_url.group(1)
+    headers = {
+               "Referer":url,
+               "Origin":"http://www.ceskatelevize.cz",
+               "Accept":"*/*",
+               "X-Requested-With":"XMLHttpRequest",
+               "x-addr":"127.0.0.1",
+               "User-Agent": _UserAgent_,
+               "Content-Type":"application/x-www-form-urlencoded"
+    }
+    request = urllib2.Request(playlist_url, headers=headers)
     request.add_data(strquery)
-    request.add_header("Referer",url)    
-    request.add_header("Origin","http://www.ceskatelevize.cz")
-    request.add_header("Accept","*/*")
-    request.add_header("X-Requested-With","XMLHttpRequest")
-    request.add_header("x-addr","127.0.0.1")
-    request.add_header("User-Agent",_UserAgent_)
-    request.add_header("Content-Type","application/x-www-form-urlencoded")
     con = urllib2.urlopen(request)
+    #
     # Read lisk XML page
     data = con.read()
+    data = data.replace('?hashedId=', '?id=').replace('<URI>','').replace('</URI>','')
     con.close()
     data = urllib.unquote(data).decode('utf8')
     doc = read_page(data)
@@ -404,12 +416,18 @@ def VIDEOLINK(url,name):
                 continue
             video = re.compile('<video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled=".+?"').findall(str(item))
             for cesta,kvalita in video:
-                #rtmp_url = base+' playpath='+cesta+' pageUrl='+url+' swfUrl='+swfurl+' swfVfy=true live=true'
+		'''
                 rtmp_url = base+'/'+cesta
                 if __settings__.getSetting('fix-rtmp-url') == "true":
                     idx = rtmp_url.find('://') + 1
                     rtmp_url = rtmp_url[:idx] + rtmp_url[idx:].replace(':', '/')
-                print rtmp_url
+                '''
+                if live:
+			rtmp_url = base+'/'+cesta
+	        else:
+	                app = base[base.find('/', base.find('://') + 3) + 1:]
+	                rtmp_url = base + ' app=' + app + ' playpath=' + cesta    
+		print rtmp_url 		
                 addLink(kvalita+' '+name,rtmp_url,icon,info[0])
                 #print rtmp_url,kvalita+info[0] #vystupni parametry RTMP
 
@@ -566,7 +584,7 @@ elif mode==9:
 
 elif mode==10:
         print ""+url
-        VIDEOLINK(url,name)
+        VIDEOLINK(url,name, False)
 
 elif mode==11:
         print ""+url
@@ -579,5 +597,9 @@ elif mode==12:
 elif mode==13:
         print ""+url
         HLEDAT(url)
+        
+elif mode == 14:
+	print "" + url
+	VIDEOLINK(url, name, True)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
