@@ -14,7 +14,7 @@ __dmdbase__ = 'http://iamm.uvadi.cz/xbmc/voyo/'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon = xbmcaddon.Addon('plugin.video.dmd-czech.novaplus')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
-__settings__ = xbmcaddon.Addon(id='plugin.video.dmd-czech.prima')
+__settings__ = xbmcaddon.Addon(id='plugin.video.dmd-czech.novaplus')
 home = __settings__.getAddonInfo('path')
 icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 nexticon = xbmc.translatePath( os.path.join( home, 'nextpage.png' ) )
