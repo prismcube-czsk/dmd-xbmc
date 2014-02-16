@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os,time,datetime
 from parseutils import *
-from urlparse import urlparse
+from urlparse import urlparse,urlunparse
 import xbmcplugin,xbmcgui,xbmcaddon
-#import json
 import simplejson as json
+import httplib
+import xml.etree.ElementTree as ET
 
 
 
@@ -40,7 +41,11 @@ def OBSAH():
     addDir('Podle abecedy',__baseurl__+'/podle-abecedy/',2,icon)
     addDir('Podle kategorie',__baseurl__,1,icon)
     addDir('Vyhledat...(beta)','0',13,search)
+    addDir('Otevřít Web URL', '0', 15, icon)
+    addDir('Otevřít Web Live URL', '0', 16, icon)    
     addDir('Živé iVysílání',__baseurl__+'/ajax/liveBox.php?time=',4,icon)
+
+
 
 def KATEGORIE():
     addDir('Filmy',__baseurl__+'/filmy/',3,icon)
@@ -56,6 +61,8 @@ def KATEGORIE():
     addDir('Magazíny',__baseurl__+'/magaziny/',3,icon)   
     addDir('Náboženské',__baseurl__+'/nabozenske/',3,icon)   
     addDir('Všechny',__baseurl__+'/zanr-vse/',3,icon)   
+
+
 
 def LIVE_OBSAH(url):
     url = url+str(time.time())
@@ -92,6 +99,9 @@ def LIVE_OBSAH(url):
             #print name, thumb, url
             addDir(name,url,14,thumb)
             i=i+1
+
+
+
 def ABC(url):
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
@@ -102,6 +112,8 @@ def ABC(url):
     for link,name in match:
         #print name,__baseurl__+link
         addDir(name,'http://www.ceskatelevize.cz'+link,3,icon)
+
+
 
 def CAT_LIST(url):
     doc = read_page(url)
@@ -115,6 +127,7 @@ def CAT_LIST(url):
         link = str(item_a['href'])
         #print name,__baseurl__+link
         addDir(name,'http://www.ceskatelevize.cz'+link,6,icon)
+
 
 
 # =============================================
@@ -132,7 +145,8 @@ def DAY_LIST(url):
                 addDir(name,url,9,icons)
 
 
-def DAY_PROGRAM_LIST( url, chnum ):
+
+def DAY_PROGRAM_LIST( url, chnum):
     doc = read_page(url)
     data = doc.find('div', {"id": "programme"}) 
     items = data.findAll('ul')
@@ -148,7 +162,7 @@ def DAY_PROGRAM_LIST( url, chnum ):
                 if name == None:
                         name = it3.find('strong', {'class':'title'})
                 name = name.getText(" ").encode('utf-8')
-                
+
                 cas  = it3.find("span", {"class": "time"})
                 cas  = cas.getText(" ").encode('utf-8')
                 #icons = it3.find("img")
@@ -162,12 +176,13 @@ def DAY_PROGRAM_LIST( url, chnum ):
                         name = name +' - pořad se ještě nevysílá.'
                         thumb = 'http://img7.ceskatelevize.cz/ivysilani/gfx/empty/noLive.png'
                         addDir(cas+' '+name, url, 10, thumb)
-                
+
 
 
 def date2label(date):
      dayname = DAY_NAME[date.weekday()]
      return "%s %s.%s.%s" % (dayname, date.day, date.month, date.year)
+
 
 
 def DATE_LIST(url):
@@ -185,6 +200,7 @@ def DATE_LIST(url):
            addDir(date2label(pdate).encode('utf-8'),__baseurl__ + '/' + pdate.strftime(DATE_FORMAT),8,icon)
 
 
+
 # vypis nejsledovanejsi za tyden
 def MOSTVISITED(url):
     doc = read_page(url)
@@ -198,6 +214,8 @@ def MOSTVISITED(url):
             #print "LINK: "+link
             addDir(name,'http://www.ceskatelevize.cz'+link,10,icons)
 
+
+
 # vypis nejnovejsich poradu
 def NEWEST(url):
     doc = read_page(url)
@@ -210,9 +228,9 @@ def NEWEST(url):
             #print "LINK: "+link
             addDir(name,'http://www.ceskatelevize.cz'+link,10,icons)
 
+
+
 # =============================================
-
-
 def VIDEO_LIST(url,nm,video_listing=-1):
     link = url
     if not re.search('dalsi-casti',url):
@@ -252,7 +270,7 @@ def VIDEO_LIST(url,nm,video_listing=-1):
                 addDir('Licence pro internetové vysílání již skončila.',link,60,thumb)
             else:
                 addDir(nm,url,10,'')
-               
+
     try:
         pager = doc.find('div', 'pagingContent')
         act_page_a = pager.find('td','center')
@@ -279,6 +297,8 @@ def VIDEO_LIST(url,nm,video_listing=-1):
                 addDir(next_label,'http://www.ceskatelevize.cz'+next_url,6,nexticon)
     except:
         print 'STRANKOVANI NENALEZENO!'
+
+
 
 def BONUSY(link):
     doc = read_page(link)
@@ -310,6 +330,8 @@ def BONUSY(link):
         addDir(next_label,'http://www.ceskatelevize.cz'+next_url,7,nexticon)
     except:
         print 'STRANKOVANI NENALEZENO!'
+
+
 
 def HLEDAT(url):
     #https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=20&hl=cs&prettyPrint=false&source=gcsc&gss=.cz&sig=981037b0e11ff304c7b2bfd67d56a506&cx=000499866030418304096:fg4vt0wcjv0&q=vypravej+tv&googlehost=www.google.com&callback=google.search.Search.apiary6680&nocache=1360011801862
@@ -357,97 +379,169 @@ def HLEDAT(url):
         next_url = 'https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=20&start='+ str(next_page) + '&hl=cs&prettyPrint=false&source=gcsc&gss=.cz&sig=981037b0e11ff304c7b2bfd67d56a506&cx=000499866030418304096:fg4vt0wcjv0&q=' + match2[0] + '&googlehost=www.google.com&callback=google.search.Search.apiary6680&nocache=1360011801862'
         next_title = '>> Další strana (výsledky '+ str(match_page[0]) + ' - ' + str(next_page) + ')'
         addDir(next_title,next_url,13,nexticon)
-        
+
+
+
+def OPEN_URL(live):    
+    validUrl = False
+    url = ''
+    while not validUrl:
+        kb = xbmc.Keyboard(url, 'Zadejte URL pořadu z Web prohlížeče', False)
+        kb.doModal()
+        if not kb.isConfirmed():
+            return
+
+        url = kb.getText()
+        print '====> Open URL live=' + str(live) + ', url=' + url
+        if url.startswith('http://www.ceskatelevize.cz'):
+            try:
+                VIDEOLINK(url, '', live)
+                validUrl = True
+            except:
+                xbmcgui.Dialog().ok('Chyba při otevírání URL')
+        else:
+            xbmcgui.Dialog().ok('Chybná URL', 'URL musí začínat http://www.ceskatelevize.cz', 'Zadano:', url)        
+
+
+
 def VIDEOLINK(url,name, live):
     if name.find('pořad se ještě nevysílá')!=-1:
             return
 
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    httpdata = response.read()
-    response.close()
-    #match = re.compile('callSOAP\((.+?)\)').findall(httpdata)
-    match = re.compile('callSOAP\((.*)\)').findall(httpdata)
-    print "VIDEO-LINK URL: "+url
-    print match[0]
-    info = re.compile('<meta name="description" content="(.+?)"').findall(httpdata)
-    if len(info)<1:
-            info = re.compile('<title>(.+?)&mdash').findall(httpdata)
-    #RE_PLAYLIST_URL = re.compile('callSOAP\((.+?)\)')
-    # Converting text to dictionary
-    query = json.loads(match[0])
-    # Converting dictionary to text arrays    options[UserIP]=xxxx&options[playlistItems][0][..]....
-    strquery = http_build_query(query)
-    # Ask a link page XML
-    #
-    req = urllib2.Request('http://img.ceskatelevize.cz/libraries/player/ajaxPlaylist.js?ver=1.2')
-    req.add_header('User-Agent', _UserAgent_)
-    response = urllib2.urlopen(req)
-    data = response.read()
-    response.close()
-    playlist_url= re.search("url\: \"([^\"]+)",data, re.DOTALL)
-    playlist_url = 'http://www.ceskatelevize.cz' + playlist_url.group(1)
+    ### Log URL
+    url_path = url.replace('http://www.ceskatelevize.cz', '')
+    print '====> URL: '+ url
+    print '====> URL Path: '+ url_path
+
+    ### HTTP Connection to www.ceskatekevize.cz
+    conn = httplib.HTTPConnection('www.ceskatelevize.cz')
+
+    ### Load main page
     headers = {
-               "Referer":url,
-               "Origin":"http://www.ceskatelevize.cz",
-               "Accept":"*/*",
-               "X-Requested-With":"XMLHttpRequest",
-               "x-addr":"127.0.0.1",
-               "User-Agent": _UserAgent_,
-               "Content-Type":"application/x-www-form-urlencoded"
+       'User-Agent': _UserAgent_
     }
-    request = urllib2.Request(playlist_url, headers=headers)
-    request.add_data(strquery)
-    con = urllib2.urlopen(request)
-    #
-    # Read lisk XML page
-    data = con.read()
-    data = data.replace('?hashedId=', '?id=').replace('<URI>','').replace('</URI>','')
-    con.close()
-    data = urllib.unquote(data).decode('utf8')
-    doc = read_page(data)
-    items = doc.find('body')
-    for item in items.findAll('switchitem'):
-        match = re.compile('<switchitem id="(.+?)" base="(.+?)"').findall(str(item))
-        for id,base in match:
-            base = re.sub('&amp;','&',base)
-            if re.search('AD', id, re.U): 
+    conn.request('GET', url_path, '', headers)
+    res = conn.getresponse()
+    httpdata = res.read();
+
+    #print '====> MAIN PAGE START: ' + url
+    #print httpdata
+    #print '====> MAIN PAGE END: ' + url
+
+    ### Extract Info from main page
+    info = re.compile('<title>(.+?)</title>').findall(httpdata)
+    info = info[0]
+    if (name == ''):
+        name = info
+    print '====> Title: ' + info
+
+    ### Extract Playlist ID form main page
+    playlist_id = re.search("getPlaylistUrl.*\"id\"\:\"([^\"]+)", httpdata, re.DOTALL)
+    playlist_id = playlist_id.group(1)
+
+    print '====> Playlist ID: ' + playlist_id
+
+    ### Get Playlist link
+    headers = {
+       'Connection': 'keep-alive',
+       'x-addr': '127.0.0.1',
+       'User-Agent': _UserAgent_,
+       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+       'Accept': '*/*',
+       'X-Requested-With': 'XMLHttpRequest',
+       'Referer': url,
+       'Origin': 'http://www.ceskatelevize.cz'
+    }
+    data = {
+       'playlist[0][type]' : 'episode',
+       'playlist[0][id]' : playlist_id,
+       'requestUrl' : url_path,
+       'requestSource' : 'iVysilani'
+    }
+    conn.request('POST', '/ivysilani/ajax/get-playlist-url', urllib.urlencode(data), headers )
+    res = conn.getresponse()
+    httpdata = res.read()
+    conn.close()
+
+    print '====> PLAYLIST LINK PAGE START'
+    print httpdata
+    print '====> PLAYLIST LINK PAGE END'
+
+    ### Extract Playlist URL
+    jsondata = json.loads(httpdata);
+    playlist_url = urllib.unquote(jsondata['url'])
+
+    print '====> Playlist ULR: ' + playlist_url
+    urlobj = urlparse(playlist_url)
+    urlhost = urlobj.netloc
+    urlpath = urlunparse(('', '', urlobj.path, urlobj.params, urlobj.query, urlobj.fragment))
+
+    print '===> Playlist Host= ' + urlhost + ' Path=' + urlpath
+
+    ### Get Playlists
+    conn = httplib.HTTPConnection(urlhost)
+    headers = {
+       'Connection': 'keep-alive',
+       #'Referer': 'http://imgct.ceskatelevize.cz/global/swf/player/player.swf?version=1.45.15a',
+       'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.107 Safari/537.36',
+       'Accept-Encoding': 'identity',
+       #'Accept-Encoding': 'gzip,deflate,sdch',
+       'Accept-Language': 'en-US,en;q=0.8,cs;q=0.6'
+    }
+    conn.request('GET', urlpath, '', headers)
+    res = conn.getresponse()
+    httpdata = res.read()
+    conn.close()
+
+    print '====> PLAYLIST PAGE START'
+    print httpdata
+    print '====> PLAYLIST PAGE END'
+
+    ### Read links XML page
+    httpdata = urllib2.unquote(httpdata)
+    root = ET.fromstring(httpdata)
+    for item in root.findall('.//body/switchItem'):
+        if ('id' in item.attrib) and ('base' in item.attrib):
+            id = item.attrib['id']
+            base = item.attrib['base']
+
+            if re.search('AD', id, re.U):
                 continue
-            video = re.compile('<video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled=".+?"').findall(str(item))
-            for cesta,kvalita in video:
-		'''
-                rtmp_url = base+'/'+cesta
-                if __settings__.getSetting('fix-rtmp-url') == "true":
-                    idx = rtmp_url.find('://') + 1
-                    rtmp_url = rtmp_url[:idx] + rtmp_url[idx:].replace(':', '/')
-                '''
-                if live:
-			rtmp_url = base+'/'+cesta
-	        else:
-	                app = base[base.find('/', base.find('://') + 3) + 1:]
-	                rtmp_url = base + ' app=' + app + ' playpath=' + cesta    
-		print rtmp_url 		
-                addLink(kvalita+' '+name,rtmp_url,icon,info[0])
-                #print rtmp_url,kvalita+info[0] #vystupni parametry RTMP
+
+            base = re.sub('&amp;','&', base)
+
+            print '==> SwitchItem id=' + id + ', base=' + base
+
+            for videoNode in item.findall('./video'):
+                if ('src' in videoNode.attrib) and ('label' in videoNode.attrib):
+                        src = videoNode.attrib['src']
+                        label = videoNode.attrib['label']
+                        if live:
+                            rtmp_url = base+'/'+src
+                        else:
+                            app = base[base.find('/', base.find('://') + 3) + 1:]
+                            rtmp_url = base + ' app=' + app + ' playpath=' + src
+                        print 'RTMP label=' + label + ', name=' + name + ', url=' + rtmp_url
+                        addLink(label+' '+name, rtmp_url, icon, info)
+
 
 
 def http_build_query(params, topkey = ''):
     from urllib import quote_plus
-    
+
     if len(params) == 0:
        return ""
- 
+
     result = ""
 
     # is a dictionary?
     if type (params) is dict:
        for key in params.keys():
            newkey = quote_plus (key)
-           
+
            if topkey != '':
               newkey = topkey + quote_plus('[' + key + ']')
-           
+
            if type(params[key]) is dict:
               result += http_build_query (params[key], newkey)
 
@@ -476,8 +570,9 @@ def http_build_query(params, topkey = ''):
     # remove the last '&'
     if (result) and (topkey == '') and (result[-1] == '&'):
        result = result[:-1]       
-  
+
     return result
+
 
 
 def get_params():
@@ -496,7 +591,7 @@ def get_params():
                         splitparams=pairsofparams[i].split('=')
                         if (len(splitparams))==2:
                                 param[splitparams[0]]=splitparams[1]
-                                
+
         return param
 
 
@@ -509,6 +604,8 @@ def addLink(name,url,iconimage,popis):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
+
+
 def addDir(name,url,mode,iconimage):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
@@ -517,7 +614,9 @@ def addDir(name,url,mode,iconimage):
         liz.setProperty( "Fanart_Image", fanart )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
-    
+
+
+
 params=get_params()
 url=None
 name=None
@@ -542,10 +641,10 @@ print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 
-if mode==None or url==None or len(url)<1:
+if mode is None or url is None or len(url)<1:
         print ""
         OBSAH()
-       
+
 elif mode==1:
         print ""
         KATEGORIE()
@@ -597,9 +696,18 @@ elif mode==12:
 elif mode==13:
         print ""+url
         HLEDAT(url)
-        
+
 elif mode == 14:
-	print "" + url
-	VIDEOLINK(url, name, True)
+    print "" + url
+    VIDEOLINK(url, name, True)
+
+elif mode == 15:
+    print "" + url
+    OPEN_URL(False)
+
+elif mode == 16:
+    print "" + url
+    OPEN_URL(True)
+
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

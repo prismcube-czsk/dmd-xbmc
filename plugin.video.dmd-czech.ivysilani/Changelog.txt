@@ -1,3 +1,8 @@
+2014-02-16:
+ * oprava otevirani videa po zmene stranky CT
+ * Pridano 'Otevřít Web URL' a 'Otevřít Web Live URL' do hlavniho menu
+   - umoznuje vyhledat porad na v prohlizeci na tabletu/telefonu
+   - nasledne zkopirovat URL to XBMC napr pomoci Yatse
 2014-02-05:
  * oprava obsluzneho linku
 2013-12-28:
