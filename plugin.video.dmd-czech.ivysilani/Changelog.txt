@@ -1,3 +1,5 @@
+2014-02-25
+ * Oprava živého přehrávání. Rozlišování typu (channel / episode) v HTTP requestu (Způsobovalo problémy u ČT24)
 2014-02-16:
  * oprava otevirani videa po zmene stranky CT
  * Pridano 'Otevřít Web URL' a 'Otevřít Web Live URL' do hlavniho menu
