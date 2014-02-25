@@ -43,7 +43,7 @@ def OBSAH():
     addDir('Vyhledat...(beta)','0',13,search)
     addDir('Otevřít Web URL', '0', 15, icon)
     addDir('Otevřít Web Live URL', '0', 16, icon)    
-    addDir('Živé iVysílání',__baseurl__+'/ajax/liveBox.php?time=',4,icon)
+    addDir('Živé iVysílání',__baseurl__+'/ajax/live-box?dc=',4,icon)
 
 
 
@@ -436,8 +436,9 @@ def VIDEOLINK(url,name, live):
     print '====> Title: ' + info
 
     ### Extract Playlist ID form main page
-    playlist_id = re.search("getPlaylistUrl.*\"id\"\:\"([^\"]+)", httpdata, re.DOTALL)
-    playlist_id = playlist_id.group(1)
+    playlist = re.search('getPlaylistUrl.+?type":"(.+?)","id":"(.+?)"', httpdata, re.DOTALL)
+    playlist_type = playlist.group(1)
+    playlist_id = playlist.group(2)
 
     print '====> Playlist ID: ' + playlist_id
 
@@ -453,7 +454,7 @@ def VIDEOLINK(url,name, live):
        'Origin': 'http://www.ceskatelevize.cz'
     }
     data = {
-       'playlist[0][type]' : 'episode',
+       'playlist[0][type]' : playlist_type,
        'playlist[0][id]' : playlist_id,
        'requestUrl' : url_path,
        'requestSource' : 'iVysilani'
@@ -463,9 +464,9 @@ def VIDEOLINK(url,name, live):
     httpdata = res.read()
     conn.close()
 
-    print '====> PLAYLIST LINK PAGE START'
-    print httpdata
-    print '====> PLAYLIST LINK PAGE END'
+    #print '====> PLAYLIST LINK PAGE START'
+    #print httpdata
+    #print '====> PLAYLIST LINK PAGE END'
 
     ### Extract Playlist URL
     jsondata = json.loads(httpdata);
@@ -493,9 +494,9 @@ def VIDEOLINK(url,name, live):
     httpdata = res.read()
     conn.close()
 
-    print '====> PLAYLIST PAGE START'
-    print httpdata
-    print '====> PLAYLIST PAGE END'
+    #print '====> PLAYLIST PAGE START'
+    #print httpdata
+    #print '====> PLAYLIST PAGE END'
 
     ### Read links XML page
     httpdata = urllib2.unquote(httpdata)
