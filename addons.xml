@@ -237,11 +237,11 @@
 </addon>
 <addon id="plugin.video.dmd-czech.prima"
        name="Prima PLAY"
-       version="3.3.2"
+       version="3.3.3"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.0"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 
     library="default.py">
@@ -349,7 +349,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="1.5.2">
+        version="1.5.3">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
