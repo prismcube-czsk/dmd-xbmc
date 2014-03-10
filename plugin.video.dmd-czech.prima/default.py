@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
+
+###############################################################################
+REMOTE_DBG = False
+# append pydev remote debugger
+# http://wiki.xbmc.org/index.php?title=HOW-TO:Debug_Python_Scripts_with_Eclipse 
+if REMOTE_DBG:
+    try:
+        import pysrc.pydevd as pydevd
+        pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
+    except ImportError:
+        sys.stderr.write("Error: You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
+        sys.exit(1)
+###############################################################################
+        
 import urllib2,urllib,re,os,random,decimal
-from parseutils import *
+from parseutilsbs4 import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://play.iprima.cz'
 __cdn_url__  = 'http://cdn-dispatcher.stream.cz/?id='
@@ -86,10 +100,10 @@ word_dic = {
 }
 
 def OBSAH():
-    addDir('Prima Family','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=family',4,family,0,'family')
-    addDir('Prima Cool','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=cool',4,cool,0,'cool')
-    addDir('Prima Love','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=love',4,love,0,'love')
-    addDir('Prima zoom','http://play.iprima.cz/primaplay/az_ajax?letter=vse&genres=vse&channel=zoom',4,zoom,0,'zoom')
+    addDir('Prima Family','http://play.iprima.cz/az/vse/vse/prima',4,family,0,'family')
+    addDir('Prima Cool','http://play.iprima.cz/az/vse/vse/cool',4,cool,0,'cool')    
+    addDir('Prima Love','http://play.iprima.cz/az/vse/vse/love',4,love,0,'love')
+    addDir('Prima Zoom','http://play.iprima.cz/az/vse/vse/zoom',4,zoom,0,'zoom')
     url = 'http://play.iprima.cz/az'
     request = urllib2.Request(url)
     con = urllib2.urlopen(request)
@@ -117,7 +131,7 @@ def KATEGORIE(url,page,kanal):
     match = re.compile('<div class=".+?" data-video-id=".+?" data-thumbs-count=".+?"><div class="field-image-primary"><a href="(.+?)"><span class="container-image-195x110"><img src="(.+?)" alt="(.+?)"').findall(data)
     for url,thumb,name in match:
         #print url,thumb,name
-        addDir(replace_words(name, word_dic),__baseurl__+url,10,__baseurl__+thumb,0,name)           
+        addDir(replace_words(name, word_dic),__baseurl__+url,10,thumb,0,name)           
     try:
         match = re.compile('<li class="pager-next last"><a href="(.+?)"').findall(data)
         #print match[0] 
@@ -142,7 +156,7 @@ def INDEX(url,page,kanal):
             item2 = item.find('div','field-video-count')
             pocet = item2.getText(" ").encode('utf-8')
             #print name+pocet, thumb, url
-            addDir(replace_words(name+' '+pocet, word_dic),__baseurl__+url,5,'http://play.iprima.cz'+thumb,0,name)           
+            addDir(replace_words(name+' '+pocet, word_dic),__baseurl__+url,5,thumb,0,name)           
     try:
         dalsi = doc.find('li', 'pager-next last')
         next_url = str(dalsi.a['href'])
