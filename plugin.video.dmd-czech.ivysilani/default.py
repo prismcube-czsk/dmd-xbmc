@@ -245,7 +245,7 @@ def NEWEST(url):
 
 
 # =============================================
-def VIDEO_LIST(url,p_name,video_listing=-1,act_page=1):
+def VIDEO_LIST(url,p_name,video_listing=-1):
     link = url
     if not re.search('dalsi-casti',url):
         link = url + 'dalsi-casti/'
@@ -293,16 +293,13 @@ def VIDEO_LIST(url,p_name,video_listing=-1,act_page=1):
     try:
         pager = doc.find('div', { "id" : "paginationControl" })
         act_page_span = pager.find('span', 'selected')
-        act_page = int(act_page_span.contents[0])
+        #act_page = int(act_page_span.contents[0])
         next_page_a = act_page_span.findNext('a')
-        next_url = next_page_a['href']
-        
+        next_url = next_page_a['href']        
         next_label = 'Další strana'
         #print next_label,next_url
-        video_listing_setting = int(__settings__.getSetting('video-listing')) 
-        #if video_listing_setting > 0:
-        #        next_label = 'Další strana'
-                
+        
+        video_listing_setting = int(__settings__.getSetting('video-listing'))                 
         # 0 - default
         # 1 - 2x
         # 2 - 4x
@@ -315,7 +312,7 @@ def VIDEO_LIST(url,p_name,video_listing=-1,act_page=1):
                 else:
                         video_listing = video_listing_setting # 2x
         if (video_listing_setting > 0 and video_listing > 0):
-                VIDEO_LIST('http://ceskatelevize.cz'+next_url,p_name,video_listing-1,act_page+1)
+                VIDEO_LIST('http://ceskatelevize.cz'+next_url,p_name,video_listing-1)
         else:
                 addDir(next_label,'http://www.ceskatelevize.cz'+next_url,6,nexticon)
     except:
