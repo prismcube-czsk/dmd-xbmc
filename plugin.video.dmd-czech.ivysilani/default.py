@@ -1,4 +1,18 @@
 # -*- coding: utf-8 -*-
+
+###############################################################################
+REMOTE_DBG = False
+# append pydev remote debugger
+# http://wiki.xbmc.org/index.php?title=HOW-TO:Debug_Python_Scripts_with_Eclipse 
+if REMOTE_DBG:
+    try:
+        import pysrc.pydevd as pydevd
+        pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
+    except ImportError:
+        sys.stderr.write("Error: You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
+        sys.exit(1)
+###############################################################################
+
 import urllib2,urllib,re,os,time,datetime
 from parseutils import *
 from urlparse import urlparse,urlunparse
@@ -108,9 +122,10 @@ def ABC(url):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('<a class="pageLoadAjaxAlphabet" href="(.+?)" rel="letter=.+?"><span>(.+?)</span></a>').findall(httpdata)
+    match = re.compile('<a class="pageLoadAjaxAlphabet" href="(.+?)" rel="letter=(.+?)">').findall(httpdata)
     for link,name in match:
         #print name,__baseurl__+link
+        name = name.upper()
         addDir(name,'http://www.ceskatelevize.cz'+link,3,icon)
 
 
