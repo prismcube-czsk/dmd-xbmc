@@ -266,38 +266,44 @@ def VIDEO_LIST(url,p_name,video_listing=-1):
     if re.search('Ouha',str(items),re.U):
         bonuslink = url+'bonusy/'
         BONUSY(bonuslink)
-    try:
-            for item in items.findAll('li', 'itemBlock clearfix'):
-                name_a = item.find('h3')
-                name_a = name_a.find('a')
-                name = name_a.getText(" ").encode('utf-8')
-                if len(name) < 2:
-                        name = 'Titul bez názvu'
-                popis_a = item.find('p') 
-                popis = popis_a.getText(" ").encode('utf-8')
-                popis = re.sub('mdash;','-',popis)
-                if re.match('Reklama:',popis, re.U):
-                        popis = 'Titul bez názvu'
-                url = 'http://www.ceskatelevize.cz'+str(item.a['href'])
-                url = re.sub('porady','ivysilani',url)
+        
+    for item in items.findAll('li', 'itemBlock clearfix'):
+        try:
+            name_a = item.find('h3')
+            name_a = name_a.find('a')
+            name = name_a.getText(" ").encode('utf-8')
+            if len(name) < 2:
+                name = 'Titul bez názvu'
+            popis_a = item.find('p') 
+            popis = popis_a.getText(" ").encode('utf-8')
+            popis = re.sub('mdash;','-',popis)
+            if re.match('Reklama:',popis, re.U):
+                popis = 'Titul bez názvu'
+            url = 'http://www.ceskatelevize.cz'+str(item.a['href'])
+            url = re.sub('porady','ivysilani',url)
+            thumb = str(item.img['src'])
+            #print name+' '+popis, thumb, url
+            addDir(name+' '+popis,url,10,thumb)
+        except:            
+            try:
+                name = item.find('h3').renderContents().strip()
                 thumb = str(item.img['src'])
-                #print name+' '+popis, thumb, url
-                addDir(name+' '+popis,url,10,thumb)
-    except:
-            #print 'Licence pro internetové vysílání již skončila.', thumb, 'http://www.ceskatelevize.cz'
-            if items != None:
-                addDir('Licence pro internetové vysílání již skončila.',link,60,icon)
-            else:
-                addDir(p_name,url,10,'')
+                name = 'NEDOSTUPNÉ: ' + name
+                addDir(name,url,60,thumb)
+            except:
+                print 'chyba pri parsovani polozky'
 
     try:
         pager = doc.find('div', { "id" : "paginationControl" })
         act_page_span = pager.find('span', 'selected')
         #act_page = int(act_page_span.contents[0])
+        is_last_page = pager.find('span', 'last disabled')      
+        if (is_last_page != None):
+            return
         next_page_a = act_page_span.findNext('a')
         next_url = next_page_a['href']        
         next_label = 'Další strana'
-        #print next_label,next_url
+        #print next_url
         
         video_listing_setting = int(__settings__.getSetting('video-listing'))                 
         # 0 - default
@@ -320,7 +326,7 @@ def VIDEO_LIST(url,p_name,video_listing=-1):
 
 
 
-def BONUSY(link):
+def BONUSY(link,video_listing=-1):
     doc = read_page(link)
     items = doc.find('ul','clearfix content')
     if re.search('Ouha',str(items),re.U):
@@ -337,19 +343,31 @@ def BONUSY(link):
         thumb = str(item.img['src'])
         #print name, thumb, url
         addDir(name,url,10,thumb)
+
     try:
-        pager = doc.find('div', 'pagingContent')
-        act_page_a = pager.find('td','center')
-        act_page = act_page_a.getText(" ").encode('utf-8')
-        act_page = act_page.split()
-        next_page_i = pager.find('td','right')
-        #print act_page,next_page_i
-        next_url = next_page_i.a['href']
-        next_label = 'Další strana (Zobrazena videa '+act_page[0]+'-'+act_page[2]+' ze '+act_page[4]+')'
-        #print next_label,next_url
-        addDir(next_label,'http://www.ceskatelevize.cz'+next_url,7,nexticon)
+        pager = doc.find('div', { "id" : "paginationControl" })
+        act_page_span = pager.find('span', 'selected')
+        is_last_page = pager.find('span', 'last disabled')      
+        if (is_last_page != None):
+            return
+        next_page_a = act_page_span.findNext('a')
+        next_url = next_page_a['href']        
+        next_label = 'Další strana'
+        
+        video_listing_setting = int(__settings__.getSetting('video-listing'))                 
+        if (video_listing_setting > 0 and video_listing == -1):
+                if video_listing_setting == 3:
+                        video_listing = 9
+                elif video_listing_setting == 2:
+                        video_listing = 3
+                else:
+                        video_listing = video_listing_setting # 2x
+        if (video_listing_setting > 0 and video_listing > 0):
+                BONUSY('http://ceskatelevize.cz'+next_url,video_listing-1)
+        else:
+                addDir(next_label,'http://www.ceskatelevize.cz'+next_url,7,nexticon)
     except:
-        print 'STRANKOVANI NENALEZENO!'
+        print 'STRANKOVANI BONUSU NENALEZENO!'
 
 
 
