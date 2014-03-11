@@ -1,4 +1,7 @@
 2014-03-11
+ * oprava stránkování
+ * oprava nezobrazování položek, které nemají další díly
+2014-03-11
  * Oprava zobrazení položek podle abecedy.
 2014-02-25
  * Oprava živého přehrávání. Rozlišování typu (channel / episode) v HTTP requestu (Způsobovalo problémy u ČT24)

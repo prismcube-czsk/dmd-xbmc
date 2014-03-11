@@ -122,10 +122,9 @@ def ABC(url):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('<a class="pageLoadAjaxAlphabet" href="(.+?)" rel="letter=(.+?)">').findall(httpdata)
+    match = re.compile('<a class="pageLoadAjaxAlphabet" href="(.+?)" rel="letter=.+?">\s*<span>(.+?)</span>\s*</a>').findall(httpdata)
     for link,name in match:
         #print name,__baseurl__+link
-        name = name.upper()
         addDir(name,'http://www.ceskatelevize.cz'+link,3,icon)
 
 
@@ -246,11 +245,16 @@ def NEWEST(url):
 
 
 # =============================================
-def VIDEO_LIST(url,nm,video_listing=-1):
+def VIDEO_LIST(url,p_name,video_listing=-1,act_page=1):
     link = url
     if not re.search('dalsi-casti',url):
         link = url + 'dalsi-casti/'
-    doc = read_page(link)
+        
+    try:
+        doc = read_page(link)
+    except: # pokud nejsou dalsi dily
+        doc = read_page(url)
+        
     if re.search('Bonusy',str(doc),re.U) and video_listing == -1:
         bonuslink = url+'bonusy/'
         if re.search('dalsi-casti',url):
@@ -282,32 +286,36 @@ def VIDEO_LIST(url,nm,video_listing=-1):
     except:
             #print 'Licence pro internetové vysílání již skončila.', thumb, 'http://www.ceskatelevize.cz'
             if items != None:
-                addDir('Licence pro internetové vysílání již skončila.',link,60,thumb)
+                addDir('Licence pro internetové vysílání již skončila.',link,60,icon)
             else:
-                addDir(nm,url,10,'')
+                addDir(p_name,url,10,'')
 
     try:
-        pager = doc.find('div', 'pagingContent')
-        act_page_a = pager.find('td','center')
-        act_page = act_page_a.getText(" ").encode('utf-8')
-        act_page = act_page.split()
-        next_page_i = pager.find('td','right')
-        #print act_page,next_page_i
-        next_url = next_page_i.a['href']
-        next_label = 'Další strana (Zobrazena videa '+act_page[0]+'-'+act_page[2]+' ze '+act_page[4]+')'
+        pager = doc.find('div', { "id" : "paginationControl" })
+        act_page_span = pager.find('span', 'selected')
+        act_page = int(act_page_span.contents[0])
+        next_page_a = act_page_span.findNext('a')
+        next_url = next_page_a['href']
+        
+        next_label = 'Další strana'
         #print next_label,next_url
         video_listing_setting = int(__settings__.getSetting('video-listing')) 
-        if video_listing_setting > 0:
-                next_label = 'Další strana (celkem '+act_page[4]+' videí)'
+        #if video_listing_setting > 0:
+        #        next_label = 'Další strana'
+                
+        # 0 - default
+        # 1 - 2x
+        # 2 - 4x
+        # 3 - unlimited -> 10x
         if (video_listing_setting > 0 and video_listing == -1):
                 if video_listing_setting == 3:
-                        video_listing = 99999
+                        video_listing = 9
                 elif video_listing_setting == 2:
                         video_listing = 3
                 else:
-                        video_listing = video_listing_setting
+                        video_listing = video_listing_setting # 2x
         if (video_listing_setting > 0 and video_listing > 0):
-                VIDEO_LIST('http://ceskatelevize.cz'+next_url,video_listing-1)
+                VIDEO_LIST('http://ceskatelevize.cz'+next_url,p_name,video_listing-1,act_page+1)
         else:
                 addDir(next_label,'http://www.ceskatelevize.cz'+next_url,6,nexticon)
     except:
