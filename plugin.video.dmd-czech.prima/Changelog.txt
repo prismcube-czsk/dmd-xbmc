@@ -1,3 +1,5 @@
+2014-03-21
+ * pridani kategorii/zanru
 2014-03-10
  * oprava Prima PLAY
 2013-11-24:
