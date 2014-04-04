@@ -1,3 +1,5 @@
+2013-04-04:
+  * oprava nezobrazovani epizod poradu
 2013-12-27:
   * pridana sekce Pohadky
 2013-11-24:

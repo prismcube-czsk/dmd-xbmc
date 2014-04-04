@@ -112,7 +112,7 @@ def LIST(url):
     response = urllib2.urlopen(req)
     httpdata = response.read()
     response.close()
-    match = re.compile('<a href=".+?" data-action=".+?" data-episode-id="(.+?)">(.+?)</a>', re.S).findall(httpdata)
+    match = re.compile('<a href=".+?" data-action=".+?" data-params=\'\{".+?"\}\' data-episode-id="(.+?)">(.+?)</a>', re.S).findall(httpdata)
     for id, name in match:
             link = __baseurl__+'get_video_source?context=catalogue&id='+id+'&0.'+str(gen_random_decimal(9999999999999999))
             addDir(name,link,10,icon)
