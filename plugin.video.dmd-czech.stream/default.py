@@ -77,7 +77,8 @@ word_dic = {
 
 
 def OBSAH():
-    addDir('Všechny Pořady','listShows',1,icon)
+    addDir('Nejnovější videa','http://www.stream.cz//ajax/get_timeline?context=latest&0.'+str(gen_random_decimal(9999999999999999)),3,icon)
+    addDir('Všechny pořady','listShows',1,icon)
     addDir('Komerční pořady','listCommercials',1,icon)
     addDir('Pohádky','dreams',1,icon)
     
@@ -117,6 +118,20 @@ def LIST(url):
             link = __baseurl__+'get_video_source?context=catalogue&id='+id+'&0.'+str(gen_random_decimal(9999999999999999))
             addDir(name,link,10,icon)
 
+def LATESTLIST(url):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', _UserAgent_)
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    response.close()
+    match = re.compile('<li data-episode-id="(.+?)" data-timestamp="(.+?)"> <a href=".+?<img src="//(.+?)/80/80" alt=""/> </span> <span class="texts"> <span class="h2">(.+?)</span> <span class="description">(.+?)</span>', re.S).findall(httpdata)
+    for id, timestamp, img, episodename, serialname in match:
+            link = __baseurl__+'get_video_source?context=catalogue&id='+id+'&0.'+str(gen_random_decimal(9999999999999999))
+            image = 'http://'+img+'/320'
+            print image
+            name = serialname+' | '+episodename
+            addDir(name,link,10,image)
+
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)
@@ -134,7 +149,7 @@ def VIDEOLINK(url,name):
             addLink(quality+' '+name,stream_url,'',name)
         except:
             continue
-            
+
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -209,7 +224,9 @@ elif mode==2:
         print ""+url
         LIST(url)
 
-
+elif mode==3:
+        print ""+url
+        LATESTLIST(url)
 
 elif mode==10:
         print ""+url
