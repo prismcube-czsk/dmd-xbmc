@@ -30,8 +30,8 @@ if secret_token == '':
     __settings__.openSettings() 
 def OBSAH():
     addDir('Seriály','http://voyo.nova.cz/serialy/',5,icon,1)
-    addDir('Pořady','http://voyo.nova.cz/porady/',5,icon,1)
-    addDir('Zprávy','http://voyo.nova.cz/zpravy/',5,icon,1)
+    #addDir('Pořady','http://voyo.nova.cz/porady/',5,icon,1)
+    #addDir('Zprávy','http://voyo.nova.cz/zpravy/',5,icon,1)
     
 def CATEGORIES_OLD(url,page):
     doc = read_page(url)
@@ -80,7 +80,8 @@ def CATEGORIES(url,page):
     request.add_header("Content-Type","application/x-www-form-urlencoded")
     con = urllib2.urlopen(request)
     data = con.read()
-    con.close()    
+    con.close()
+    data = data.replace("<!doctype html>", "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
     doc = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
     items = doc.find('div', 'productsList series')
     for item in items.findAll('li', 'item_ul'):
@@ -144,7 +145,8 @@ def INDEX(url,page):
     request.add_header("Content-Type","application/x-www-form-urlencoded")
     con = urllib2.urlopen(request)
     data = con.read()
-    con.close()    
+    con.close()
+    data = data.replace("<!doctype html>", "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
     doc = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
     items = doc.find('div', 'productsList series')
     for item in items.findAll('li', 'item_ul'):
