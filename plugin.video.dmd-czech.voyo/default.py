@@ -30,8 +30,10 @@ if secret_token == '':
     __settings__.openSettings() 
 def OBSAH():
     addDir('Seriály','http://voyo.nova.cz/serialy/',5,icon,1)
-    #addDir('Pořady','http://voyo.nova.cz/porady/',5,icon,1)
-    #addDir('Zprávy','http://voyo.nova.cz/zpravy/',5,icon,1)
+    addDir('Pořady','http://voyo.nova.cz/porady/',5,icon,1)
+    addDir('Zprávy','http://voyo.nova.cz/zpravy/',5,icon,1)
+    addDir('Sport','http://voyo.nova.cz/sport/',5,icon,1)
+
     
 def CATEGORIES_OLD(url,page):
     doc = read_page(url)
@@ -70,7 +72,7 @@ def CATEGORIES(url,page):
         
     except:
         print "id nenalezeno"
-    strquery = '?count=35&sectionId='+section_id[0]+'&showAs=2013&urlPath='+urlPath+'&boxId='+pageid[0]+'&resultType=categories&disablePagination=n&page='+str(page)+'&sortOrder=DESC&letterFilter=false'    
+    strquery = '?count=35&sectionId='+section_id[0]+'&showAs=2013&urlPath='+urlPath+'&resultType=categories&disablePagination=n&page='+str(page)+'&sortOrder=DESC&letterFilter=false'
     request = urllib2.Request(url, strquery)
     request.add_header("Referer",url)
     request.add_header("Host","voyo.nova.cz")
@@ -84,16 +86,25 @@ def CATEGORIES(url,page):
     data = data.replace("<!doctype html>", "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
     doc = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
     items = doc.find('div', 'productsList series')
-    for item in items.findAll('li', 'item_ul'):
-        if re.search('Přehrát', str(item), re.U):
+    if items:
+        for item in items.findAll('li', 'item_ul'):
+            if re.search('Přehrát', str(item), re.U):
                 continue
-        item2 = item.find('div', 'poster')    
-        url2 = item2.a['href'].encode('utf-8')
-        title = item2.a['title'].encode('utf-8')
-        thumb = item2.a.img['src'].encode('utf-8')
-        #print title,url,thumb
-        i = i + 1
-        addDir(title,__baseurl__+url2,2,thumb,1)
+            item2 = item.find('div', 'poster')
+            url2 = item2.a['href'].encode('utf-8')
+            title = item2.a['title'].encode('utf-8')
+            thumb = item2.a.img['src'].encode('utf-8')
+            #print title,url,thumb
+            i = i + 1
+            addDir(title,__baseurl__+url2,2,thumb,1)
+    else:
+        items = doc.find('div', 'productList')
+        for item in items.findAll('li', 'item'):
+            url2 = item.a['href']
+            thumb = item.a.img['src']
+            title = item.findAll('a')[1].span.span.string.encode('utf-8')
+            i = i + 1
+            addDir(title,__baseurl__+url2,2,thumb,1)
     if i == 35:
         page = page + 1
         addDir('>> Další strana >>',url,5,nexticon,page)
@@ -135,7 +146,7 @@ def INDEX(url,page):
         pageid = re.compile("'boxId': '(.+?)'", re.S).findall(str(match[0]))        
     except:
         print "strankovani nenalezeno"       
-    strquery = '?count=35&sectionId='+section_id[0]+'&productId='+product_id[0]+'&showAs=2013&urlPath='+urlPath+'&boxId='+pageid[0]+'&disablePagination=n&page='+str(page)+'&sortOrder=DESC&letterFilter=false'    
+    strquery = '?count=35&sectionId='+section_id[0]+'&showAs=2013&urlPath='+urlPath+'&disablePagination=n&page='+str(page)+'&sortOrder=DESC&letterFilter=false'
     request = urllib2.Request(url, strquery)
     request.add_header("Referer",url)
     request.add_header("Host","voyo.nova.cz")
@@ -149,7 +160,9 @@ def INDEX(url,page):
     data = data.replace("<!doctype html>", "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
     doc = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
     items = doc.find('div', 'productsList series')
-    for item in items.findAll('li', 'item_ul'):
+    itemsPorady = doc.find('div', 'series')
+    if items:
+        for item in items.findAll('li', 'item_ul'):
             item = item.find('div', 'poster')
             url2 = item.a['href'].encode('utf-8')
             title = item.a['title'].encode('utf-8')
@@ -165,8 +178,27 @@ def INDEX(url,page):
             if i == 35:
                 page = page + 1
                 addDir('>> Další strana >>',url,5,nexticon,page)
+    elif itemsPorady:
+        thumb = itemsPorady.div.img['src']
+        seasonClearfix = itemsPorady.find('div', 'seasons clearfix')
+        episodeCrearfix = doc.find('div', 'episode-list clearfix')
+        if seasonClearfix:
+            for item in seasonClearfix.ul.findAll('li', 'season p1 noSubparents'):
+                title = item.div.a.text.encode('utf-8')
+                series = item.find('div', 'season-subgroups')
+                for episode in series.ul.findAll('li'):
+                    title = episode.a.text.encode('utf-8')
+                    url2 = episode.a['href']
+                    addDir(title,__baseurl__+url2,3,thumb,1)
+        elif episodeCrearfix:
+            thumb = episodeCrearfix.div.p.img['src']
+            for item in reversed(episodeCrearfix.table.tbody.findAll('td')):
+                if item.a:
+                    url2 = item.a['href']
+                    title = item.a['title'].encode('utf-8')
+                    addDir(title,__baseurl__+url2,3,thumb,1)
 
-        
+
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
     req.add_header('User-Agent', _UserAgent_)

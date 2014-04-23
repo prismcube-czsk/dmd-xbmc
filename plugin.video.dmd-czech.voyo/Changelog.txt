@@ -1,4 +1,6 @@
 2014-04-18:
+ * oprava poradu a zprav, pridani sportu
+2014-04-18:
  * oprava vadneho doctype, kvuli kteremu nechtel BeautifulSoup parsovat stranky
 2013-03-26:
  * oprava zpráv a listingu nìkterých poøadù,zobrazení pøehrávané kvality
