@@ -1,3 +1,5 @@
+2014-05-27
+ * oprava dle data
 2014-03-11
  * oprava stránkování
  * oprava nezobrazování položek, které nemají další díly
