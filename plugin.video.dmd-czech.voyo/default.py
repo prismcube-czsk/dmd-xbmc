@@ -181,8 +181,22 @@ def INDEX(url,page):
     elif itemsPorady:
         thumb = itemsPorady.div.img['src']
         seasonClearfix = itemsPorady.find('div', 'seasons clearfix')
-        episodeCrearfix = doc.find('div', 'episode-list clearfix')
-        if seasonClearfix:
+        episodeCrearfix = doc.findAll("div", {"class": "episode-list clearfix"})
+ 
+ #funguje pro ulici
+ #       episodeCrearfix = doc.find(id="episodelist-season-40508")
+        if episodeCrearfix:
+            print 'episodeCrearfix'
+            print episodeCrearfix
+            for episode in episodeCrearfix:
+                thumb = episode.div.p.img['src']
+                for item in reversed(episode.table.tbody.findAll('td')):
+                    if item.a:
+                        url2 = item.a['href']
+                        title = item.a['title'].encode('utf-8')
+                        addDir(title,__baseurl__+url2,3,thumb,1)
+        elif seasonClearfix:
+            print 'seasonClearfix'
             for item in seasonClearfix.ul.findAll('li', 'season p1 noSubparents'):
                 title = item.div.a.text.encode('utf-8')
                 series = item.find('div', 'season-subgroups')
@@ -190,14 +204,6 @@ def INDEX(url,page):
                     title = episode.a.text.encode('utf-8')
                     url2 = episode.a['href']
                     addDir(title,__baseurl__+url2,3,thumb,1)
-        elif episodeCrearfix:
-            thumb = episodeCrearfix.div.p.img['src']
-            for item in reversed(episodeCrearfix.table.tbody.findAll('td')):
-                if item.a:
-                    url2 = item.a['href']
-                    title = item.a['title'].encode('utf-8')
-                    addDir(title,__baseurl__+url2,3,thumb,1)
-
 
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)

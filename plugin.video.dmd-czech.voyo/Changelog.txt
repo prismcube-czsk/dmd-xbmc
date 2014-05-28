@@ -1,3 +1,5 @@
+2014-05-28:
+ * hotfix pro serialy
 2014-04-18:
  * oprava poradu a zprav, pridani sportu
 2014-04-18:
