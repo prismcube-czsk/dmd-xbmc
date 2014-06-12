@@ -237,7 +237,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.prima"
        name="Prima PLAY"
-       version="3.3.4"
+       version="4.0.0"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -262,7 +262,7 @@
 
 <addon id="plugin.video.dmd-czech.stream"
        name="Stream TV Archiv"
-       version="1.1.5"
+       version="1.1.6"
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

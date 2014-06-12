@@ -140,6 +140,9 @@ def VIDEOLINK(url,name):
     response.close()
     httpdata = replace_words(httpdata, word_dic)
     data = json.loads(httpdata)
+    print data
+	
+    
     name = data[u'episode_name']
     thumb = data[u'episode_image_original_url']    
     for item in data[u'instances']:
@@ -149,6 +152,15 @@ def VIDEOLINK(url,name):
             addLink(quality+' '+name,stream_url,'',name)
         except:
             continue
+    try:
+         show = data[u'show_url']
+         print 'show'
+         print show
+         link = __baseurl__+'get_series?show_url='+show+'&0.'+str(gen_random_decimal(9999999999999999))
+         addDir('[B][COLOR blue]Další nabídka: [/COLOR][/B]','','','')
+         addDir('Další epizody pořadu',link,2,'')
+    except:
+         print 'Další epizody nenalezeny'
 
 def get_params():
         param=[]
