@@ -101,6 +101,20 @@ def KATEGORIE():
 def LIVE_OBSAH(url):
     url = url+str(time.time())
     program=[r'ČT1 - ', r'ČT2 - ', r'ČT24 - ', r'ČT4 - ', r'ČTD/ART - ']
+    programid=[r'CT1', r'CT2', r'CT24', r'CT4', r'CT5']
+    i = 0
+    # Zjisteni hashe
+    hashurl = 'http://www.ceskatelevize.cz/ct24/zive-vysilani/'
+    req = urllib2.Request(hashurl)
+    req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    link=response.read()
+    response.close()
+    match = re.compile('hash=(.+?)&').findall(httpdata)
+    hash = match[0]
+    print 'HASH :'+hash
+	
     i = 0
     request = urllib2.Request(url)
     request.add_header("Referer",__baseurl__)    
@@ -125,7 +139,7 @@ def LIVE_OBSAH(url):
             try:
                 name_a = item.find('a') 
                 name = program[i]+name_a.getText(" ").encode('utf-8')+'- Přehráno: '+prehrano.encode('utf-8')
-                url = 'http://www.ceskatelevize.cz'+str(item.a['href'])
+                url = 'http://www.ceskatelevize.cz/ivysilani/embed/iFramePlayerCT24.php?hash='+hash+'&videoID='+programid[i]
                 thumb = str(item.img['src'])
             except:
                 name = program[i]+'Právě teď běží pořad, který nemůžeme vysílat po internetu.'
@@ -134,6 +148,49 @@ def LIVE_OBSAH(url):
             addDir(name,url,14,thumb)
             i=i+1
 
+
+def VIDEOLINK_LIVE(url,name, live):
+    if name.find('pořad se ještě nevysílá')!=-1:
+            return
+    print 'VIDEOLINK_LIVE URL: '+url
+    # Zjisteni hashe
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    link=response.read()
+    response.close()
+    match = re.compile('pc : \'(.+?)\'').findall(httpdata)
+    #print match[0]
+    playlistinfo = match[0]
+    # Ziskani adresy playlistu
+    req = urllib2.Request(playlistinfo)
+    req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    httpdata = response.read()
+    link=response.read()
+    response.close()
+    httpdata = httpdata.replace("\r","")
+    httpdata = httpdata.replace("\n","")
+    httpdata = httpdata.replace("\t","")
+    try:
+       baseurl = re.compile('ItemAlt id="Item" base="(.+?)smil.+?f4m(.+?)"').findall(httpdata)
+       polozky = re.compile('switchItemAlt(.+?)switchItemAlt').findall(httpdata)
+       item = re.compile('video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled="(.+?)"').findall(polozky[0])
+       for adresa,nazev,povoleno in item:
+            if povoleno == 'true':
+                playlisturl = str(baseurl[0][0])+str(adresa)+'/playlist.m3u8'+str(baseurl[0][1])
+                print 'PLAYLIST URL: '+playlisturl
+                addLink(nazev+' - '+name, playlisturl, icon, 'info')
+    except:
+       baseurl = re.compile('Item id="Item" base="(.+?)smil.+?f4m(.+?)"').findall(httpdata)
+       polozky = re.compile('switchItem (.+?)switchItem').findall(httpdata)
+       item = re.compile('video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled="(.+?)"').findall(polozky[0])
+       for adresa,nazev,povoleno in item:
+            if povoleno == 'true':
+                playlisturl = str(baseurl[0][0])+str(adresa)+'/playlist.m3u8'+str(baseurl[0][1])
+                print 'PLAYLIST URL: '+playlisturl
+                addLink(nazev+' - '+name, playlisturl, icon, 'info')
 
 
 def ABC(url):
@@ -739,7 +796,7 @@ elif mode==13:
 
 elif mode == 14:
     print "" + url
-    VIDEOLINK(url, name, True)
+    VIDEOLINK_LIVE(url, name, True)
 
 elif mode == 15:
     print "" + url
