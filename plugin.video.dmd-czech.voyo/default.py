@@ -5,6 +5,9 @@ try:
     import hashlib
 except ImportError:
     import md5
+import simplejson as json
+import httplib
+import requests
 
 from parseutils import *
 import xbmcplugin,xbmcgui,xbmcaddon
@@ -25,6 +28,7 @@ secret_token =__settings__.getSetting('secret_token')
 rtmp_token = 'h0M*t:pa$kA'
 nova_service_url = 'http://master-ng.nacevi.cz/cdn.server/PlayerLink.ashx'
 nova_app_id = 'nova-vod'
+season_id = ''
 if secret_token == '':
     xbmc.executebuiltin("XBMC.Notification('Doplněk DMD VOYO','Zadejte tajné heslo!',30000,"+icon+")")
     __settings__.openSettings() 
@@ -131,6 +135,10 @@ def INDEX_OLD(url,page):
         print 'strankovani nenalezeno'
 
 def INDEX(url,page):
+    season = None
+    if '#' in url:
+        season = url.split('#')[1]
+        url = url.split('#')[0]
     vyjimka = ['/porady/30359-farma-epizody','/porady/30359-farma-nejnovejsi-dily','/porady/29930-farma-komentare-vypadnutych','/porady/29745-farma-cele-dily', '/porady/29564-farma-necenzurovane-dily', '/porady/29563-farma-deniky-soutezicich']
     i = 0
     req = urllib2.Request(url)
@@ -157,53 +165,72 @@ def INDEX(url,page):
     con = urllib2.urlopen(request)
     data = con.read()
     con.close()
+
     data = data.replace("<!doctype html>", "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
     doc = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-    items = doc.find('div', 'productsList series')
-    itemsPorady = doc.find('div', 'series')
-    if items:
-        for item in items.findAll('li', 'item_ul'):
-            item = item.find('div', 'poster')
-            url2 = item.a['href'].encode('utf-8')
-            title = item.a['title'].encode('utf-8')
-            thumb = item.a.img['src'].encode('utf-8')
-            if url2 in vyjimka:
-                print title,url2,thumb
-                addDir(title,__baseurl__+url2,2,thumb,1)
-                continue
-            print title,url,thumb
-            addDir(title,__baseurl__+url2,3,thumb,1)
-            i = i+1
-            print title
-            if i == 35:
-                page = page + 1
-                addDir('>> Další strana >>',url,5,nexticon,page)
-    elif itemsPorady:
-        thumb = itemsPorady.div.img['src']
-        seasonClearfix = itemsPorady.find('div', 'seasons clearfix')
-        episodeCrearfix = doc.findAll("div", {"class": "episode-list clearfix"})
- 
- #funguje pro ulici
- #       episodeCrearfix = doc.find(id="episodelist-season-40508")
-        if episodeCrearfix:
-            print 'episodeCrearfix'
-            print episodeCrearfix
-            for episode in episodeCrearfix:
-                thumb = episode.div.p.img['src']
-                for item in reversed(episode.table.tbody.findAll('td')):
-                    if item.a:
-                        url2 = item.a['href']
-                        title = item.a['title'].encode('utf-8')
-                        addDir(title,__baseurl__+url2,3,thumb,1)
-        elif seasonClearfix:
-            print 'seasonClearfix'
-            for item in seasonClearfix.ul.findAll('li', 'season p1 noSubparents'):
-                title = item.div.a.text.encode('utf-8')
-                series = item.find('div', 'season-subgroups')
-                for episode in series.ul.findAll('li'):
-                    title = episode.a.text.encode('utf-8')
-                    url2 = episode.a['href']
+    if season:
+        itemsEpisodeList = doc.findAll("div", {"id": "episodelist-"+season})
+    else:
+        itemsEpisodeList = doc.findAll("div", {"id": "episodelist-season-"})
+    itemsMagicWrap = doc.find("div", {"id": "magic-wrap"})
+
+    if itemsEpisodeList:
+        for episode in itemsEpisodeList:
+            thumb = episode.div.p.img['src']
+            for item in reversed(episode.table.tbody.findAll('td')):
+                if item.a:
+                    url2 = item.a['href']
+                    title = item.a['title'].encode('utf-8')
                     addDir(title,__baseurl__+url2,3,thumb,1)
+    elif itemsMagicWrap:
+        seasonSub = itemsMagicWrap.findAll('div', 'season-subgroups')
+        for i in seasonSub:
+            seasonSubP2 = i.find('li', 'season-sub p2')
+            # Zjistim jestli je tam ta posrana lista s nabidkou
+            if seasonSubP2:
+                if '/' == seasonSubP2.a['href'][0]:
+                    # Na strance jsou rovnou dily
+                    myMode = 2
+                else:
+                    # Je tam lista
+                    myMode = 6
+                break
+        for label in reversed(itemsMagicWrap.findAll('div', 'label')):
+            # Vytahnu si nazvy adresaru a vytvorim je
+            myUrl = url + label.a['href']
+            season_id = label.a['href'].split('-')[1]
+            addDir(label.a.text.encode('utf-8'),myUrl,myMode,'',1)
+
+
+def JSON(url,page):
+    if '#' in url:
+        season = url.split('#')[1].split('-')[1]
+    URL='voyo.nova.cz'
+    
+    conn = httplib.HTTPConnection(URL)
+    header = {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        #'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Content-Length': '515',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Host': 'voyo.nova.cz',
+        'Pragma': 'no-cache',
+        'Referer': 'http://voyo.nova.cz/serialy/3919-ulice',
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0',
+        'X-Requested-With': 'XMLHttpRequest',
+    }
+    body="allowTrialBadge=N&boxId=400051393d131248&count=50&chargeTypeFilter=yes&descrLength=100&itemDescriptionLength=100&disableFilter=n&disablePagination=n&enableRecommendations=n&expireBadge=N&genreId=&itemTpl=item_ul_v3.tpl&ignoreTreeOrderForEpisodes=n&letter=&letterFilter=n&page=1&productId=&parentId="+season+"&resultType=series&saveCount=0&setNewBadge=N&seriesFilter=n&sectionId=69003&showAs=2013&showInTv=n&sort=id&sortOrder=ASC&subsiteId=503&templateType=json&templateFileItem=item_ul_v3.tpl&toggleSortOrder=0&version=3"
+    
+    conn.request('POST', '/bin/eshop/product/filter.php', body=body, headers=header)
+    res = conn.getresponse()
+    httpdata = res.read()
+    conn.close()
+    jsondata = json.loads(httpdata)
+    for d in reversed(jsondata["result"]):
+        addDir(d["title"].encode('utf-8'),"http://" + URL + d["href"],2,'',1)
 
 def VIDEOLINK(url,name):
     req = urllib2.Request(url)
@@ -307,7 +334,6 @@ def get_params():
         return param
 
 
-
 def addLink(name,url,iconimage,popis):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
@@ -377,12 +403,16 @@ elif mode==4:
         print ""+str(page)                
         INDEX_OLD(url,page)        
 
-        
 elif mode==3:
         print ""+url
         try:
             VIDEOLINK(url, name)
         except IndexError:
             INDEX(url, name)
- 
+
+elif mode==6:
+    print ""+url
+    print ""+str(page)
+    JSON(url,page)
+
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
