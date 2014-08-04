@@ -1,3 +1,7 @@
+2014-08-04
+ * Oprava nahodile nefungujícího živého přehrávání
+ * Zkušebně přidány online přenosy do žívého vysílání (jednou za čas vyjimečně jede něco na ivysilani)
+ * Přepínání mezi ČT ART a ČT:Déčko
 2014-06-17
  * Oprava živého vysílání
  2014-05-27

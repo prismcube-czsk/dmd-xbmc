@@ -100,8 +100,19 @@ def KATEGORIE():
 
 def LIVE_OBSAH(url):
     url = url+str(time.time())
-    program=[r'ČT1 - ', r'ČT2 - ', r'ČT24 - ', r'ČT4 - ', r'ČTD/ART - ']
-    programid=[r'CT1', r'CT2', r'CT24', r'CT4', r'CT5']
+    #seznam kanalu a jejich id pro zive vysilani
+    cas = datetime.datetime.now()
+    cas = cas.hour
+	#Decko a Art se stridaji, proto menim podle casu
+    if(cas < 20 and cas >= 6):
+        programctda = r'ČT:Déčko - '
+        programctdaid = r'CT5'
+    else:
+        programctda = r'ČT ART - '
+        programctdaid = r'CT6'
+    program=[r'ČT1 - ', r'ČT2 - ', r'ČT24 - ', r'ČT4 - ', programctda, r' ', r' ', r' ', r' ', r' ', r' ', r' ', r' ']
+    programid=[r'CT1', r'CT2', r'CT24', r'CT4', programctdaid, r'CT26', r'CT27', r'CT28', r'CT29', r'CT30', r'CT31', r'CT32', r'CT33']
+
     i = 0
     # Zjisteni hashe
     hashurl = 'http://www.ceskatelevize.cz/ct24/zive-vysilani/'
