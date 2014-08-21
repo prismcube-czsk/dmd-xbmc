@@ -1,3 +1,5 @@
+2014-08-21
+ * Oprava zobrazování dílù
 2014-06-11
  * Pridana moznost zobrazit nejnovejsi videa jednotlivých TV stanic
  * Pri spousteni dilu je mozne zobrazit si ostatni epizody
