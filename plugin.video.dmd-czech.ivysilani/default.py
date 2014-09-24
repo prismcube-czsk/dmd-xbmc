@@ -174,6 +174,7 @@ def VIDEOLINK_LIVE(url,name, live):
     match = re.compile('pc : \'(.+?)\'').findall(httpdata)
     #print match[0]
     playlistinfo = match[0]
+    print "Playlistinfo: %s"%playlistinfo
     # Ziskani adresy playlistu
     req = urllib2.Request(playlistinfo)
     req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -185,16 +186,7 @@ def VIDEOLINK_LIVE(url,name, live):
     httpdata = httpdata.replace("\n","")
     httpdata = httpdata.replace("\t","")
     try:
-       baseurl = re.compile('ItemAlt id="Item" base="(.+?)smil.+?f4m(.+?)"').findall(httpdata)
-       polozky = re.compile('switchItemAlt(.+?)switchItemAlt').findall(httpdata)
-       item = re.compile('video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled="(.+?)"').findall(polozky[0])
-       for adresa,nazev,povoleno in item:
-            if povoleno == 'true':
-                playlisturl = str(baseurl[0][0])+str(adresa)+'/playlist.m3u8'+str(baseurl[0][1])
-                print 'PLAYLIST URL: '+playlisturl
-                addLink(nazev+' - '+name, playlisturl, icon, 'info')
-    except:
-       baseurl = re.compile('Item id="Item" base="(.+?)smil.+?f4m(.+?)"').findall(httpdata)
+       baseurl = re.compile('Item id="item" base="(.+?)smil.+?f4m(.+?)"').findall(httpdata)
        polozky = re.compile('switchItem (.+?)switchItem').findall(httpdata)
        item = re.compile('video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled="(.+?)"').findall(polozky[0])
        for adresa,nazev,povoleno in item:
@@ -202,7 +194,15 @@ def VIDEOLINK_LIVE(url,name, live):
                 playlisturl = str(baseurl[0][0])+str(adresa)+'/playlist.m3u8'+str(baseurl[0][1])
                 print 'PLAYLIST URL: '+playlisturl
                 addLink(nazev+' - '+name, playlisturl, icon, 'info')
-
+    except:
+       baseurl = re.compile('ItemAlt id="item" base="(.+?)smil.+?f4m(.+?)"').findall(httpdata)
+       polozky = re.compile('switchItemAlt(.+?)switchItemAlt').findall(httpdata)
+       item = re.compile('video src="(.+?)" system-bitrate=".+?" label="(.+?)" enabled="(.+?)"').findall(polozky[0])
+       for adresa,nazev,povoleno in item:
+            if povoleno == 'true':
+                playlisturl = str(baseurl[0][0])+str(adresa)+'/playlist.m3u8'+str(baseurl[0][1])
+                print 'PLAYLIST URL: '+playlisturl
+                addLink(nazev+' - '+name, playlisturl, icon, 'info')
 
 def ABC(url):
     req = urllib2.Request(url)
