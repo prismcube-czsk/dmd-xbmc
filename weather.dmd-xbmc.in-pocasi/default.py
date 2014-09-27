@@ -72,7 +72,7 @@ def parse_data():
     for count in range (0, 5):
         match = re.compile('%s: (.+?)\|(.+?)\|(.+?)\n'%count).findall(httpdata)
         for max, min, odpo in match:
-            set_property('Day%s.Title'      %count  , czdays[den])#DAYS[item.attributes['day'].value]
+            set_property('Day%s.Title'      %count  , czdays[den+count])#DAYS[item.attributes['day'].value]
             set_property('Day%s.HighTemp'   %count  , max)
             set_property('Day%s.LowTemp'    %count  , min)
             set_property('Day%s.OutlookIcon'%count  , xbmc.translatePath(os.path.join(__cwd__, 'resources/lib/icons', '%s.png'%odpo)))   
