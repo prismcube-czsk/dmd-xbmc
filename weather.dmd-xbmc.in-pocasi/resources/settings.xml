@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="Hlavní nastavení">
+		<setting id="mesto" label="Město" type="action" action="RunScript($ID,mesto)" enable="true" default=""/>
+		<setting id="mestoid" type="text" visible="false" default=""/>
+		</category>
+</settings>

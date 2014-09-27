@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mesta>
+  <region id="1" name="Jihočeský">
+    <mesto id="bechyne" name="Bechyně"/>
+    <mesto id="blatna" name="Blatná"/>
+    <mesto id="borovany" name="Borovany"/>
+    <mesto id="ceske_budejovice" name="České Budějovice"/>
+    <mesto id="ceske_velenice" name="České Velenice"/>
+    <mesto id="cesky_krumlov" name="Český Krumlov"/>
+    <mesto id="dacice" name="Dačice"/>
+    <mesto id="hluboka_nad_vltavou" name="Hluboká nad Vltavou"/>
+    <mesto id="jindrichuv_hradec" name="Jindřichův Hradec"/>
+    <mesto id="kaplice" name="Kaplice"/>
+    <mesto id="lipno_nad_vltavou" name="Lipno nad Vltavou"/>
+    <mesto id="lisov" name="Lišov"/>
+    <mesto id="milevsko" name="Milevsko"/>
+    <mesto id="mlada_vozice" name="Mladá Vožice"/>
+    <mesto id="netolice" name="Netolice"/>
+    <mesto id="nova_bystrice" name="Nová Bystřice"/>
+    <mesto id="nova_vcelnice" name="Nová Včelnice"/>
+    <mesto id="nove_hrady" name="Nové Hrady"/>
+    <mesto id="pisek" name="Písek"/>
+    <mesto id="plana_nad_luznici" name="Planá nad Lužnicí"/>
+    <mesto id="prachatice" name="Prachatice"/>
+    <mesto id="protivin" name="Protivín"/>
+    <mesto id="sezimovo_usti" name="Sezimovo Ústí"/>
+    <mesto id="slavonice" name="Slavonice"/>
+    <mesto id="sobeslav" name="Soběslav"/>
+    <mesto id="strakonice" name="Strakonice"/>
+    <mesto id="suchdol_nad_luznici" name="Suchdol nad Lužnicí"/>
+    <mesto id="tabor" name="Tábor"/>
+    <mesto id="trhove_sviny" name="Trhové Sviny"/>
+    <mesto id="trebon" name="Třeboň"/>
+    <mesto id="tyn_nad_vltavou" name="Týn nad Vltavou"/>
+    <mesto id="velesin" name="Velešín"/>
+    <mesto id="veseli_nad_luznici" name="Veselí nad Lužnicí"/>
+    <mesto id="vetrni" name="Větřní"/>
+    <mesto id="vimperk" name="Vimperk"/>
+    <mesto id="vodnany" name="Vodňany"/>
+    <mesto id="volary" name="Volary"/>
+    <mesto id="volyne" name="Volyně"/>
+    <mesto id="vyssi_brod" name="Vyšší Brod"/>
+    <mesto id="zliv" name="Zliv"/>
+  </region>
+  <region id="2" name="Jihomoravský">
+    <mesto id="adamov" name="Adamov"/>
+    <mesto id="blansko" name="Blansko"/>
+    <mesto id="boskovice" name="Boskovice"/>
+    <mesto id="brno" name="Brno"/>
+    <mesto id="breclav" name="Břeclav"/>
+    <mesto id="bucovice" name="Bučovice"/>
+    <mesto id="cejkovice" name="Čejkovice"/>
+    <mesto id="dolni_bojanovice" name="Dolní Bojanovice"/>
+    <mesto id="dubnany" name="Dubňany"/>
+    <mesto id="hodonin" name="Hodonín"/>
+    <mesto id="hrusovany_nad_jevisovkou" name="Hrušovany nad Jevišovkou"/>
+    <mesto id="hrusovany_u_brna" name="Hrušovany u Brna"/>
+    <mesto id="hustopece" name="Hustopeče"/>
+    <mesto id="ivancice" name="Ivančice"/>
+    <mesto id="kurim" name="Kuřim"/>
+    <mesto id="kyjov" name="Kyjov"/>
+    <mesto id="lanzhot" name="Lanžhot"/>
+    <mesto id="letovice" name="Letovice"/>
+    <mesto id="mikulov" name="Mikulov"/>
+    <mesto id="modrice" name="Modřice"/>
+    <mesto id="mokra-horakov" name="Mokrá-Horákov"/>
+    <mesto id="moravska_nova_ves" name="Moravská Nová Ves"/>
+    <mesto id="moravsky_krumlov" name="Moravský Krumlov"/>
+    <mesto id="mutenice" name="Mutěnice"/>
+    <mesto id="oslavany" name="Oslavany"/>
+    <mesto id="podivin" name="Podivín"/>
+    <mesto id="rajec-jestrebi" name="Rájec-Jestřebí"/>
+    <mesto id="rajhrad" name="Rajhrad"/>
+    <mesto id="ratiskovice" name="Ratíškovice"/>
+    <mesto id="rohatec" name="Rohatec"/>
+    <mesto id="slavkov_u_brna" name="Slavkov u Brna"/>
+    <mesto id="straznice" name="Strážnice"/>
+    <mesto id="svatoborice-mistrin" name="Svatobořice-Mistřín"/>
+    <mesto id="slapanice" name="Šlapanice"/>
+    <mesto id="tisnov" name="Tišnov"/>
+    <mesto id="ujezd_u_brna" name="Újezd u Brna"/>
+    <mesto id="valtice" name="Valtice"/>
+    <mesto id="velka_nad_velickou" name="Velká nad Veličkou"/>
+    <mesto id="velke_bilovice" name="Velké Bílovice"/>
+    <mesto id="velke_opatovice" name="Velké Opatovice"/>
+    <mesto id="velke_pavlovice" name="Velké Pavlovice"/>
+    <mesto id="veseli_nad_moravou" name="Veselí nad Moravou"/>
+    <mesto id="veverska_bityska" name="Veverská Bítýška"/>
+    <mesto id="vnorovy" name="Vnorovy"/>
+    <mesto id="vracov" name="Vracov"/>
+    <mesto id="vyskov" name="Vyškov"/>
+    <mesto id="zbysov" name="Zbýšov"/>
+    <mesto id="znojmo" name="Znojmo"/>
+    <mesto id="zidlochovice" name="Židlochovice"/>
+  </region>
+  <region id="3" name="Karlovarský">
+    <mesto id="as" name="Aš"/>
+    <mesto id="bozi_dar" name="Boží Dar"/>
+    <mesto id="brezova" name="Březová"/>
+    <mesto id="frantiskovy_lazne" name="Františkovy Lázně"/>
+    <mesto id="habartov" name="Habartov"/>
+    <mesto id="horni_slavkov" name="Horní Slavkov"/>
+    <mesto id="cheb" name="Cheb"/>
+    <mesto id="chodov" name="Chodov"/>
+    <mesto id="jachymov" name="Jáchymov"/>
+    <mesto id="karlovy_vary" name="Karlovy Vary"/>
+    <mesto id="kraslice" name="Kraslice"/>
+    <mesto id="kynsperk_nad_ohri" name="Kynšperk nad Ohří"/>
+    <mesto id="loket" name="Loket"/>
+    <mesto id="luby" name="Luby"/>
+    <mesto id="marianske_lazne" name="Mariánské Lázně"/>
+    <mesto id="nejdek" name="Nejdek"/>
+    <mesto id="nova_role" name="Nová Role"/>
+    <mesto id="nove_sedlo" name="Nové Sedlo"/>
+    <mesto id="ostrov" name="Ostrov"/>
+    <mesto id="rotava" name="Rotava"/>  
+    <mesto id="sokolov" name="Sokolov"/>
+    <mesto id="svatava" name="Svatava"/>
+    <mesto id="tepla" name="Teplá"/>
+    <mesto id="touzim" name="Toužim"/>
+    <mesto id="zlutice" name="Žlutice"/>
+  </region>
+  <region id="4" name="Královéhradecký">
+    <mesto id="broumov" name="Broumov"/>
+    <mesto id="cerveny_kostelec" name="Červený Kostelec"/>
+    <mesto id="ceska_skalice" name="Česká Skalice"/>
+    <mesto id="dobruska" name="Dobruška"/>
+    <mesto id="dvur_kralove_n._l." name="Dvůr Králové n. L."/>
+    <mesto id="hostinne" name="Hostinné"/>
+    <mesto id="hradec_kralove" name="Hradec Králové"/>
+    <mesto id="hronov" name="Hronov"/>
+    <mesto id="chlumec_nad_cidlinou" name="Chlumec nad Cidlinou"/>
+    <mesto id="jaromer" name="Jaroměř"/>
+    <mesto id="jicin" name="Jičín"/>
+    <mesto id="kostelec_nad_orlici" name="Kostelec nad Orlicí"/>
+    <mesto id="lazne_belohrad" name="Lázně Bělohrad"/>
+    <mesto id="mezimesti" name="Meziměstí"/>
+    <mesto id="nachod" name="Náchod"/>
+    <mesto id="nova_paka" name="Nová Paka"/>
+    <mesto id="nove_mesto_nad_metuji" name="Nové Město nad Metují"/>
+    <mesto id="novy_bydzov" name="Nový Bydžov"/>
+    <mesto id="opocno" name="Opočno"/>
+    <mesto id="pec_pod_snezkou" name="Pec pod Sněžkou"/>
+    <mesto id="police_nad_metuji" name="Police nad Metují"/>
+    <mesto id="rtyne_v_podkrkonosi" name="Rtyně v Podkrkonoší"/>
+    <mesto id="rychnov_nad_kneznou" name="Rychnov nad Kněžnou"/>
+    <mesto id="ricky_v_orlickych_horach" name="Říčky v Orlických horách"/>
+    <mesto id="smirice" name="Smiřice"/>
+    <mesto id="spindleruv_mlyn" name="Špindlerův Mlýn"/>
+    <mesto id="trutnov" name="Trutnov"/>
+    <mesto id="trebechovice_pod_orebem" name="Třebechovice pod Orebem"/>
+    <mesto id="tyniste_nad_orlici" name="Týniště nad Orlicí"/>
+    <mesto id="upice" name="Úpice"/>
+    <mesto id="vamberk" name="Vamberk"/>
+    <mesto id="vrchlabi" name="Vrchlabí"/>
+    <mesto id="zacler" name="Žacléř"/>
+  </region>
+  <region id="5" name="Liberecký">
+    <mesto id="bedrichov" name="Bedřichov"/>
+    <mesto id="cvikov" name="Cvikov"/>
+    <mesto id="ceska_lipa" name="Česká Lípa"/>
+    <mesto id="cesky_dub" name="Český Dub"/>
+    <mesto id="desna" name="Desná"/>
+    <mesto id="doksy" name="Doksy"/>
+    <mesto id="frydlant" name="Frýdlant"/>
+    <mesto id="hejnice" name="Hejnice"/>
+    <mesto id="hodkovice_nad_mohelkou" name="Hodkovice nad Mohelkou"/>
+    <mesto id="hradek_nad_nisou" name="Hrádek nad Nisou"/>
+    <mesto id="chrastava" name="Chrastava"/>
+    <mesto id="jablonec_nad_nisou" name="Jablonec nad Nisou"/>
+    <mesto id="jablonne_v_podjestedi" name="Jablonné v Podještědí"/>
+    <mesto id="jilemnice" name="Jilemnice"/>
+    <mesto id="kamenicky_senov" name="Kamenický Šenov"/>
+    <mesto id="liberec" name="Liberec"/>
+    <mesto id="lomnice_nad_popelkou" name="Lomnice nad Popelkou"/>
+    <mesto id="mimon" name="Mimoň"/>
+    <mesto id="nove_mesto_pod_smrkem" name="Nové Město pod Smrkem"/>
+    <mesto id="novy_bor" name="Nový Bor"/>
+    <mesto id="raspenava" name="Raspenava"/>
+    <mesto id="rokytnice_nad_jizerou" name="Rokytnice nad Jizerou"/>
+    <mesto id="semily" name="Semily"/>
+    <mesto id="smrzovka" name="Smržovka"/>
+    <mesto id="straz_pod_ralskem" name="Stráž pod Ralskem"/>
+    <mesto id="tanvald" name="Tanvald"/>
+    <mesto id="turnov" name="Turnov"/>
+    <mesto id="zelezny_brod" name="Železný Brod"/>
+  </region>
+  <region id="6" name="Moravskoslezský">
+    <mesto id="albrechtice" name="Albrechtice"/>
+    <mesto id="baska" name="Baška"/>
+    <mesto id="bilovec" name="Bílovec"/>
+    <mesto id="bohumin" name="Bohumín"/>
+    <mesto id="bruntal" name="Bruntál"/>
+    <mesto id="brusperk" name="Brušperk"/>
+    <mesto id="budisov_nad_budisovkou" name="Budišov nad Budišovkou"/>
+    <mesto id="bystrice" name="Bystřice"/>
+    <mesto id="cesky_tesin" name="Český Těšín"/>
+    <mesto id="dolni_benesov" name="Dolní Benešov"/>
+    <mesto id="dolni_lutyne" name="Dolní Lutyně"/>
+    <mesto id="frenstat_pod_radhostem" name="Frenštát pod Radhoštěm"/>
+    <mesto id="frydek-mistek" name="Frýdek-Místek"/>
+    <mesto id="frydlant_nad_ostravici" name="Frýdlant nad Ostravicí"/>
+    <mesto id="fulnek" name="Fulnek"/>
+    <mesto id="haj_ve_slezsku" name="Háj ve Slezsku"/>
+    <mesto id="havirov" name="Havířov"/>
+    <mesto id="hlucin" name="Hlučín"/>
+    <mesto id="horni_benesov" name="Horní Benešov"/>
+    <mesto id="horni_sucha" name="Horní Suchá"/>
+    <mesto id="hradec_nad_moravici" name="Hradec nad Moravicí"/>
+    <mesto id="jablunkov" name="Jablunkov"/>
+    <mesto id="karvina" name="Karviná"/>
+    <mesto id="koberice" name="Kobeřice"/>
+    <mesto id="koprivnice" name="Kopřivnice"/>
+    <mesto id="kozlovice" name="Kozlovice"/>
+    <mesto id="kravare" name="Kravaře"/>
+    <mesto id="krnov" name="Krnov"/>
+    <mesto id="ludgerovice" name="Ludgeřovice"/>
+    <mesto id="mesto_albrechtice" name="Město Albrechtice"/>
+    <mesto id="mosty_u_jablunkova" name="Mosty u Jablunkova"/>
+    <mesto id="navsi" name="Návsí"/>
+    <mesto id="novy_jicin" name="Nový Jičín"/>
+    <mesto id="odry" name="Odry"/>
+    <mesto id="opava" name="Opava"/>
+    <mesto id="orlova" name="Orlová"/>
+    <mesto id="ostrava" name="Ostrava"/>
+    <mesto id="paskov" name="Paskov"/>
+    <mesto id="petrovice_u_karvine" name="Petrovice u Karviné"/>
+    <mesto id="pribor" name="Příbor"/>
+    <mesto id="rychvald" name="Rychvald"/>
+    <mesto id="rymarov" name="Rýmařov"/>
+    <mesto id="studenka" name="Studénka"/>
+    <mesto id="senov" name="Šenov"/>
+    <mesto id="stepankovice" name="Štěpánkovice"/>
+    <mesto id="stramberk" name="Štramberk"/>
+    <mesto id="terlicko" name="Těrlicko"/>
+    <mesto id="trinec" name="Třinec"/>
+    <mesto id="vendryne" name="Vendryně"/>
+    <mesto id="vitkov" name="Vítkov"/>
+    <mesto id="vrbno_pod_pradedem" name="Vrbno pod Pradědem"/>
+  </region>
+  <region id="7" name="Olomoucký">
+    <mesto id="hanusovice" name="Hanušovice"/>
+    <mesto id="hlubocky" name="Hlubočky"/>
+    <mesto id="hranice" name="Hranice"/>
+    <mesto id="javornik" name="Javorník"/>
+    <mesto id="jesenik" name="Jeseník"/>
+    <mesto id="kojetin" name="Kojetín"/>
+    <mesto id="konice" name="Konice"/>
+    <mesto id="kostelec_na_hane" name="Kostelec na Hané"/>
+    <mesto id="libina" name="Libina"/>
+    <mesto id="lipnik_nad_becvou" name="Lipník nad Bečvou"/>
+    <mesto id="litovel" name="Litovel"/>
+    <mesto id="lostice" name="Loštice"/>
+    <mesto id="lutin" name="Lutín"/>
+    <mesto id="mohelnice" name="Mohelnice"/>
+    <mesto id="moravsky_beroun" name="Moravský Beroun"/>
+    <mesto id="olomouc" name="Olomouc"/>
+    <mesto id="postrelmov" name="Postřelmov"/>
+    <mesto id="prostejov" name="Prostějov"/>
+    <mesto id="prerov" name="Přerov"/>
+    <mesto id="rapotin" name="Rapotín"/>
+    <mesto id="sobotin" name="Sobotín"/>
+    <mesto id="sternberk" name="Šternberk"/>
+    <mesto id="sumperk" name="Šumperk"/>
+    <mesto id="tovacov" name="Tovačov"/>
+    <mesto id="unicov" name="Uničov"/>
+    <mesto id="velka_bystrice" name="Velká Bystřice"/>
+    <mesto id="velke_losiny" name="Velké Losiny"/>
+    <mesto id="zabreh" name="Zábřeh"/>
+    <mesto id="zlate_hory" name="Zlaté Hory"/>
+  </region>
+  <region id="8" name="Pardubický">
+    <mesto id="cervena_voda" name="Červená Voda"/>
+    <mesto id="ceska_trebova" name="Česká Třebová"/>
+    <mesto id="hermanuv_mestec" name="Heřmanův Městec"/>
+    <mesto id="hlinsko" name="Hlinsko"/>
+    <mesto id="holice" name="Holice"/>
+    <mesto id="chocen" name="Choceň"/>
+    <mesto id="chrast" name="Chrast"/>
+    <mesto id="chrudim" name="Chrudim"/>
+    <mesto id="chvaletice" name="Chvaletice"/>
+    <mesto id="jablonne_nad_orlici" name="Jablonné nad Orlicí"/>
+    <mesto id="jevicko" name="Jevíčko"/>
+    <mesto id="kraliky" name="Králíky"/>
+    <mesto id="lanskroun" name="Lanškroun"/>
+    <mesto id="letohrad" name="Letohrad"/>
+    <mesto id="litomysl" name="Litomyšl"/>
+    <mesto id="luze" name="Luže"/>
+    <mesto id="moravska_trebova" name="Moravská Třebová"/>
+    <mesto id="pardubice" name="Pardubice"/>
+    <mesto id="policka" name="Polička"/>
+    <mesto id="prelouc" name="Přelouč"/>
+    <mesto id="skutec" name="Skuteč"/>
+    <mesto id="slatinany" name="Slatiňany"/>
+    <mesto id="svitavy" name="Svitavy"/>
+    <mesto id="tremosnice" name="Třemošnice"/>
+    <mesto id="usti_nad_orlici" name="Ústí nad Orlicí"/>
+    <mesto id="vysoke_myto" name="Vysoké Mýto"/>
+    <mesto id="zamberk" name="Žamberk"/>
+  </region>
+  <region id="9" name="Plzeňský">
+    <mesto id="blovice" name="Blovice"/>
+    <mesto id="bor" name="Bor"/>
+    <mesto id="dobrany" name="Dobřany"/>
+    <mesto id="domazlice" name="Domažlice"/>
+    <mesto id="holysov" name="Holýšov"/>
+    <mesto id="horazdovice" name="Horažďovice"/>
+    <mesto id="horni_briza" name="Horní Bříza"/>
+    <mesto id="horsovsky_tyn" name="Horšovský Týn"/>
+    <mesto id="hradek" name="Hrádek"/>
+    <mesto id="chotesov" name="Chotěšov"/>
+    <mesto id="kaznejov" name="Kaznějov"/>
+    <mesto id="kdyne" name="Kdyně"/>
+    <mesto id="klatovy" name="Klatovy"/>
+    <mesto id="nepomuk" name="Nepomuk"/>
+    <mesto id="nyrsko" name="Nýrsko"/>
+    <mesto id="nyrany" name="Nýřany"/>
+    <mesto id="plana" name="Planá"/>
+    <mesto id="plasy" name="Plasy"/>
+    <mesto id="plzen" name="Plzeň"/>
+    <mesto id="prestice" name="Přeštice"/>
+    <mesto id="rokycany" name="Rokycany"/>
+    <mesto id="spalene_porici" name="Spálené Poříčí"/>
+    <mesto id="stod" name="Stod"/>
+    <mesto id="stribro" name="Stříbro"/>
+    <mesto id="susice" name="Sušice"/>
+    <mesto id="tachov" name="Tachov"/>
+    <mesto id="tremosna" name="Třemošná"/>
+  </region>
+  <region id="10" name="Středočeský">
+    <mesto id="bakov_nad_jizerou" name="Bakov nad Jizerou"/>
+    <mesto id="bela_pod_bezdezem" name="Bělá pod Bezdězem"/>
+    <mesto id="benatky_nad_jizerou" name="Benátky nad Jizerou"/>
+    <mesto id="benesov" name="Benešov"/>
+    <mesto id="beroun" name="Beroun"/>
+    <mesto id="brandys_nad_labem-stara_boleslav" name="Brandýs nad Labem-Stará Boleslav"/>
+    <mesto id="breznice" name="Březnice"/>
+    <mesto id="caslav" name="Čáslav"/>
+    <mesto id="celakovice" name="Čelákovice"/>
+    <mesto id="cernosice" name="Černošice"/>
+    <mesto id="cesky_brod" name="Český Brod"/>
+    <mesto id="dobrovice" name="Dobrovice"/>
+    <mesto id="dobris" name="Dobříš"/>
+    <mesto id="horovice" name="Hořovice"/>
+    <mesto id="hostivice" name="Hostivice"/>
+    <mesto id="kladno" name="Kladno"/>
+    <mesto id="kolin" name="Kolín"/>
+    <mesto id="kosmonosy" name="Kosmonosy"/>
+    <mesto id="kostelec_nad_cernymi_lesy" name="Kostelec nad Černými lesy"/>
+    <mesto id="kostelec_nad_labem" name="Kostelec nad Labem"/>
+    <mesto id="kralupy_nad_vltavou" name="Kralupy nad Vltavou"/>
+    <mesto id="kraluv_dvur" name="Králův Dvůr"/>
+    <mesto id="kutna_hora" name="Kutná Hora"/>
+    <mesto id="libcice_nad_vltavou" name="Libčice nad Vltavou"/>
+    <mesto id="lysa_nad_labem" name="Lysá nad Labem"/>
+    <mesto id="melnik" name="Mělník"/>
+    <mesto id="mestec_kralove" name="Městec Králové"/>
+    <mesto id="mlada_boleslav" name="Mladá Boleslav"/>
+    <mesto id="mnichovo_hradiste" name="Mnichovo Hradiště"/>
+    <mesto id="mnisek_pod_brdy" name="Mníšek pod Brdy"/>
+    <mesto id="neratovice" name="Neratovice"/>
+    <mesto id="nove_straseci" name="Nové Strašecí"/>
+    <mesto id="nymburk" name="Nymburk"/>
+    <mesto id="odolena_voda" name="Odolena Voda"/>
+    <mesto id="pecky" name="Pečky"/>
+    <mesto id="podebrady" name="Poděbrady"/>
+    <mesto id="praha" name="Praha"/>
+    <mesto id="pribram" name="Příbram"/>
+    <mesto id="rakovnik" name="Rakovník"/>
+    <mesto id="rozmital_pod_tremsinem" name="Rožmitál pod Třemšínem"/>
+    <mesto id="revnice" name="Řevnice"/>
+    <mesto id="ricany" name="Říčany"/>
+    <mesto id="sadska" name="Sadská"/>
+    <mesto id="sedlcany" name="Sedlčany"/>
+    <mesto id="sedlec-prcice" name="Sedlec-Prčice"/>
+    <mesto id="slany" name="Slaný"/>
+    <mesto id="stochov" name="Stochov"/>
+    <mesto id="tynec_nad_sazavou" name="Týnec nad Sázavou"/>
+    <mesto id="uhlirske_janovice" name="Uhlířské Janovice"/>
+    <mesto id="unhost" name="Unhošť"/>
+    <mesto id="uvaly" name="Úvaly"/>
+    <mesto id="velvary" name="Velvary"/>
+    <mesto id="vlasim" name="Vlašim"/>
+    <mesto id="votice" name="Votice"/>
+    <mesto id="vrdy" name="Vrdy"/>
+    <mesto id="zdice" name="Zdice"/>
+    <mesto id="zruc_nad_sazavou" name="Zruč nad Sázavou"/>
+  </region>
+  <region id="11" name="Ústecký">
+    <mesto id="benesov_nad_ploucnici" name="Benešov nad Ploučnicí"/>
+    <mesto id="bilina" name="Bílina"/>
+    <mesto id="ceska_kamenice" name="Česká Kamenice"/>
+    <mesto id="decin" name="Děčín"/>
+    <mesto id="dubi" name="Dubí"/>
+    <mesto id="duchcov" name="Duchcov"/>
+    <mesto id="chlumec" name="Chlumec"/>
+    <mesto id="chomutov" name="Chomutov"/>
+    <mesto id="jilove" name="Jílové"/>
+    <mesto id="jirkov" name="Jirkov"/>
+    <mesto id="jirikov" name="Jiříkov"/>
+    <mesto id="kadan" name="Kadaň"/>
+    <mesto id="klasterec_nad_ohri" name="Klášterec nad Ohří"/>
+    <mesto id="krasna_lipa" name="Krásná Lípa"/>
+    <mesto id="krupka" name="Krupka"/>
+    <mesto id="libochovice" name="Libochovice"/>
+    <mesto id="litomerice" name="Litoměřice"/>
+    <mesto id="litvinov" name="Litvínov"/>
+    <mesto id="lom" name="Lom"/>
+    <mesto id="louny" name="Louny"/>
+    <mesto id="lovosice" name="Lovosice"/>
+    <mesto id="mezibori" name="Meziboří"/>
+    <mesto id="mikulasovice" name="Mikulášovice"/>
+    <mesto id="most" name="Most"/>
+    <mesto id="podborany" name="Podbořany"/>
+    <mesto id="postoloprty" name="Postoloprty"/>
+    <mesto id="roudnice_nad_labem" name="Roudnice nad Labem"/>
+    <mesto id="rumburk" name="Rumburk"/>
+    <mesto id="sluknov" name="Šluknov"/>
+    <mesto id="steti" name="Štětí"/>
+    <mesto id="teplice" name="Teplice"/>
+    <mesto id="terezin" name="Terezín"/>
+    <mesto id="usti_nad_labem" name="Ústí nad Labem"/>
+    <mesto id="ustek" name="Úštěk"/>
+    <mesto id="varnsdorf" name="Varnsdorf"/>
+    <mesto id="vejprty" name="Vejprty"/>
+    <mesto id="zatec" name="Žatec"/>
+  </region>
+  <region id="12" name="Vysočina">
+    <mesto id="brtnice" name="Brtnice"/>
+    <mesto id="bystrice_nad_pernstejnem" name="Bystřice nad Pernštejnem"/>
+    <mesto id="golcuv_jenikov" name="Golčův Jeníkov"/>
+    <mesto id="havlickuv_brod" name="Havlíčkův Brod"/>
+    <mesto id="humpolec" name="Humpolec"/>
+    <mesto id="chotebor" name="Chotěboř"/>
+    <mesto id="jaromerice_nad_rokytnou" name="Jaroměřice nad Rokytnou"/>
+    <mesto id="jemnice" name="Jemnice"/>
+    <mesto id="jihlava" name="Jihlava"/>
+    <mesto id="kamenice_nad_lipou" name="Kamenice nad Lipou"/>
+    <mesto id="ledec_nad_sazavou" name="Ledeč nad Sázavou"/>
+    <mesto id="moravske_budejovice" name="Moravské Budějovice"/>
+    <mesto id="namest_nad_oslavou" name="Náměšť nad Oslavou"/>
+    <mesto id="nove_mesto_na_morave" name="Nové Město na Moravě"/>
+    <mesto id="pacov" name="Pacov"/>
+    <mesto id="pelhrimov" name="Pelhřimov"/>
+    <mesto id="pocatky" name="Počátky"/>
+    <mesto id="polna" name="Polná"/>
+    <mesto id="pribyslav" name="Přibyslav"/>
+    <mesto id="svetla_nad_sazavou" name="Světlá nad Sázavou"/>
+    <mesto id="telc" name="Telč"/>
+    <mesto id="trebic" name="Třebíč"/>
+    <mesto id="trest" name="Třešť"/>
+    <mesto id="velka_bites" name="Velká Bíteš"/>
+    <mesto id="velke_mezirici" name="Velké Meziříčí"/>
+    <mesto id="zdar_nad_sazavou" name="Žďár nad Sázavou"/>
+    <mesto id="zdirec_nad_doubravou" name="Ždírec nad Doubravou"/>
+    <mesto id="zirovnice" name="Žirovnice"/>
+  </region>
+  <region id="13" name="Zlínský">
+    <mesto id="brumov-bylnice" name="Brumov-Bylnice"/>
+    <mesto id="bystrice_pod_hostynem" name="Bystřice pod Hostýnem"/>
+    <mesto id="dolni_nemci" name="Dolní Němčí"/>
+    <mesto id="frystak" name="Fryšták"/>
+    <mesto id="holesov" name="Holešov"/>
+    <mesto id="chropyne" name="Chropyně"/>
+    <mesto id="karolinka" name="Karolinka"/>
+    <mesto id="kelc" name="Kelč"/>
+    <mesto id="korycany" name="Koryčany"/>
+    <mesto id="kromeriz" name="Kroměříž"/>
+    <mesto id="kunovice" name="Kunovice"/>
+    <mesto id="luhacovice" name="Luhačovice"/>
+    <mesto id="morkovice-slizany" name="Morkovice-Slížany"/>
+    <mesto id="napajedla" name="Napajedla"/>
+    <mesto id="nivnice" name="Nivnice"/>
+    <mesto id="novy_hrozenkov" name="Nový Hrozenkov"/>
+    <mesto id="ostrozska_nova_ves" name="Ostrožská Nová Ves"/>
+    <mesto id="otrokovice" name="Otrokovice"/>
+    <mesto id="roznov_pod_radhostem" name="Rožnov pod Radhoštěm"/>
+    <mesto id="slavicin" name="Slavičín"/>
+    <mesto id="slusovice" name="Slušovice"/>
+    <mesto id="strani" name="Strání"/>
+    <mesto id="uherske_hradiste" name="Uherské Hradiště"/>
+    <mesto id="uhersky_brod" name="Uherský Brod"/>
+    <mesto id="uhersky_ostroh" name="Uherský Ostroh"/>
+    <mesto id="valasske_klobouky" name="Valašské Klobouky"/>
+    <mesto id="valasske_mezirici" name="Valašské Meziříčí"/>
+    <mesto id="velke_karlovice" name="Velké Karlovice"/>
+    <mesto id="vizovice" name="Vizovice"/>
+    <mesto id="vlcnov" name="Vlčnov"/>
+    <mesto id="vsetin" name="Vsetín"/>
+    <mesto id="zasova" name="Zašová"/>
+    <mesto id="zlin" name="Zlín"/>
+    <mesto id="zubri" name="Zubří"/>
+  </region>
+</mesta>
