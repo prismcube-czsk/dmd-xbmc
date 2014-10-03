@@ -85,15 +85,15 @@ def parse_data():
     match = re.compile('now: .+?\|(.+?)\|.+?\|(.+?)\|(.+?)\|(.+?)\|.+?\|.+?\|.+?\|.+?\|.+?\|(.+?)\|.+?\n').findall(httpdata)
     for teplota, rychlost, smer, vlhkost, stav in match:
         set_property('Current.Location'      , __addon__.getSetting('mesto'))
-        set_property('Current.Temperature'   , teplota)
+        set_property('Current.Temperature'   , teplota.replace(",","."))
         set_property('Current.Wind'          , str(float(rychlost)*3.6))
         set_property('Current.WindDirection' , smer)
         #set_property('Current.WindChill'    , wind[0].attributes['chill'].value)
         set_property('Current.Humidity'      , vlhkost)
         #set_property('Current.Visibility'   , atmosphere[0].attributes['visibility'].value)
         #set_property('Current.Pressure'     , atmosphere[0].attributes['pressure'].value)
-        set_property('Current.FeelsLike'     , feelslike(int(teplota), int(round(float(rychlost)*3.6) + 0.5)))
-        set_property('Current.DewPoint'      , dewpoint(int(teplota), int(vlhkost)))
+        set_property('Current.FeelsLike'     , feelslike(int(teplota.replace(",",".")), int(round(float(rychlost)*3.6) + 0.5)))
+        set_property('Current.DewPoint'      , dewpoint(int(teplota.replace(",",".")), int(vlhkost)))
         set_property('Current.UVIndex'       , '-')
         index = 0;
         print 'Stav: '+stav

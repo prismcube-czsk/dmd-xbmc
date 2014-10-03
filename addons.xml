@@ -26,7 +26,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon 	id="weather.dmd-xbmc.in-pocasi" 
 		name="In-počasí" 
-		version="1.0.0" 
+		version="1.0.1" 
 		provider-name="Erik Zapletal">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
