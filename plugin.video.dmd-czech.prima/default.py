@@ -218,9 +218,9 @@ def INDEX(url,page,kanal):
 	else:
 		addDir(item[2]+' - počet videí: '+item[3],__baseurl__+item[1],5,item[0],0,item[2])  
     try:
-	pattern = '<li class="pager-next last"><a href="(.+?)"'
-	match = re.compile(pattern).findall(data)
-	addDir('>> Další strana',__baseurl__+match[0],4,nexticon,'','')
+        pattern = '<li class="pager-next last"><a href="(.+?)"'
+        match = re.compile(pattern).findall(data)
+        addDir('>> Další strana',__baseurl__+match[0],4,nexticon,'','')
     except:
         print 'strankovani nenalezeno'
 

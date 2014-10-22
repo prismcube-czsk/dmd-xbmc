@@ -1,3 +1,5 @@
+2014-10-22
+ * Oprava listovani v zanrech a uprava parsovani polozek
 2014-08-21
  * Oprava zobrazování dílù
 2014-06-11
