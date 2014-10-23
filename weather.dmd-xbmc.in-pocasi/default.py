@@ -97,7 +97,11 @@ def parse_data():
         set_property('Current.UVIndex'       , '-')
         index = 0;
         print 'Stav: '+stav
-        set_property('Current.OutlookIcon', xbmc.translatePath(os.path.join(__cwd__, 'resources/lib/icons', '%s.png'%stav)))
+        #Obcas blbne zobrazovani ikon v noci, protoze maji priponu -noc. Nektere ikony jsou upraveny primo pro noc, ale nektere ne, takze se tam udela tato podminka
+        if os.path.exists('%s\\resources/lib/icons/%s.png'%(__cwd__, stav)) == True:
+            set_property('Current.OutlookIcon', xbmc.translatePath(os.path.join(__cwd__, 'resources/lib/icons', '%s.png'%stav)))
+        else:
+            set_property('Current.OutlookIcon', xbmc.translatePath(os.path.join(__cwd__, 'resources/lib/icons', '%s.png'%stav.replace("-noc",""))))
         #for icon in weatherid:
         #    if icon == stav:
         #        set_property('Current.OutlookIcon', '%s.png'%weathericonid[index])   
