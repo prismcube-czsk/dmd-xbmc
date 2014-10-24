@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os,random,decimal
 from parseutils import *
+from stats import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
 import simplejson as json
@@ -226,22 +227,27 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
        
 elif mode==1:
         print ""
+        STATS("INDEX", "Function")
         INDEX(url)
 
 elif mode==2:
         print ""+url
+        STATS("LIST", "Function")
         LIST(url)
 
 elif mode==3:
         print ""+url
+        STATS("LATESTLIST", "Function")
         LATESTLIST(url)
 
 elif mode==10:
         print ""+url
+        STATS(name, "Item")
         VIDEOLINK(url,name)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
