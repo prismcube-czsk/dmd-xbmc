@@ -404,7 +404,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="1.5.3">
+        version="1.5.4">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
