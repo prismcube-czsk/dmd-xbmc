@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os
 from parseutils import *
+from stats import *
 import xbmcplugin,xbmcgui,xbmcaddon
 
 __baseurl__= 'http://voyo.markiza.sk'
@@ -238,19 +239,23 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
        
 elif mode==1:
         print ""+url
+        STATS("CAT_VOYO", "Function")
         CAT_VOYO(url)
 
 elif mode==5:
         print ""+url
+        STATS("LIST_VOYO", "Function")
         LIST_VOYO(url)
 
         
 elif mode==10:
         print ""+url
+        STATS("VIDEOLINK_VOYO", "Function")
         VIDEOLINK_VOYO(url,name)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

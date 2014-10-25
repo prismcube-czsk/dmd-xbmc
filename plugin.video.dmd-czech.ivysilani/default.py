@@ -15,6 +15,7 @@ if REMOTE_DBG:
 
 import urllib2,urllib,re,os,time,datetime
 from parseutils import *
+from stats import *
 from urlparse import urlparse,urlunparse
 import xbmcplugin,xbmcgui,xbmcaddon
 import simplejson as json
@@ -751,70 +752,87 @@ print "Name: "+str(name)
 
 if mode is None or url is None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
 
 elif mode==1:
         print ""
+        STATS("KATEGORIE", "Function")
         KATEGORIE()
 
 elif mode==2:
         print ""+url
+        STATS("ABC", "Function")
         ABC(url)
 
 elif mode==3:
         print ""+url
+        STATS("CAT_LIST", "Function")
         CAT_LIST(url)
 
 elif mode==4:
         print ""+url
+        STATS("LIVE_OBSAH", "Function")
         LIVE_OBSAH(url)
 
 elif mode==5:
         print ""+url
+        STATS("DATE_LIST", "Function")
         DATE_LIST(url)
 
 elif mode==6:
         print ""+url
+        STATS("VIDEO_LIST", "Function")
         VIDEO_LIST(url,name)
 
 elif mode==7:
         print ""+url
+        STATS("BONUSY", "Function")
         BONUSY(url)
 
 elif mode==8:
         print ""+url
+        STATS("DAY_LIST", "Function")
         DAY_LIST(url)
 
 elif mode==9:
         print ""+url
+        STATS("DAY_PROGRAM_LIST", "Function")
         DAY_PROGRAM_LIST(url,name)
 
 elif mode==10:
         print ""+url
+        STATS(name, "Item")
         VIDEOLINK(url,name, False)
 
 elif mode==11:
         print ""+url
+        STATS("MOSTVISITED", "Function")
         MOSTVISITED(url)
 
 elif mode==12:
         print ""+url
+        STATS("NEWEST", "Function")
         NEWEST(url)
 
 elif mode==13:
         print ""+url
+        STATS("HLEDAT", "Function")
         HLEDAT(url)
 
 elif mode == 14:
     print "" + url
+    STATS(name, "Item")
     VIDEOLINK_LIVE(url, name, True)
 
 elif mode == 15:
     print "" + url
+    STATS("OPEN_URL", "Function")
     OPEN_URL(False)
 
 elif mode == 16:
     print "" + url
+    STATS("OPEN_URL", "Function")
     OPEN_URL(True)
 
 

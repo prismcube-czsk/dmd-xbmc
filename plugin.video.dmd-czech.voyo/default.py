@@ -7,6 +7,7 @@ except ImportError:
     import md5
 import simplejson as json
 import httplib
+from stats import *
 import requests
 
 from parseutils import *
@@ -382,30 +383,36 @@ print "Page: "+str(page)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
 
 elif mode==1:
         print ""+url
-        print ""+str(page)                
+        print ""+str(page)  
+        STATS("CATEGORIES_OLD", "Function")              
         CATEGORIES_OLD(url,page)
 elif mode==5:
         print ""+url
-        print ""+str(page)        
+        print ""+str(page)  
+        STATS("CATEGORIES", "Function")      
         CATEGORIES(url,page)
      
        
 elif mode==2:
         print ""+url
-        print ""+str(page)        
+        print ""+str(page) 
+        STATS("INDEX", "Function")       
         INDEX(url,page)
 elif mode==4:
         print ""+url
-        print ""+str(page)                
+        print ""+str(page)
+        STATS("INDEX_OLD", "Function")                
         INDEX_OLD(url,page)        
 
 elif mode==3:
         print ""+url
         try:
+            STATS(name, "Item")
             VIDEOLINK(url, name)
         except IndexError:
             INDEX(url, name)

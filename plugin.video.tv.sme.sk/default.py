@@ -4,6 +4,7 @@ import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://tv.sme.sk'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 import HTMLParser
+from stats import *
 from datetime import datetime,timedelta
 
 __addon__ = xbmcaddon.Addon('plugin.video.tv.sme.sk')
@@ -225,18 +226,22 @@ logDbg("Name: "+str(name))
 logDbg("Desc: "+str(desc))
 
 if mode==None or url==None or len(url)<1:
+	STATS("listCategories", "Function")
 	listCategories()
 	
 elif mode==1:
+	STATS("listActiveShows", "Function")
 	listActiveShows(url)
 
 elif mode==2:
+	STATS("listArchiveShows", "Function")
 	listArchiveShows(url)
 
 elif mode==3:
 	listEpisodes(url)
 
 elif mode==4:
+	STATS(name, "Item")
 	listVideoLink(url,name.decode('utf-8'),desc.decode('utf-8'))
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

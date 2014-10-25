@@ -1,3 +1,5 @@
+2014-10-25
+ * Pridani statistik
 2013-06-27:
  * oprava doplňku, thanx to Martin Stachon
 2013-04-28:

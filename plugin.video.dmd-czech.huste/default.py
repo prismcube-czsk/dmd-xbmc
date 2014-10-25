@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os,time
 from parseutils import *
+from stats import *
 from urlparse import urlparse
 from datetime import datetime
 import xbmcplugin,xbmcgui,xbmcaddon
@@ -204,32 +205,39 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
 
 elif mode==4:
         print ""+url
+        STATS("PROUZEK", "Function")
         PROUZEK(url)
 
 elif mode==5:
         print ""+url
+        STATS("ABC", "Function")
         ABC(url)
 
 elif mode==6:
         print ""+url
+        STATS("NAZEV", "Function")
         NAZEV(url)
 
 elif mode==7:
         print ""+url
         print ""+str(page)
+        STATS("INDEX", "Function")
         INDEX(url,page)
 
 
 elif mode==11:
         print ""+url
+        STATS("LIVE", "Function")
         LIVE(url)
         
 elif mode==10:
         print ""+url
+        STATS(name, "Item")
         VIDEOLINK(url,name)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

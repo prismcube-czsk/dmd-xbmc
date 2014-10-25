@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os
 from parseutils import *
+from stats import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
 
@@ -209,30 +210,37 @@ print "stv: Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print "stv: "
+        STATS("CATEGORIES", "Function")
         CATEGORIES()
 
 elif mode == 1:
         print "stv: " + url
+        STATS("LIST_TOP", "Function")
         LIST_TOP(url)
       
 elif mode == 2:
         print "stv: " + url
+        STATS("LIST_NEWEST", "Function")
         LIST_NEWEST(url)
 
 elif mode == 3:
         print "stv: " + url
+        STATS("CATEGORY_AZ", "Function")
         CATEGORY_AZ(url)
         
 elif mode == 4:
         print "stv: " + url
+        STATS("LIST_AZ", "Function")
         LIST_AZ(url)
 
 elif mode == 5:
         print "stv: " + url
+        STATS("LIST_TITLE", "Function")
         LIST_TITLE(url)
 
 elif mode==10:
         print ""+url
+        STATS(name, "Item")
         VIDEOLINK(url,name)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

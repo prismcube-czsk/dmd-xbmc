@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os
 from parseutils import *
+from stats import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__='http://www.b-tv.cz/videoarchiv'
 _UserAgent_ = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -104,10 +105,12 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
        
 elif mode==1:
         print ""
+        STATS(name, "Item")
         INDEX(url)
         
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

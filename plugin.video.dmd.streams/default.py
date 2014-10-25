@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,os
 import xbmcplugin,xbmcgui,xbmcaddon
+from stats import *
 from BeautifulSoup import BeautifulStoneSoup, BeautifulSoup, BeautifulSOAP
 
 addon = xbmcaddon.Addon('plugin.video.dmd.streams')
@@ -284,18 +285,23 @@ print "Name: "+str(name)
 
 if mode==None:
         print ""
+        STATS("getStreams", "Function")
+        STATS(file, "Items")
         getStreams()
 
 elif mode==1:
         print ""+url
+        STATS("getChanels", "Function")
         getChannels()
 
 elif mode==2:
         print ""+url
+        STATS(file, "Item")
         getChannelItems(name)
 
 elif mode==3:
         print ""+url
+        STATS(file, "Item")
         getSubChannelItems(name)
         
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

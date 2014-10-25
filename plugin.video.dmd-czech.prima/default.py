@@ -16,6 +16,7 @@ if REMOTE_DBG:
 import urllib2,urllib,re,os,random,decimal
 #from parseutilsbs4 import *
 import xbmcplugin,xbmcgui,xbmcaddon
+from stats import *
 __baseurl__ = 'http://play.iprima.cz'
 __nejnovejsiurl__ = 'http://play.iprima.cz/primaplay/channel_ajax_more/'
 __cdn_url__  = 'http://cdn-dispatcher.stream.cz/?id='
@@ -407,30 +408,35 @@ print "Page: "+str(page)
 print "Kanal: "+str(kanal)
 
 if mode==None or url==None or len(url)<1:
+        STATS("OBSAH", "Function")
         OBSAH()
        
 elif mode==1:
         print ""+str(url)
         print ""+str(kanal)
         print ""+str(page)
+        STATS("KATEGORIE", "Function")
         KATEGORIE(url,page,kanal)
 
 elif mode==2:
         print ""+str(url)
         print ""+str(kanal)
         print ""+str(page)
+        STATS("VYVOLENI", "Function")
         VYVOLENI(url,page,kanal)
         
 elif mode==4:
         print ""+str(url)
         print ""+str(kanal)
         print ""+str(page)
+        STATS("INDEX", "Function")
         INDEX(url,page,kanal)
 
 elif mode==5:
         print ""+str(url)
         print ""+str(kanal)
         print ""+str(page)
+        STATS("KATEGORIE", "Function")
         KATEGORIE(url,page,kanal)
         
 
@@ -438,10 +444,12 @@ elif mode==6:
         print ""+str(url)
         print ""+str(kanal)
         print ""+str(page)
+        STATS("NEJNOVEJSI", "Function")
         NEJNOVEJSI(url,page,kanal)
         
 elif mode==10:
         print ""+url
+        STATS(name, "Item")
         VIDEOLINK(url,name)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

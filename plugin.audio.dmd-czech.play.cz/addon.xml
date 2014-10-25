@@ -1,8 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addon id="plugin.audio.dmd-czech.play.cz" name="play.cz" provider-name="Van Thomas" version="0.1.2">
+<addon 	id="plugin.audio.dmd-czech.play.cz" 
+		name="play.cz" 
+		provider-name="Van Thomas" 
+		version="0.1.3">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
 	<import addon="script.module.elementtree" version="1.2.7" />
+    <import addon="script.module.dmd-czech.common" version="1.5.4"/>
   </requires>
   <extension library="default.py" point="xbmc.python.pluginsource" provides="audio">
     <provides>audio</provides>

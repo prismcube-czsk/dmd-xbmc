@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os
 from parseutils import *
+from stats import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__='http://www.muvi.cz'
@@ -138,13 +139,16 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
        
 elif mode==1:
         print ""
+        STATS("INDEX", "Function")
         INDEX(url)
 elif mode==2:
         print ""
+        STATS(name, "Item")
         VIDEOLINK(url)
         
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

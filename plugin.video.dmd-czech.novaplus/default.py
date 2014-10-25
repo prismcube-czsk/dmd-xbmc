@@ -8,6 +8,7 @@ except ImportError:
     import md5
 
 from parseutils import *
+from stats import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://novaplus.nova.cz'
 __dmdbase__ = 'http://iamm.uvadi.cz/xbmc/voyo/'
@@ -196,31 +197,37 @@ print "Page: "+str(page)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
 
 elif mode==1:
         print ""+url
-        print ""+str(page)                
+        print ""+str(page)
+        STATS("TN", "Function")
         TN(url,page)
 
 elif mode==6:
         print ""+url
-        print ""+str(page)                
+        print ""+str(page)
+        STATS("NEW", "Function")                
         NEW(url,page)
         
 elif mode==5:
         print ""+url
-        print ""+str(page)        
+        print ""+str(page)      
+        STATS("CATEGORIES", "Function") 
         CATEGORIES(url,page)
         
 elif mode==2:
         print ""+url
-        print ""+str(page)        
+        print ""+str(page) 
+        STATS("INDEX", "Function")       
         INDEX(url,page)
         
 elif mode==3:
         print ""+url
         try:
+            STATS(name, "Item")
             VIDEOLINK(url, name)
         except IndexError:
             INDEX(url, name)

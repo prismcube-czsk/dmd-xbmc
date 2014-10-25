@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os
 from parseutils import *
+from stats import *
 import xbmcplugin,xbmcgui,xbmcaddon
 import megavideo,videobb,novamov,vk,videoweed,videozer
 
@@ -395,34 +396,42 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
 
 elif mode==1:
         print ""
+        STATS("KATEGORIE", "Function")
         KATEGORIE()
 
 elif mode==2:
         print ""+url
+        STATS("HERCI", "Function")
         HERCI()
         
 elif mode==3:
         print ""+url
+        STATS("ROKY", "Function")
         ROKY()
         
 elif mode==4:
         print ""+url
+        STATS("SERVERY", "Function")
         SERVERY()
         
 elif mode==5:
         print ""+url
+        STATS("INDEX", "Function")
         INDEX(url)
         
 elif mode==6:
         print ""+url
+        STATS(name, "Item")
         VIDEOLINK(url,name)
 
 elif mode==7:
         print ""+url
+        STATS("SEARCH", "Function")
         SEARCH()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

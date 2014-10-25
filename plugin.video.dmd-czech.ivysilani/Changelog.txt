@@ -1,3 +1,5 @@
+2014-10-25
+ * Pridani statistik
 2014-09-24
  * Oprava živého vysílání
 2014-08-04

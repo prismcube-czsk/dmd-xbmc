@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re
 from parseutils import *
+from stats import *
 #from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
 #import json
@@ -170,10 +171,12 @@ except:
 		
 if mode==None or url==None or len(url)<1:
         #print ""
+        STATS("SEZNAM", "Function")
         SEZNAM()
 
 elif mode==1:
-        #print ""+url
+        #print ""+url       
+        STATS(name, "Item")
         LINK(url)
  
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

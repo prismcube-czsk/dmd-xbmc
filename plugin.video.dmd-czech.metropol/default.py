@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2,urllib,re,os,string,time,base64,md5,datetime
 from parseutils import *
+from stats import *
 import xbmcplugin,xbmcgui,xbmcaddon
 __baseurl__ = 'http://www.metropol.cz/'
 __dmdbase__ = 'http://iamm.uvadi.cz/xbmc/metropol/'
@@ -165,19 +166,24 @@ if mode==None or url==None or len(url)<1:
        
 elif mode==1:
         print ""+url
+        STATS("PORADY", "Function")
         PORADY(url)
 
 elif mode==2:
         print ""+url
+        STATS("VIDEA", "Function")
         VIDEA(url)
 elif mode==3:
         print ""+url
+        STATS("INDEX_PORADY", "Function")
         INDEX_PORADY(url)        
 elif mode==4:
         print ""+url
+        STATS("INDEX_VIDEA", "Function")
         INDEX_VIDEA(url) 
 elif mode==10:
         print ""+url
+        STATS(name, "Item")
         VIDEOLINK(url,name)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

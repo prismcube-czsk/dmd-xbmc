@@ -8,6 +8,7 @@ import xbmcaddon
 import urllib
 import urllib2
 import re
+from stats import *
 import HTMLParser
 import xml.etree.ElementTree as ET
 import email.utils as eut
@@ -181,7 +182,9 @@ try:
 except:
         pass
 if url:
+	STATS("playUrl", "Function")
 	playUrl(url)
 else:
+	STATS("listItems", "Function")
 	listItems(offset)
 

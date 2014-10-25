@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib2, urllib, re, os
 from parseutils import *
+from stats import *
 from urlparse import urlparse
 import xbmcplugin,xbmcgui,xbmcaddon
 
@@ -542,91 +543,114 @@ print "Page: " + str(page)
 
 if mode == None or url == None or len(url) < 1:
         print ""
+        STATS("OBSAH", "Function")
         OBSAH()
         
 elif mode == 30:
+        STATS("OBSAH2", "Function")
         OBSAH2()
         
 elif mode == 1:
         print ""
+        STATS("OBSAH_PUB", "Function")
         OBSAH_PUB()
 
 elif mode == 2:
         print ""
+        STATS("OBSAH_SER", "Function")
         OBSAH_SER()
 
 elif mode == 3:
         print ""
+        STATS("OBSAH_ZAB", "Function")
         OBSAH_ZAB()
        
 elif mode == 31:
         print ""
+        STATS("OBSAH_JOJ", "Function")
         OBSAH_JOJ()
 
 elif mode == 32:
         print ""
+        STATS("OBSAH_JOJ_PLUS", "Function")
         OBSAH_JOJ_PLUS()
         
 elif mode == 33:
         print ""
+        STATS("OBSAH_WAU", "Function")
         OBSAH_WAU()
 
 elif mode == 34:
         print ""
+        STATS("OBSAH_RELASER", "Function")
         OBSAH_RELASER(url)
 
 elif mode == 35:
         print ""
+        STATS("OBSAH_VYSIELANE", "Function")
         OBSAH_VYSIELANE(url)
         
 elif mode == 36:
         print ""
+        STATS("OBSAH_NEVYSIELANE", "Function")
         OBSAH_NEVYSIELANE(url)
         
 elif mode == 4:
         print "" + url
-        #print "" + str(page)        
+        #print "" + str(page) 
+        STATS("LIST", "Function")       
         LIST(url)
 
 elif mode == 5:
         print "" + url
+        STATS("LIST_2", "Function") 
         LIST_2(url)
 
 elif mode == 6:
         print "" + url
+        STATS("LIST_3", "Function")
         LIST_3(url)        
 
 elif mode == 7:
         print "" + url
+        STATS("LIST_4", "Function")
         LIST_4(url) 
 
 elif mode == 8:
         print "" + url
+        STATS("LIST_5", "Function")
         LIST_5(url)
 
 elif mode == 9:
         print "" + url
+        STATS("VIDEOPORTAL", "Function")
         VIDEOPORTAL(url)
 
         
 elif mode == 10:
         print "" + url
+        STATS(name, "Item")
         VIDEOLINK(url, name)
 elif mode == 11:
         print "" + url
+        STATS("TALENT", "Function")
         TALENT(url, name)
 elif mode == 12:
         print "" + url
+        STATS("VP_LIST", "Function")
         VP_LIST(url)
 elif mode == 13:
         print "" + url
+        STATS("VP_PLAY", "Function")
         VP_PLAY(url, name)
 
 elif mode == 20:
         print "" + url
+        STATS("PARADISE_CAT_LIST", "Function")
         PARADISE_CAT_LIST(url)
 elif mode == 21:
         print "" + url
+        STATS("PARADISE_LIST", "Function")
         PARADISE_LIST(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -19,6 +19,7 @@ import os, sys, socket, urllib2
 from xml.dom import minidom
 import xbmc, xbmcgui, xbmcaddon
 import re, datetime
+from stats import *
 import math
 
 #Nacteni informaci o doplnku
@@ -232,3 +233,5 @@ set_property('Locations',           str(1)) #pocet lokaci celkem (mame pouze jed
 set_property('WeatherProvider',     __addonname__)
 set_property('WeatherProviderLogo', xbmc.translatePath(os.path.join(__cwd__, 'resources', 'banner.png')))
 
+#Statistiky
+STATS(__addon__.getSetting('mesto'), "Location")
