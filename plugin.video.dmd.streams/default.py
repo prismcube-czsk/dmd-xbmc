@@ -286,7 +286,6 @@ print "Name: "+str(name)
 if mode==None:
         print ""
         STATS("getStreams", "Function")
-        STATS(file, "Items")
         getStreams()
 
 elif mode==1:
@@ -296,12 +295,12 @@ elif mode==1:
 
 elif mode==2:
         print ""+url
-        STATS(file, "Item")
+        STATS(name, "Item")
         getChannelItems(name)
 
 elif mode==3:
         print ""+url
-        STATS(file, "Item")
+        STATS(name, "Item")
         getSubChannelItems(name)
         
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
