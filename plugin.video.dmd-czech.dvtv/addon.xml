@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dmd-czech.dvtv" name="Drtinová Veselovský TV" version="1.2.1" provider-name="Štěpán Ort">
+<addon id="plugin.video.dmd-czech.dvtv" name="Drtinová Veselovský TV" version="1.2.2" provider-name="Štěpán Ort">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-	<import addon="script.module.dmd-czech.common" version="1.5.4"/>
+	<import addon="script.module.dmd-czech.common" version="1.5.5"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>

@@ -6,7 +6,7 @@
   <requires>
     <import addon="script.module.pysqlite" version="2.5.6"/>
     <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.4"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

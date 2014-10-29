@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import xbmc, xbmcgui, xbmcaddon, simplejson, time
+import xbmc, xbmcgui, xbmcaddon, time
 import urllib, urllib2 
 from uuid import getnode as uuid_node
 from hashlib import md5
 __addon__       = xbmcaddon.Addon()
 _UserAgent_     = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-
-try:
-    data = xbmc.executeJSONRPC('{"jsonrpc" : "2.0", "method": "XBMC.GetInfoLabels", "id" :1, "params": {"labels" : \
-                    ["System.BuildVersion","System.ScreenHeight","System.ScreenWidth","System.KernelVersion","System.Language", "Network.MacAddress", "Skin.CurrentTheme"]}}')
-    data = simplejson.loads(data)
-except:
-    print "Chyba nacteni InfoLabels pro statitiky"
 
 def uniq_id(mac_addr):
 	if not ":" in mac_addr: mac_addr = xbmc.getInfoLabel('Network.MacAddress')

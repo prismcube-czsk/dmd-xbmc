@@ -182,7 +182,7 @@ try:
 except:
         pass
 if url:
-	STATS("playUrl", "Function")
+	STATS(url, "Item")
 	playUrl(url)
 else:
 	STATS("listItems", "Function")
