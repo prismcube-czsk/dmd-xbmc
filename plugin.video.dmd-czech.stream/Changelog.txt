@@ -1,3 +1,5 @@
+2014-10-31
+  * Pridani zavislosti na simplejson 
 2014-10-24
   * Pridani sberu statistik 
 2013-04-10:
