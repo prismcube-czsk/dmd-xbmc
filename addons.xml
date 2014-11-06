@@ -6,7 +6,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -31,7 +31,7 @@
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
-		<import addon="script.module.dmd-czech.common" version="1.5.5"/>
+		<import addon="script.module.dmd-czech.common" version="1.5.6"/>
 	</requires>
 	<extension point="xbmc.python.weather" library="default.py"/>
 	<extension point="xbmc.addon.metadata">
@@ -50,7 +50,7 @@
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
 	<import addon="script.module.elementtree" version="1.2.7" />
-		<import addon="script.module.dmd-czech.common" version="1.5.5"/>
+		<import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension library="default.py" point="xbmc.python.pluginsource" provides="audio">
     <provides>audio</provides>
@@ -69,7 +69,7 @@
 		provider-name="Štěpán Ort">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-	<import addon="script.module.dmd-czech.common" version="1.5.5"/>
+	<import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -87,7 +87,7 @@
        provider-name="Radim Stoklasa">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -115,7 +115,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
 	<import addon="script.module.simplejson"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
@@ -139,7 +139,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -162,7 +162,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -186,7 +186,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -209,7 +209,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -232,7 +232,7 @@
        provider-name="Jiri Vyhnalek a mx3Lm">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -255,7 +255,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -278,7 +278,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -301,7 +301,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 
     library="default.py">
@@ -326,7 +326,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -349,7 +349,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 
     library="default.py">
@@ -371,7 +371,7 @@
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.beautifulsoup" version="3.0.8" />
-	<import addon="script.module.dmd-czech.common" version="1.5.5"/>
+	<import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -389,7 +389,7 @@
        provider-name="Jiri Vyhnalek">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -410,7 +410,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="1.5.5">
+        version="1.5.6">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -430,7 +430,7 @@
        provider-name="Ivo Brhel">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
+    <import addon="script.module.dmd-czech.common" version="1.5.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
