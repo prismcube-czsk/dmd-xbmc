@@ -1,3 +1,5 @@
+2014-11-15
+ * Pridana zavislost na requests
 2014-11-11
  * Pridana zavislost na simplejson
 2014-10-25
