@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import xbmc, xbmcgui, xbmcaddon, time, datetime
-import urllib, urllib2 
+import urllib, urllib2, re
 from hashlib import md5
 import threading
 
@@ -51,6 +51,8 @@ def REFRESH():
         __addon2__.setSetting('mac', "")
         __addon2__.setSetting('kernel_version', "")
         __addon2__.setSetting('timestamp', "")
+        
+
 
 def SEND_STATS(name, type):
     GET_MAC()
@@ -80,7 +82,7 @@ def SEND_STATS(name, type):
             #print "Statistiky: %s"%url
             request = urllib2.Request(url)
             con = urllib2.urlopen(request)
-            #data = con.read()
+            httpdata = con.read()
             con.close()
             #print "odesilam statistiky"
             #xbmcgui.Dialog().ok(addon_name, version_kernel, version_build,'%sx%s'%(screen_width, screen_height))
@@ -88,6 +90,27 @@ def SEND_STATS(name, type):
             print "Chyba zpracovani statistiky"
         REFRESH()
    
+        try:
+            news_time_settings = datetime.datetime.fromtimestamp(time.mktime(time.strptime(__addon2__.getSetting('timestamp_news'), '%Y-%m-%d %H:%M:%S')))
+        except:
+            news_time_settings = datetime.datetime.fromtimestamp(time.mktime(time.strptime('2000-10-10 10:10:10', '%Y-%m-%d %H:%M:%S')))
+        
+        try:
+            match = re.compile('<timestamp>(.+?)</timestamp>').findall(httpdata)
+            news_timestamp = datetime.datetime.fromtimestamp(time.mktime(time.strptime(match[0], '%Y-%m-%d %H:%M:%S')))
+            if news_time_settings < news_timestamp:
+                match = re.compile('<title>(.+?)</title>').findall(httpdata)
+                news_title = match[0]
+                match = re.compile('<line1>(.+?)</line1>').findall(httpdata)
+                news_line1 = match[0]
+                match = re.compile('<line2>(.+?)</line2>').findall(httpdata)
+                news_line2 = match[0]
+                match = re.compile('<line3>(.+?)</line3>').findall(httpdata)
+                news_line3 = match[0]
+                __addon2__.setSetting('timestamp_news', news_timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+                xbmcgui.Dialog().ok(news_title, news_line1, news_line2,news_line3)
+        except:
+            print "Chyba načtení novinek"
 def STATS(name, item_type):
 	try:
 		t = threading.Thread(target=SEND_STATS, args = (name, item_type))

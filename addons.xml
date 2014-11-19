@@ -412,7 +412,7 @@
 <addon  id="script.module.dmd-czech.common" 
         name="dmd-czech common python modules" 
         provider-name="Jiri Vyhnalek" 
-        version="1.5.6">
+        version="1.5.7">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
