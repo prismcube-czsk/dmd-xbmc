@@ -567,7 +567,7 @@ def VIDEOLINK(url,name, live):
        'requestUrl' : url_path,
        'requestSource' : 'iVysilani'
     }
-    conn.request('POST', '/ivysilani/ajax/get-playlist-url', urllib.urlencode(data), headers )
+    conn.request('POST', '/ivysilani/ajax/get-client-playlist', urllib.urlencode(data), headers )
     res = conn.getresponse()
     httpdata = res.read()
     conn.close()
@@ -580,7 +580,7 @@ def VIDEOLINK(url,name, live):
     jsondata = json.loads(httpdata);
     playlist_url = urllib.unquote(jsondata['url'])
 
-    print '====> Playlist ULR: ' + playlist_url
+    print '====> Playlist URL: ' + playlist_url
     urlobj = urlparse(playlist_url)
     urlhost = urlobj.netloc
     urlpath = urlunparse(('', '', urlobj.path, urlobj.params, urlobj.query, urlobj.fragment))
@@ -606,33 +606,52 @@ def VIDEOLINK(url,name, live):
     #print httpdata
     #print '====> PLAYLIST PAGE END'
 
-    ### Read links XML page
-    httpdata = urllib2.unquote(httpdata)
-    root = ET.fromstring(httpdata)
-    for item in root.findall('.//body/switchItem'):
-        if ('id' in item.attrib) and ('base' in item.attrib):
-            id = item.attrib['id']
-            base = item.attrib['base']
+    ### Read client config
+    jsondata = json.loads(httpdata);
+    m3u_url = jsondata["playlist"][0]["streamUrls"]["main"]
 
-            if re.search('AD', id, re.U):
-                continue
+    print '====> M3U URL: ' + m3u_url
+    urlobj = urlparse(m3u_url)
+    urlhost = urlobj.netloc
+    urlpath = urlunparse(('', '', urlobj.path, urlobj.params, urlobj.query, urlobj.fragment))
 
-            base = re.sub('&amp;','&', base)
+    print '===> M3U Host= ' + urlhost + ' Path=' + urlpath
 
-            print '==> SwitchItem id=' + id + ', base=' + base
+    ### Get M3u
+    conn = httplib.HTTPConnection(urlhost)
+    headers = {
+       'Connection': 'close',
+       'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.107 Safari/537.36',
+    }
+    conn.request('GET', urlpath, '', headers)
+    res = conn.getresponse()
+    m3u_url = res.getheader("Location")
+    conn.close()
 
-            for videoNode in item.findall('./video'):
-                if ('src' in videoNode.attrib) and ('label' in videoNode.attrib):
-                        src = videoNode.attrib['src']
-                        label = videoNode.attrib['label']
-                        if live:
-                            rtmp_url = base+'/'+src
-                        else:
-                            app = base[base.find('/', base.find('://') + 3) + 1:]
-                            rtmp_url = base + ' app=' + app + ' playpath=' + src
-                        print 'RTMP label=' + label + ', name=' + name + ', url=' + rtmp_url
-                        addLink(label+' '+name, rtmp_url, icon, info)
+    print '====> M3U URL: ' + m3u_url
+    urlobj = urlparse(m3u_url)
+    urlhost = urlobj.netloc
+    urlpath = urlunparse(('', '', urlobj.path, urlobj.params, urlobj.query, urlobj.fragment))
 
+    print '===> M3U Host= ' + urlhost + ' Path=' + urlpath
+
+    ### Get M3u
+    conn = httplib.HTTPConnection(urlhost)
+    headers = {
+       'Connection': 'close',
+       'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.107 Safari/537.36',
+    }
+    conn.request('GET', urlpath, '', headers)
+    res = conn.getresponse()
+    httpdata = res.read()
+    conn.close()
+
+    # Add links
+    stream_urls = re.findall(r"^http://.*.m3u8$", httpdata, re.MULTILINE)
+    labels = ("288p", "404p", "576p", "720p")
+    for label, stream_url in zip(labels, stream_urls):
+        print 'Stream label=' + label + ', name=' + name + ', url=' + stream_url
+        addLink(label+' '+name, stream_url, icon, info)
 
 
 def http_build_query(params, topkey = ''):
