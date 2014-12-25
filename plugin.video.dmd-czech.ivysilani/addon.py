@@ -30,7 +30,7 @@ try:
             sys.stderr.write("Error: Could not load pysrc!")
             sys.exit(1)
     ###############################################################################
-    _addon_ = xbmcaddon.Addon('plugin.video.ivysilani')
+    _addon_ = xbmcaddon.Addon('plugin.video.dmd-czech.ivysilani')
     # First run
     if not (_addon_.getSetting("settings_init_done") == "true"):
         DEFAULT_SETTING_VALUES = {"quality" : "576p",
