@@ -108,10 +108,9 @@
     </description>
   </extension>
 </addon>
-<addon id="plugin.video.dmd-czech.ivysilani" name="iVysílání — Česká televize" version="2.2.3" provider-name="Štěpán Ort">
+<addon id="plugin.video.ivysilani" name="iVysílání — Česká televize" version="1.2.4" provider-name="Štěpán Ort">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.dmd-czech.common" version="1.5.5"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -120,6 +119,21 @@
     <summary>iVysílání — Česká televize</summary>
 	<description>Plugin to play videos and live TV from Czech Television's iVysilani</description>
     <description lang="cs">Plugin nabízí přístup do archivu České televize iVysílání i přehrávání kanálů živě.</description>
+    <platform>all</platform>
+  </extension>
+</addon>
+<addon id="plugin.video.dmd-czech.ivysilani" name="iVysílání — Česká televize (starý)" version="2.2.4" provider-name="Štěpán Ort">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="plugin.video.ivysilani"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>iVysílání (Zastaralý, nový je k dispozici v repozitáři)</summary>
+	<description>This addon will be removed from DMD repository. New version is now available, please change it! New addon will be automaticly downloaded and installed after you run this old addon. </description>
+    <description lang="cs">Tento doplňěk se bude rušit, ale k dispozici je již nová verze, prosím proveďte výměnu ve vašem XBMC/Kodi! Nový doplněk bude automaticky k dispozici ve Vašem XBMC po spuštění tohoto starého doplňku.</description>
     <platform>all</platform>
   </extension>
 </addon>
