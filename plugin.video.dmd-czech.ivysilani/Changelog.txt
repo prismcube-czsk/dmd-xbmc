@@ -1,3 +1,13 @@
+2015-01-03
+ * 2014-01-03 [1.2.3]
+ * Auto view mode default fix
+ * Bugfix
+ * Automatic view mode fix 
+ * Episode listing is default for programmes listed by letter or genre (allowes favouriting)
+ * Windows path join bugfix
+ * Thread concurence datetime import bugfix
+ * Translation of well known errors (etc. license expired)
+ * Automatic view mode
 2014-12-25
  * Kompletně předělaná verze od Štepána Orta
 2014-12-21
