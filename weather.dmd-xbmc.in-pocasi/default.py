@@ -93,8 +93,8 @@ def parse_data():
         set_property('Current.Humidity'      , vlhkost)
         #set_property('Current.Visibility'   , atmosphere[0].attributes['visibility'].value)
         #set_property('Current.Pressure'     , atmosphere[0].attributes['pressure'].value)
-        set_property('Current.FeelsLike'     , feelslike(int(teplota.replace(",",".")), int(round(float(rychlost)*3.6) + 0.5)))
-        set_property('Current.DewPoint'      , dewpoint(int(teplota.replace(",",".")), int(vlhkost)))
+        set_property('Current.FeelsLike'     , feelslike(round(float(teplota.replace(",","."))), int(round(float(rychlost)*3.6) + 0.5)))
+        set_property('Current.DewPoint'      , dewpoint(round(float(teplota.replace(",","."))), int(vlhkost)))
         set_property('Current.UVIndex'       , '-')
         index = 0;
         print 'Stav: '+stav

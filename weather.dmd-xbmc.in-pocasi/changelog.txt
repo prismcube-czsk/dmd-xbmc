@@ -1,5 +1,7 @@
+2015-01-04
+* Drobne opravy
 2014-10-25
- * Pridani statistik
+* Pridani statistik
 2014-10-23
 * Oprava zobrazování nočních ikonek
 2014-10-03
