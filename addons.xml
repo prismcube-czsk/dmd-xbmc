@@ -110,7 +110,7 @@
 </addon>
 <addon id="plugin.video.dmd-czech.ivysilani" name="iVysílání — Česká televize" version="2.1.1" provider-name="Štěpán Ort">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="2.2.3"/>
     <import addon="script.module.dmd-czech.common" version="1.5.5"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
